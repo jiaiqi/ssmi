@@ -1,0 +1,105 @@
+<template>
+  <div>
+    <el-card class="box-card">
+      <el-input
+        v-model="userName"
+        placeholder="请输入用户名"
+        style="margin-bottom:20px;width:200px;"
+        clearable
+      ></el-input>
+      <el-input v-model="pwd" placeholder="请输入密码" style="width:200px;" show-password></el-input>
+      <el-button type="primary" @click="toHome()" style="margin:10px auto;">登录</el-button>
+    </el-card>
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+export default {
+  data() {
+    return {
+      userName: '',
+      pwd: ''
+    };
+  },
+  mounted() {
+    // let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket")
+    // if (bx_auth_ticket) {
+    //   console.log("bx_auth_ticket", bx_auth_ticket)
+    //   this.$router.push({ path: '/home' })
+    // }
+  },
+  methods: {
+    toHome() {
+      let self = this
+      let user_no = this.userName
+      let pwd = this.pwd
+
+      let bxReqs = [];
+      let bxReq = {};
+
+      bxReq.serviceName = "srvuser_login";
+      bxReq.data = [{ "user_no": user_no, "pwd": pwd }];
+      bxReqs.push(bxReq);
+      sessionStorage.setItem("need_login_flag", null);
+      let path = "http://192.168.0.192:8101/sso/operate/srvuser_login";
+      let callBack = function (data) {
+        if (data.state == "SUCCESS") {
+          let resp = data.response[0];
+          let bx_auth_ticket = resp.response.bx_auth_ticket;
+          let current_login_user = resp.response.login_user_info;
+
+          sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket);
+          sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+        } else {
+          alert(data.resultMessage);
+        }
+      }
+      function crosAjax(url, method, jsonData, succFun) {
+        console.log(jsonData)
+        if (sessionStorage.getItem("need_login_flag") == "need_login") {
+        } else {
+          var bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
+          axios({
+            headers: {
+              "bx_auth_ticket": bx_auth_ticket
+            },
+            url: url,
+            method: method,
+            data: jsonData,
+            xhrFields: {
+              withCredentials: true
+            },
+          }).then(res => {
+            console.log(res)
+            if (res.data.resultCode === "SUCCESS") {
+              let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
+              sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
+              self.$router.push({ path: '/dzbl' })
+            }
+          }).catch(err => {
+            console.log(err)
+          });
+        }
+      }
+      crosAjax(path, "POST", bxReqs, callBack);
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.text {
+  font-size: 14px;
+}
+.el-card {
+  margin: 100px auto 0;
+  width: 300px;
+}
+.el-card /deep/ .el-card__body {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
