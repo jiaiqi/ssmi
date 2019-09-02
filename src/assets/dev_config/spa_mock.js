@@ -55,7 +55,7 @@ let dummy = {
         }
     }
     
-      sessionStorage.setItem("bx_auth_ticket", "139be6f6-8b52-4cae-a0a0-63595e0176eb"); //  开发bx_auth_ticket
+      // sessionStorage.setItem("bx_auth_ticket", "139be6f6-8b52-4cae-a0a0-63595e0176eb"); //  开发bx_auth_ticket
     }
   }
 }

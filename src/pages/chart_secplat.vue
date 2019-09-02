@@ -594,7 +594,7 @@ export default {
       let num = str.indexOf("?");
       str = str.substr(num + 1);
       console.log(str)
-      window.location.href = '../../main/index.html'
+      window.location.href = '../../main/index.html?' + str
     },
     choose(item) {
       switch (item) {

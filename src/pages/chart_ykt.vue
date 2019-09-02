@@ -10,14 +10,17 @@
         <div class="top">
           <div class="top_left">
             <div class="logo">
-              <img src alt="x" />
+              <img src="../assets/images/card.png" style="width:50px" />
             </div>
-            <div class="page_name">一卡通就诊</div>
+            <div class="page_name" style="padding-left:15px;">一卡通就诊</div>
           </div>
           <div class="top_right">
             <span class="btn" @click="toManangerment">管理入口</span>
-            <span class="btn">退出</span>
-            <span class="btn">当前帐号</span>
+            <!-- <span class="btn">退出</span> -->
+            <div class="accountInfo">
+              当前帐号:
+              <span>{{user.user_no}}</span>
+            </div>
           </div>
         </div>
         <div class="top_header">
@@ -143,36 +146,426 @@
           </div>
         </div>
       </div>
+      <div class="content">
+        <div class="content_left col-65">
+          <div class="content_left_left xpanel-l-t">
+            <div class="item_title_long">各医院电子病历查询次数柱状图（多级） X轴：天对应小时，周和月对应天，年对应月</div>
+            <ve-histogram
+              height="700px"
+              :data="chartData01"
+              :settings="chartSetting1"
+              :textStyle="legend.textStyle"
+              :legend="legend"
+            ></ve-histogram>
+          </div>
+          <div class="content_left_right">
+            <div class="content_left_right_item xpanel-l-b">
+              <div class="item_title">各医院查询次数分布饼图</div>
+              <ve-pie :data="pieData1.hospital" :legend="legend" :settings="pieSetting"></ve-pie>
+            </div>
+            <div class="content_left_right_item xpanel-l-b">
+              <div class="item_title">身份验证成功/失败饼图</div>
+              <ve-pie :data="pieData1.card" :legend="legend" :settings="pieSetting"></ve-pie>
+            </div>
+          </div>
+        </div>
+        <div class="content_right col-35" ref="hospital_swiper">
+          <div class="content_right_content xpanel-l-t">
+            <div class="item_title_long">电子病历查询次数柱状图</div>
+            <swiper :options="swiperOptionTop" ref="swiperTop">
+              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+              <swiper-slide class="slide-1">
+                <ve-histogram
+                  :data="chartData02.hos1"
+                  :textStyle="legend.textStyle"
+                  :legend="legend"
+                ></ve-histogram>
+              </swiper-slide>
+              <swiper-slide class="slide-2">
+                <ve-histogram
+                  :data="chartData02.hos2"
+                  :textStyle="legend.textStyle"
+                  :legend="legend"
+                ></ve-histogram>
+              </swiper-slide>
+              <swiper-slide class="slide-3">
+                <ve-histogram
+                  :data="chartData02.hos3"
+                  :textStyle="legend.textStyle"
+                  :legend="legend"
+                ></ve-histogram>
+              </swiper-slide>
+              <swiper-slide class="slide-4">
+                <ve-histogram
+                  :data="chartData02.hos4"
+                  :textStyle="legend.textStyle"
+                  :legend="legend"
+                ></ve-histogram>
+              </swiper-slide>
+              <swiper-slide class="slide-5">
+                <ve-histogram
+                  :data="chartData02.hos5"
+                  :textStyle="legend.textStyle"
+                  :legend="legend"
+                ></ve-histogram>
+              </swiper-slide>
+              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+            </swiper>
+          </div>
+          <div class="content_right_bottom">
+            <div class="content_right_bottom_item xpanel-l-b">
+              <span>累计就诊次数：56565次</span>
+              <span>累计运行时间：3天12小时56分钟</span>
+            </div>
+            <div class="content_right_bottom_item">
+              <div class="content_left_right_item xpanel-l-b" style="height: 260px;">
+                <div class="item_title">身份验证成功/失败饼图</div>
+                <ve-pie :data="pieData1.card" :settings="pieSetting3" :legend="legend"></ve-pie>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- page2 -->
+      <div class="content">
+        <div class="content_left col-65">
+          <div class="content_left_left xpanel-l-t">
+            <div class="item_title_long">整体电子病历采集数量折线图（分记录类型）/显示当前已采集到的数据库数据 天对应小时的不用显示，显示在周</div>
+            <ve-line
+              height="700px"
+              :data="chartData01"
+              :settings="chartSetting1"
+              :textStyle="legend.textStyle"
+              :legend="legend"
+            ></ve-line>
+          </div>
+          <div class="content_left_right">
+            <div class="content_left_right_item xpanel-l-b">
+              <div class="item_title">各医院采集数量分布饼图</div>
+              <ve-pie :data="pieData1.hospital" :legend="legend" :settings="pieSetting"></ve-pie>
+            </div>
+            <div class="content_left_right_item xpanel-l-b">
+              <div class="item_title">各类型记录分布饼图</div>
+              <ve-pie :data="pieData1.card" :legend="legend" :settings="pieSetting"></ve-pie>
+            </div>
+          </div>
+        </div>
+        <div class="content_right col-35" ref="hospital_swiper">
+          <div class="content_right_content xpanel-l-t">
+            <div class="item_title_long">电子病历采集数量折线图</div>
+            <swiper :options="swiperOptionTop" ref="swiperTop">
+              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+              <swiper-slide class="slide-1">
+                <ve-line :data="chartData02.hos1" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+              </swiper-slide>
+              <swiper-slide class="slide-2">
+                <ve-line :data="chartData02.hos2" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+              </swiper-slide>
+              <swiper-slide class="slide-3">
+                <ve-line :data="chartData02.hos3" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+              </swiper-slide>
+              <swiper-slide class="slide-4">
+                <ve-line :data="chartData02.hos4" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+              </swiper-slide>
+              <swiper-slide class="slide-5">
+                <ve-line :data="chartData02.hos5" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+              </swiper-slide>
+              <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+            </swiper>
+          </div>
+          <div class="content_right_bottom">
+            <div class="content_right_bottom_item xpanel-l-b">
+              <span>累计采集数量：56565次</span>
+              <span>累计运行时间：3天12小时56分钟</span>
+            </div>
+            <div class="content_right_bottom_item">
+              <div class="content_left_right_item xpanel-l-b" style="height: 260px;">
+                <div class="item_title">各类型记录分布饼图</div>
+                <ve-pie :data="pieData1.card" :settings="pieSetting3" :legend="legend"></ve-pie>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 let moment = require('moment');
+import axios from 'axios'
 export default {
   methods: {
+    getData(groupBy) {
+      console.log(groupBy)
+      let req = {
+        "serviceName": "srvemr_record_count_by_hour_select",
+        "colNames": ["*"],
+        "condition": [
+          {
+            "colName": "count_hour",
+            "value": "2018-08-31",
+            "ruleType": "[like]"
+          }
+        ],
+        "group": [
+          {
+            "colName": "hospital",
+            "type": "by"
+          }, {
+            "colName": "count_hour",
+            "type": groupBy
+          }, {
+            "colName": "amount",
+            "type": "sum"
+          }
+        ],
+        "order": [
+          {
+            "colName": "count_hour",
+            "orderType": "asc"
+          }
+        ]
+      }
+      if (groupBy === "by_month_of_year") {
+        req.condition = [
+          {
+            "colName": "count_hour",
+            "value": "2018",
+            "ruleType": "[like]"
+          }
+        ]
+      } else if (groupBy === 'by_date_of_week') {
+        // console.log(this.timeHorizon)
+        req.condition = [
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.week_start,
+            "ruleType": "ge"
+          },
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.week_end,
+            "ruleType": "le"
+          }
+        ]
+        req.group = [
+          {
+            "colName": "hospital",
+            "type": "by"
+          }, {
+            "colName": "count_hour",
+            "type": "by_date"
+          }, {
+            "colName": "amount",
+            "type": "sum"
+          }
+        ]
+      } else if (groupBy === 'by_date_of_month') {
+        req.condition = [
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.month_start,
+            "ruleType": "ge"
+          },
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.month_end,
+            "ruleType": "le"
+          }
+        ]
+        req.group = [
+          {
+            "colName": "hospital",
+            "type": "by"
+          }, {
+            "colName": "count_hour",
+            "type": "by_date"
+          }, {
+            "colName": "amount",
+            "type": "sum"
+          }
+        ]
+      }
+      let url = this.getServiceUrl("select", req.serviceName, "emr")
+      axios({ method: "POST", headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }, url: url, data: req })
+        .then(res => {
+          if (res.data.resultCode === "0011") {
+            this.$router.push({ name: "login" })
+          }
+          // console.log("返回数据", res.data.data)
+          let data = res.data.data
+
+          if (groupBy === "by_hour_of_date") {
+            let hours = ["0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
+            let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
+            let rows = []
+            // debugger
+            for (var key in hours) {
+              let dataMap = {}
+              rows.push(dataMap)
+              dataMap.时间 = hours[key]
+              for (var i in hos) {
+                for (var item of data) {
+                  // console.log(item.hospital, hos[i], hours[key], dateHour)
+                  let dateHour = item.count_hour.slice(11) // YYYY-MM-DD hh:mm:ss 截取从h开始后面所有字符（时分秒）
+                  if (item.hospital === 'rmyy' && hours[key] === dateHour) {
+                    dataMap.市人民医院 = item.amount // 市人民医院:amount
+                  } else if (item.hospital === 'zyyy' && hours[key] === dateHour) {
+                    dataMap.市中医医院 = item.amount // 市中医医院:amount
+                  } else if (item.hospital === 'bayy' && hours[key] === dateHour) {
+                    dataMap.博爱医院 = item.amount // 市中医医院:amount
+                  } else if (item.hospital === 'fyyy' && hours[key] === dateHour) {
+                    dataMap.市妇幼医院 = item.amount // 市妇幼医院:amount
+                  }
+                }
+              }
+            }
+            let lineData = {
+              columns: ['时间', '市人民医院', '市中医医院', '博爱医院', '市妇幼医院'],
+              rows: rows
+            }
+            this.chartData01 = lineData
+            // console.log(this.chartData01)
+          } else if (groupBy === "by_month_of_year") {
+            let month = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+            let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
+            let rows = []
+            for (var key in month) {
+              let dataMap = {}
+              rows.push(dataMap)
+              dataMap.时间 = month[key]
+              for (var i in hos) {
+                for (var item of data) {
+                  // console.log(item.hospital, hos[i], month[key], dateHour)
+                  let dateHour = item.count_hour.slice(5)
+                  // console.log(dateHour)
+                  if (item.hospital === 'rmyy' && month[key] == dateHour) {
+                    dataMap.市人民医院 = item.amount
+                  } else if (item.hospital === 'zyyy' && month[key] == dateHour) {
+                    dataMap.市中医医院 = item.amount
+                  } else if (item.hospital === 'bayy' && month[key] == dateHour) {
+                    dataMap.博爱医院 = item.amount
+                  } else if (item.hospital === 'fyyy' && month[key] == dateHour) {
+                    dataMap.市妇幼医院 = item.amount
+                  }
+                }
+              }
+            }
+            let lineData = {
+              columns: ['时间', '市人民医院', '市中医医院', '博爱医院', '市妇幼医院'],
+              rows: rows
+            }
+            // this.lineData 
+            this.chartData01 = lineData
+            console.log(this.chartData01)
+          } else if (groupBy === "by_date_of_week") {
+            let date = this.timeHorizon.date
+            let day_of_week = this.timeHorizon.day_of_week
+            // let week = ["周一", "周二", "周三", "周四", "周五", "周六", "周天"]
+            let week = []
+            for (let i = 1; i < 8; i++) {
+              week.push(moment(date).add(i - day_of_week, 'days').format('YYYY-MM-DD'))
+            }
+            // console.log(week)
+            let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
+            let rows = []
+            for (let day in week) { // 遍历一周的每一天
+              let dataMap = {}
+              rows.push(dataMap)
+              dataMap.时间 = week[day]  // 时间:"周一"
+              for (var i in hos) {
+                for (var item of data) {
+                  let dateHour = item.count_hour
+                  if (item.hospital === 'rmyy' && week[day] == dateHour) {
+                    dataMap.市人民医院 = item.amount
+                  } else if (item.hospital === 'zyyy' && week[day] == dateHour) {
+                    dataMap.市中医医院 = item.amount
+                  } else if (item.hospital === 'bayy' && week[day] == dateHour) {
+                    dataMap.博爱医院 = item.amount
+                  } else if (item.hospital === 'fyyy' && week[day] == dateHour) {
+                    dataMap.市妇幼医院 = item.amount
+                  }
+                }
+              }
+              // console.log(dataMap)
+            }
+            let lineData = {
+              columns: ['时间', '市人民医院', '市中医医院', '博爱医院', '市妇幼医院'],
+              rows: rows
+            }
+            // this.lineData 
+            this.chartData01 = lineData
+            // console.log(lineData)
+          } else if (groupBy === "by_date_of_month") {
+            let date = this.timeHorizon.date
+            let day_count = this.timeHorizon.day_count
+            let day_of_week = this.timeHorizon.day_of_week
+            let month_start = this.timeHorizon.month_start
+            // let week = ["周一", "周二", "周三", "周四", "周五", "周六", "周天"]
+            let days = []
+            for (let i = 1; i < day_count + 1; i++) {
+              if (i < 10) {
+                days.push(moment().format(month_start).slice(0, 9) + i)
+              } else {
+                days.push(moment().format(month_start).slice(0, 8) + i)
+              }
+            }
+            // console.log(days)
+            let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
+            let rows = []
+            for (let day in days) { // 遍历每月的每一天
+              let dataMap = {}
+              rows.push(dataMap)
+              dataMap.时间 = days[day]  //
+              for (var i in hos) {
+                for (var item of data) {
+                  let dateHour = item.count_hour
+                  if (item.hospital === 'rmyy' && days[day] == dateHour) {
+                    dataMap.市人民医院 = item.amount
+                  } else if (item.hospital === 'zyyy' && days[day] == dateHour) {
+                    dataMap.市中医医院 = item.amount
+                  } else if (item.hospital === 'bayy' && days[day] == dateHour) {
+                    dataMap.博爱医院 = item.amount
+                  } else if (item.hospital === 'fyyy' && days[day] == dateHour) {
+                    dataMap.市妇幼医院 = item.amount
+                  }
+                }
+              }
+            }
+            let lineData = {
+              columns: ['时间', '市人民医院', '市中医医院', '博爱医院', '市妇幼医院'],
+              rows: rows
+            }
+            this.chartData01 = lineData
+            // console.log(lineData)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
     toManangerment() {
       let str = window.location.href
       let num = str.indexOf("?");
       str = str.substr(num + 1);
       console.log(str)
-      window.location.href = '../../main/index.html'
+      window.location.href = '../../main/index.html?' + str
     },
     checkTimeHorizon(time) {
       this.checkDataType = time;
-      this.chartData01 = this.data01[time];
-      this.pieData1.hospital = this.data02.hos_num_pie[time];
-      this.pieData1.card = this.data02.card_num_pie[time];
-      this.chartData02 = {
-        hos1: this.hos_bar_data.hos1Data[time],
-        hos2: this.hos_bar_data.hos2Data[time],
-        hos3: this.hos_bar_data.hos3Data[time],
-        hos4: this.hos_bar_data.hos4Data[time],
-        hos5: this.hos_bar_data.hos5Data[time]
-      };
+      if (time === "day") {
+        this.getData("by_hour_of_date")
+      }
+      else if (time === "week") {
+        this.getData("by_date_of_week")
+      }
+      else if (time === "month") {
+        this.getData("by_date_of_month")
+      } else if (time === "year") {
+        this.getData("by_month_of_year")
+      }
     }
   },
-
   data() {
     this.pieSetting = {
       radius: 80,
@@ -183,7 +576,9 @@ export default {
       offsetY: 120
     };
     return {
+      user: '',
       date: null,
+      timeHorizon: '',
       checkDataType: 'day',
       legend: {
         textStyle: {
@@ -191,7 +586,7 @@ export default {
         }
       },
       chartSetting1: {
-        stack: { 用户: ['延大附院', '市中医医院', '市人民医院', '市妇幼医院', '宝塔区医院'] }
+        stack: { 用户: ['市人民医院', '市中医医院', '博爱医院', '市妇幼医院'] }
       },
       swiperOptionTop: {
         watchSlidesProgress: true,
@@ -221,101 +616,6 @@ export default {
         hos3: {},
         hos4: {},
         hos5: {}
-      },
-      data01: {
-        day: {
-          columns: ['时间', '延大附院', '市中医医院', '市人民医院', '市妇幼医院', '宝塔区医院'],
-          rows: [
-            { 时间: '00:00', 延大附院: 5, 市中医医院: 2, 市人民医院: 1, 市妇幼医院: 0, 宝塔区医院: 0 },
-            { 时间: '01:00', 延大附院: 3, 市中医医院: 5, 市人民医院: 2, 市妇幼医院: 2, 宝塔区医院: 0 },
-            { 时间: '02:00', 延大附院: 1, 市中医医院: 0, 市人民医院: 0, 市妇幼医院: 1, 宝塔区医院: 0 },
-            { 时间: '03:00', 延大附院: 2, 市中医医院: 0, 市人民医院: 1, 市妇幼医院: 0, 宝塔区医院: 1 },
-            { 时间: '04:00', 延大附院: 2014, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '05:00', 延大附院: 4975, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 },
-            { 时间: '06:00', 延大附院: 4568, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '07:00', 延大附院: 3065, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '08:00', 延大附院: 2589, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '09:00', 延大附院: 4593, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '10:00', 延大附院: 5547, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '11:00', 延大附院: 714, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '12:00', 延大附院: 6520, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '13:00', 延大附院: 987, 市中医医院: 1093, 市人民医院: 1093, 市妇幼医院: 1093, 宝塔区医院: 0.32 },
-            { 时间: '14:00', 延大附院: 1982, 市中医医院: 3230, 市人民医院: 3230, 市妇幼医院: 3230, 宝塔区医院: 0.26 },
-            { 时间: '15:00', 延大附院: 2923, 市中医医院: 2623, 市人民医院: 2623, 市妇幼医院: 2623, 宝塔区医院: 0.76 },
-            { 时间: '16:00', 延大附院: 2456, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '17:00', 延大附院: 3792, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 },
-            { 时间: '18:00', 延大附院: 1514, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '19:00', 延大附院: 2436, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '20:00', 延大附院: 4125, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '21:00', 延大附院: 3201, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '22:00', 延大附院: 2514, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '23:00', 延大附院: 1026, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 }
-          ]
-        },
-        week: {
-          columns: ['时间', '延大附院', '市中医医院', '市人民医院', '市妇幼医院', '宝塔区医院'],
-          rows: [
-            { 时间: '周一', 延大附院: 1234, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '周二', 延大附院: 5851, 市中医医院: 1093, 市人民医院: 1093, 市妇幼医院: 1093, 宝塔区医院: 0.32 },
-            { 时间: '周三', 延大附院: 4567, 市中医医院: 3230, 市人民医院: 3230, 市妇幼医院: 3230, 宝塔区医院: 0.26 },
-            { 时间: '周四', 延大附院: 4521, 市中医医院: 2623, 市人民医院: 2623, 市妇幼医院: 2623, 宝塔区医院: 0.76 },
-            { 时间: '周五', 延大附院: 2014, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '周六', 延大附院: 4975, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 },
-            { 时间: '周日', 延大附院: 4568, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 }
-          ]
-        },
-        month: {
-          columns: ['时间', '延大附院', '市中医医院', '市人民医院', '市妇幼医院', '宝塔区医院'],
-          rows: [
-            { 时间: '1号', 延大附院: 1234, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '2号', 延大附院: 5851, 市中医医院: 1093, 市人民医院: 1093, 市妇幼医院: 1093, 宝塔区医院: 0.32 },
-            { 时间: '3号', 延大附院: 4567, 市中医医院: 3230, 市人民医院: 3230, 市妇幼医院: 3230, 宝塔区医院: 0.26 },
-            { 时间: '4号', 延大附院: 4521, 市中医医院: 2623, 市人民医院: 2623, 市妇幼医院: 2623, 宝塔区医院: 0.76 },
-            { 时间: '5号', 延大附院: 2014, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '6号', 延大附院: 4975, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 },
-            { 时间: '7号', 延大附院: 4568, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '8号', 延大附院: 3065, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '9号', 延大附院: 2589, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '10号', 延大附院: 4593, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '11号', 延大附院: 5547, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '12号', 延大附院: 714, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '13号', 延大附院: 6520, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '14号', 延大附院: 987, 市中医医院: 1093, 市人民医院: 1093, 市妇幼医院: 1093, 宝塔区医院: 0.32 },
-            { 时间: '15号', 延大附院: 1982, 市中医医院: 3230, 市人民医院: 3230, 市妇幼医院: 3230, 宝塔区医院: 0.26 },
-            { 时间: '16号', 延大附院: 2923, 市中医医院: 2623, 市人民医院: 2623, 市妇幼医院: 2623, 宝塔区医院: 0.76 },
-            { 时间: '17号', 延大附院: 2456, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '18号', 延大附院: 3792, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 },
-            { 时间: '19号', 延大附院: 1514, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '20号', 延大附院: 2436, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '21号', 延大附院: 4125, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '22号', 延大附院: 3201, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '23号', 延大附院: 2514, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '24号', 延大附院: 1026, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '25号', 延大附院: 1234, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '26号', 延大附院: 5851, 市中医医院: 1093, 市人民医院: 1093, 市妇幼医院: 1093, 宝塔区医院: 0.32 },
-            { 时间: '27号', 延大附院: 4567, 市中医医院: 3230, 市人民医院: 3230, 市妇幼医院: 3230, 宝塔区医院: 0.26 },
-            { 时间: '28号', 延大附院: 4521, 市中医医院: 2623, 市人民医院: 2623, 市妇幼医院: 2623, 宝塔区医院: 0.76 },
-            { 时间: '29号', 延大附院: 2014, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '30号', 延大附院: 4975, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 }
-          ]
-        },
-        year: {
-          columns: ['时间', '延大附院', '市中医医院', '市人民医院', '市妇幼医院', '宝塔区医院'],
-          rows: [
-            { 时间: '1月', 延大附院: 1234, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '2月', 延大附院: 5851, 市中医医院: 1093, 市人民医院: 1093, 市妇幼医院: 1093, 宝塔区医院: 0.32 },
-            { 时间: '3月', 延大附院: 4567, 市中医医院: 3230, 市人民医院: 3230, 市妇幼医院: 3230, 宝塔区医院: 0.26 },
-            { 时间: '4月', 延大附院: 4521, 市中医医院: 2623, 市人民医院: 2623, 市妇幼医院: 2623, 宝塔区医院: 0.76 },
-            { 时间: '5月', 延大附院: 2014, 市中医医院: 1423, 市人民医院: 1423, 市妇幼医院: 1423, 宝塔区医院: 0.49 },
-            { 时间: '6月', 延大附院: 4975, 市中医医院: 3492, 市人民医院: 3492, 市妇幼医院: 3492, 宝塔区医院: 0.323 },
-            { 时间: '7月', 延大附院: 4568, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '8月', 延大附院: 3065, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '9月', 延大附院: 2589, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '10月', 延大附院: 4593, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '11月', 延大附院: 5547, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 },
-            { 时间: '12月', 延大附院: 714, 市中医医院: 4293, 市人民医院: 4293, 市妇幼医院: 4293, 宝塔区医院: 0.78 }
-          ]
-        }
       },
       data02: {
         hos_num_pie: {
@@ -863,14 +1163,39 @@ export default {
       return this.$refs.swiperTop.swiper;
     }
   },
-  created() { },
+  created() {
+    let date = "2018-8-31"
+    let today = moment().format('YYYY-MM-DD') // moment获取本日日期
+    let day_of_week = moment(date, 'YYYY-MM-DD').format('E'); // 计算指定日期是这周第几天
+    let week_start = moment(date).subtract(day_of_week - 1, 'days').format('YYYY-MM-DD'); // 周一日期
+    let week_end = moment(date).add(7 - day_of_week, 'days').format('YYYY-MM-DD'); // 周日日期
+    let month_start = moment(date).startOf('month').format('YYYY-MM-DD'); // 本月第一天
+    let month_end = moment(date).endOf('month').format('YYYY-MM-DD'); // 本月最后一天
+    let day_count = parseInt(moment(date).endOf('month').format('DD')); // 本月天数
+    this.timeHorizon = {
+      date: date,
+      today: today,
+      day_count: day_count,
+      day_of_week: day_of_week,
+      week_start: week_start,
+      week_end: week_end,
+      month_start: month_start,
+      month_end: month_end
+    }
+    // console.log(this.timeHorizon)
+  },
+  created() {
+    this.user = top.user
+    console.log("user:", this.user)
+  },
   mounted() {
     setInterval(() => {
       this.date = moment().format('YYYY-MM-DD  hh:mm:ss');
     }, 1000);
-    console.log('this is current swiper instance object', this.swiperTop);
+    // console.log('this is current swiper instance object', this.swiperTop);
     // this.swiper.slideTo(1, 1000, false);
-    this.chartData01 = this.data01.day;
+    this.getData("by_hour_of_date")
+    // this.chartData01 = this.data01.day;
     this.pieData1.hospital = this.data02.hos_num_pie.day;
     this.pieData1.card = this.data02.card_num_pie.day;
     this.chartData02 = {
@@ -979,7 +1304,7 @@ div /deep/ .swiper-pagination-bullets {
   min-width: 1500px;
   .main {
     margin: 0 0px 0px;
-    background: url("../assets/images/wrapper-bg.png") no-repeat;
+    background: url("../assets/images/wrapper-long-bg.png") no-repeat;
     background-size: 100% 100%;
   }
   .header {
@@ -1001,14 +1326,24 @@ div /deep/ .swiper-pagination-bullets {
       .top_right {
         display: flex;
         align-items: center;
+        .accountInfo {
+          display: inline-block;
+          height: 50px;
+          min-width: 150px;
+        }
         .btn {
           cursor: pointer;
+          text-align: center;
           display: inline-block;
           height: 30px;
-          width: 80px;
+          min-width: 100px;
           line-height: 30px;
+          margin-right: 20px;
           &:nth-child(2) {
-            width: 50px;
+            text-align: left;
+            &:hover {
+              background-color: transparent;
+            }
           }
           &:hover {
             background-color: rgba(255, 0, 0, 0.5);

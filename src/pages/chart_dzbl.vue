@@ -208,6 +208,12 @@ export default {
       this.checkDataType = time;
       if (time === "day") {
         this.getData("by_hour_of_date")
+      }
+      else if (time === "week") {
+        this.getData("by_date_of_week")
+      }
+      else if (time === "month") {
+        this.getData("by_date_of_month")
       } else if (time === "year") {
         this.getData("by_month_of_year")
       }
@@ -227,7 +233,7 @@ export default {
       let num = str.indexOf("?");
       str = str.substr(num + 1);
       console.log(str)
-      window.location.href = '../../main/index.html'
+      window.location.href = '../../main/index.html?' + str
     },
     getData(groupBy) {
       console.log(groupBy)
@@ -235,11 +241,6 @@ export default {
         "serviceName": "srvemr_record_count_by_hour_select",
         "colNames": ["*"],
         "condition": [
-          // {
-          //   "colName": "hospital",
-          //   "value": "rmyy",
-          //   "ruleType": "eq"
-          // },
           {
             "colName": "count_hour",
             "value": "2018-08-31",
@@ -261,9 +262,8 @@ export default {
         "order": [
           {
             "colName": "count_hour",
-            "orderType": "desc"
+            "orderType": "asc"
           }
-
         ]
       }
       if (groupBy === "by_month_of_year") {
@@ -274,6 +274,57 @@ export default {
             "ruleType": "[like]"
           }
         ]
+      } else if (groupBy === 'by_date_of_week') {
+        console.log(this.timeHorizon)
+        req.condition = [
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.week_start,
+            "ruleType": "ge"
+          },
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.week_end,
+            "ruleType": "le"
+          }
+        ]
+        req.group = [
+          {
+            "colName": "hospital",
+            "type": "by"
+          }, {
+            "colName": "count_hour",
+            "type": "by_date"
+          }, {
+            "colName": "amount",
+            "type": "sum"
+          }
+        ]
+      } else if (groupBy === 'by_date_of_month') {
+        req.condition = [
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.month_start,
+            "ruleType": "ge"
+          },
+          {
+            "colName": "count_hour",
+            "value": this.timeHorizon.month_end,
+            "ruleType": "le"
+          }
+        ]
+        req.group = [
+          {
+            "colName": "hospital",
+            "type": "by"
+          }, {
+            "colName": "count_hour",
+            "type": "by_date"
+          }, {
+            "colName": "amount",
+            "type": "sum"
+          }
+        ]
       }
       let url = this.getServiceUrl("select", req.serviceName, "emr")
       axios({ method: "POST", headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }, url: url, data: req })
@@ -281,7 +332,7 @@ export default {
           if (res.data.resultCode === "0011") {
             this.$router.push({ name: "login" })
           }
-          console.log(res.data.data)
+          console.log("返回数据", res.data.data)
           let data = res.data.data
 
           if (groupBy === "by_hour_of_date") {
@@ -296,15 +347,15 @@ export default {
               for (var i in hos) {
                 for (var item of data) {
                   // console.log(item.hospital, hos[i], hours[key], dateHour)
-                  let dateHour = item.count_hour.slice(11)
+                  let dateHour = item.count_hour.slice(11) // YYYY-MM-DD hh:mm:ss 截取从h开始后面所有字符（时分秒）
                   if (item.hospital === 'rmyy' && hours[key] === dateHour) {
-                    dataMap.市人民医院 = item.amount
+                    dataMap.市人民医院 = item.amount // 市人民医院:amount
                   } else if (item.hospital === 'zyyy' && hours[key] === dateHour) {
-                    dataMap.市中医医院 = item.amount
+                    dataMap.市中医医院 = item.amount // 市中医医院:amount
                   } else if (item.hospital === 'bayy' && hours[key] === dateHour) {
-                    dataMap.博爱医院 = item.amount
+                    dataMap.博爱医院 = item.amount // 市中医医院:amount
                   } else if (item.hospital === 'fyyy' && hours[key] === dateHour) {
-                    dataMap.市妇幼医院 = item.amount
+                    dataMap.市妇幼医院 = item.amount // 市妇幼医院:amount
                   }
                 }
               }
@@ -348,6 +399,44 @@ export default {
             // this.lineData 
             this.chartData01 = lineData
             console.log(this.chartData01)
+          } else if (groupBy === "by_date_of_week") {
+            let week = ["周一", "周二", "周三", "周四", "周五", "周六", "周天"]
+            let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
+            let rows = []
+            for (let day in week) {
+              let dataMap = {}
+              rows.push(dataMap)
+              dataMap.时间 = week[day]  // 时间:"周一"
+              for (var i in hos) {
+                for (var item of data) {
+                  console.log(item) // 
+                  let dateHour = item.count_hour
+                  // console.log(item.hospital, hos[i], week[day], dateHour)
+                  // console.log(dateHour)
+                  if (item.hospital === 'rmyy') {
+                    dataMap.市人民医院 = item.amount
+                  } else if (item.hospital === 'zyyy') {
+                    dataMap.市中医医院 = item.amount
+                  } else if (item.hospital === 'bayy') {
+                    dataMap.博爱医院 = item.amount
+                  } else if (item.hospital === 'fyyy') {
+                    dataMap.市妇幼医院 = item.amount
+                  }
+                }
+              }
+              console.log(dataMap)
+            }
+
+            let lineData = {
+              columns: ['时间', '市人民医院', '市中医医院', '博爱医院', '市妇幼医院'],
+              rows: rows
+            }
+            // this.lineData 
+            // this.chartData01 = lineData
+            console.log(lineData)
+
+          } else if (groupBy === "by_date_of_month") {
+
           }
         }).catch(err => {
           console.log(err)
@@ -356,9 +445,6 @@ export default {
   },
 
   data() {
-    group: [
-
-    ]
     this.pieSetting = {
       radius: 80,
       offsetY: 160
@@ -368,6 +454,14 @@ export default {
       offsetY: 120
     };
     return {
+      timeHorizon: {
+        today: "",
+        day_of_week: "",
+        week_start: "",
+        week_end: "",
+        month_start: "",
+        month_end: ""
+      },
       testData: {
         columns: ['counter_hour', '延大附院', '市中医医院', '市人民医院', '市妇幼医院', '宝塔区医院'],
         rows: [
@@ -1061,11 +1155,30 @@ export default {
       return this.$refs.swiperTop.swiper;
     }
   },
+  created() {
+    let date = "2018-8-31"
+    let today = moment().format('YYYY-MM-DD') // moment获取本日日期
+    let day_of_week = moment(date, 'YYYY-MM-DD').format('E'); // 计算指定日期是这周第几天
+    let week_start = moment(date).subtract(day_of_week - 1, 'days').format('YYYY-MM-DD'); // 周一日期
+    let week_end = moment(date).add(7 - day_of_week, 'days').format('YYYY-MM-DD'); // 周日日期
+    let month_start = moment(date).startOf('month').format('YYYY-MM-DD'); // 本月第一天
+    let month_end = moment(date).endOf('month').format('YYYY-MM-DD'); // 本月最后一天
+    this.timeHorizon = {
+      today: today,
+      day_of_week: day_of_week,
+      week_start: week_start,
+      week_end: week_end,
+      month_start: month_start,
+      month_end: month_end
+    }
+    console.log(this.timeHorizon)
+  },
   mounted() {
     // setInterval(() => {
     //   this.date = moment().format('YYYY-MM-DD  hh:mm:ss');
     // }, 1000);
     this.getData("by_hour_of_date")
+
     // current swiper instance
     // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
     console.log('this is current swiper instance object', this.swiperTop);

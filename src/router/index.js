@@ -1,22 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import dzbl from '@/pages/dzbl'
 import login from '@/pages/login'
-import chartDzbl from '@/pages/chart_dzbl'
+import medicalrecord from '@/pages/chart_dzbl'
 import platform from '@/pages/chart_platform'
-import chartYKT from '@/pages/chart_ykt'
+import oneCard from '@/pages/chart_ykt'
 import secplat from '@/pages/chart_secplat'
 import datacenter from'@/pages/datacenter'
+import debugging from'@/pages/debugging'
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
     {
       path: '/',
       name: 'dzbl',
@@ -28,14 +23,14 @@ export default new Router({
       component: login
     },
     {
-      path: '/dzblc',
-      name: 'chartDzbl',
-      component: chartDzbl
+      path: '/medicalrecord',
+      name: 'medicalrecord',
+      component: medicalrecord
     },
     {
-      path: '/ykt',
-      name: 'chartYKT',
-      component: chartYKT
+      path: '/onecard',
+      name: 'oneCard',
+      component: oneCard
     },
     {
       path: '/platform',
@@ -51,6 +46,11 @@ export default new Router({
       path: '/datacenter',
       name: 'datacenter',
       component: datacenter
-    }
+    },
+    {
+      path: '/debugging',
+      name: 'debugging',
+      component: debugging
+    },
   ]
 })

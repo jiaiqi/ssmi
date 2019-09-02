@@ -4,21 +4,21 @@
       <div class="header_item">
         <div class="header_img"></div>
         <div class="header_user_info">
-          <div class="header_user_info_item" style="width: 110px">
-            <span class="label">患者姓名：</span>
-            {{ patientInfo.name }}
-          </div>
-          <div class="header_user_info_item" style="width: 80px">
-            <span class="label">性别：</span>
-            {{ patientInfo.gender }}
-          </div>
-          <div class="header_user_info_item" style="width: 85px">
-            <span class="label">年龄：</span>
-            {{ patientInfo.age }}岁
+          <div class="header_user_info_item">
+            患者姓名：
+            <span v-if="patientInfo.name">{{ patientInfo.name }}</span>
           </div>
           <div class="header_user_info_item">
-            <span class="label">身份证号：</span>
-            {{ patientInfo.identityCard }}
+            性别：
+            <span v-if="patientInfo.gender">{{ patientInfo.gender }}</span>
+          </div>
+          <div class="header_user_info_item">
+            年龄：
+            <span v-if="patientInfo.age">{{ patientInfo.age }}</span>
+          </div>
+          <div class="header_user_info_item">
+            身份证号：
+            <span v-if="patientInfo.identityCard">{{ patientInfo.identityCard }}</span>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
           <p class="text">医生</p>
           <p class="text">服务</p>
         </div>
-        <div class="header_btn" onclick="window.close()">退出</div>
+        <div class="header_btn" onclick="toManangerment">退出</div>
       </div>
     </header>
     <div class="content">
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="content_left_bottom">
-          <el-timeline style="padding-inline-start: 10px;padding-top:10px;">
+          <el-timeline style="padding-inline-start: 10px;padding-top:10px;padding-left:10px;">
             <el-timeline-item
               v-for="(item, index) in timeLineData"
               :key="index"
@@ -103,2339 +103,35 @@
               :color="item.color"
               :size="item.size"
               placement="top"
-              :timestamp="item.timestamp"
+              :timestamp="item.dateTime"
             >
-              <el-tree :data="item.data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+              <el-tree :data="item.data" :props="defaultProps" @node-click="addTab"></el-tree>
             </el-timeline-item>
           </el-timeline>
         </div>
       </div>
-      <div class="content_right" style="width: 1092px;">
+      <div class="content_right">
         <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
-          <el-tab-pane label="患者总览" name="患者总览">
-            <div class="tab_content">
-              <div class="tab_content_title">基本信息</div>
-              <div class="tab_content_main">
-                <table style="width:800px">
-                  <tr>
-                    <td>姓名</td>
-                    <td>{{ patientInfo.name }}</td>
-                    <td>性别</td>
-                    <td>{{ patientInfo.gender }}</td>
-                    <td>年龄</td>
-                    <td>{{ patientInfo.age }}</td>
-                  </tr>
-                  <tr>
-                    <td>职业</td>
-                    <td colspan="5">{{ patientInfo.profession }}</td>
-                  </tr>
-                  <tr>
-                    <td>家庭住址</td>
-                    <td colspan="5">{{ patientInfo.familyAddress }}</td>
-                  </tr>
-                  <tr>
-                    <td>联系方式</td>
-                    <td colspan="5">{{ patientInfo.contact }}</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗手术记录" name="门急诊诊疗手术记录">
-            <div class="tab_content">
-              <div class="tab_content_title">手术记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>序号</td>
-                      <td>手术开始时间</td>
-                      <td>手术结束时间</td>
-                      <td>手术级别</td>
-                      <td>愈合等级</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.AP01_00_025_00}}</td>
-                      <td
-                        v-if="item.AP06_00_393_00"
-                      >{{ item.AP06_00_393_00.slice(0,4)+'-'+item.AP06_00_393_00.slice(4,6)+'-'+item.AP06_00_393_00.slice(6,8)+" "+item.AP06_00_393_00.slice(9,11)+':'+item.AP06_00_393_00.slice(11,13)+':'+item.AP06_00_393_00.slice(13,15) }}</td>
-                      <td v-else-if="!item.AP06_00_393_00"></td>
-                      <td
-                        v-if="item.AP06_00_394_00"
-                      >{{ item.AP06_00_394_00.slice(0,4)+'-'+item.AP06_00_394_00.slice(4,6)+'-'+item.AP06_00_394_00.slice(6,8)+" "+item.AP06_00_394_00.slice(9,11)+':'+item.AP06_00_394_00.slice(11,13)+':'+item.AP06_00_394_00.slice(13,15) }}</td>
-                      <td v-else-if="!item.AP06_00_394_00"></td>
-                      <td>{{ item.AP06_00_367_00 }}</td>
-                      <td>{{ item.AP05_01_054_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('1',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog1"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <span>医师：{{ detail.AP02_01_039_37 }}</span>
-                          <span>就诊时间: {{ detail.DE06_00_095_00 }}</span>
-                          <span>医院：{{detail.HOSPITAL_NAME}}</span>
-                        </div>
-                        <p>手术申请单号:{{ detail.AP01_00_022_00 }}</p>
-                        <p>手术/操作-名称:{{ detail.DE06_00_094_00 }}</p>
-                        <p>麻醉-方法:{{ detail.DE06_00_074_00 }}</p>
-                      </div>
-                    </el-dialog>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <!-- <el-tab-pane label="入院记录" name="入院记录">
-            <div class="tab_content">
-              <div class="tab_content_title">手术记录-延安市人民医院</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>序号</td>
-                      <td>手术开始时间</td>
-                      <td>手术结束时间</td>
-                      <td>手术级别</td>
-                      <td>愈合等级</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.AP01_00_025_00 }}</td>
-                      <td>{{ item.AP06_00_393_00 }}</td>
-                      <td>{{ item.AP06_00_394_00 }}</td>
-                      <td>{{ item.AP06_00_367_00 }}</td>
-                      <td>{{ item.AP05_01_054_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('3')">
-                        <span>详情</span>
-                      </td>
-                      <el-dialog
-                        :visible.sync="dialogVisible.dialog3"
-                        :before-close="handleClose"
-                        width="1000px"
-                      >
-                        <div class="tab_detail">
-                          <div class="detail_title">
-                            <span>医师：{{ item.AP02_01_039_37 }}</span>
-                            <span>就诊时间: {{ item.DE06_00_095_00 }}</span>
-                          </div>
-                          <p>手术申请单号:{{ item.AP01_00_022_00 }}</p>
-                          <p>手术/操作-名称:{{ item.DE06_00_094_00 }}</p>
-                          <p>麻醉-方法:{{ item.DE06_00_074_00 }}</p>
-                        </div>
-                      </el-dialog>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>-->
-          <el-tab-pane label="门急诊诊疗检验报告" name="门急诊诊疗检验报告">
-            <div class="tab_content">
-              <div class="tab_content_title">检验记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>检验申请单号</td>
-                      <td>检验时间</td>
-                      <td>检验报告单号</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.AP01_00_022_00}}</td>
-                      <td>{{item.DATAGENERATE_DATE}}</td>
-                      <td>{{item.AP04_50_057_00}}</td>
-                      <td class="handle" @click="changeDialogVisible('2',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      title
-                      :visible.sync="dialogVisible.dialog2"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <div class="detail_title_block">
-                            <span>姓名:{{detail.DE02_01_039_00}}</span>
-                            <span>性别:{{detail.AP02_01_102_01}}</span>
-                            <span>年龄:{{detail.DE02_01_032_00}}</span>
-                          </div>
-                          <div class="detail_title_block">
-                            <span>病人ID：{{detail.LOCAL_ID}}</span>
-                            <span>科室：{{detail.AP04_30_060_00}}</span>
-                            <span>检验类别:{{detail.AP04_30_018_02}}</span>
-                          </div>
-                          <div class="detail_title_block">
-                            <span>标本种类：{{detail.AP04_50_054_00}}</span>
-                            <span>核收日期： {{detail.AP09_00_074_00}}</span>
-                            <span>诊断：{{detail.DE05_01_025_00}}</span>
-                          </div>
-                          <div class="detail_title_block">
-                            <span>样本号： 常 0015</span>
-                            <span>送检医生：{{detail.AP02_01_122_00}}</span>
-                            <span>备注:</span>
-                          </div>
-                        </div>
-                        <div class="detail_content">
-                          <div class="detail_content_title">
-                            <div class="title_left">
-                              <span>序号</span>
-                              <span>项目名称</span>
-                              <span>结果</span>
-                              <span>单位</span>
-                              <span>参考范围</span>
-                            </div>
-                            <div class="title_right">
-                              <span>序号</span>
-                              <span>项目名称</span>
-                              <span>结果</span>
-                              <span>单位</span>
-                              <span>参考范围</span>
-                            </div>
-                          </div>
-                          <div class="detail_content_content">
-                            <div class="detail_content_left"></div>
-                            <div class="detail_content_right"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗病历" name="门急诊诊疗病历">
-            <div class="tab_mzbl-content">
-              <div class="tab_content_title"></div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>流水号</td>
-                      <td>就诊时间</td>
-                      <td>就诊科室</td>
-                      <td>处理意见</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.BASIC_ACTIVE_ID }}</td>
-                      <td>{{ item.DE06_00_062_00 }}</td>
-                      <td>{{ item.DE08_10_026_00 }}</td>
-                      <td>{{item.DE06_00_087_00}}</td>
-                      <td class="handle" @click="changeDialogVisible('3',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog3"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="table_mzbl_content">
-                        <div class="main_title">{{detail.AP08_10_013_04}}{{detail.BASIC_ACTIVE_DES}}</div>
-                        <div class="header">
-                          <div class="header_item">门诊号：{{detail.DE01_00_010_00}}</div>
-                          <div class="header_item">姓名:{{detail.DE02_01_039_00}}</div>
-                          <div class="header_item">性别:{{detail.AP02_01_102_01}}</div>
-                          <div class="header_item">年龄：{{detail.DE02_01_032_00}}</div>
-                          <div class="header_item">就诊科室:{{detail.DE08_10_026_00}}</div>
-                          <div
-                            class="header_item"
-                            v-if="detail.DE06_00_062_00"
-                          >就诊时间:{{detail.DE06_00_062_00.slice(0,4)+'-'+detail.DE06_00_062_00.slice(4,6)+'-'+detail.DE06_00_062_00.slice(6,8)}}</div>
-                        </div>
-                        <div class="content">
-                          <div class="content_item_title">主诉:</div>
-                          <div class="content_item_detail">{{detail.DE04_01_119_00}}</div>
-                          <div class="content_item_title">现病史:</div>
-                          <div class="content_item_detail">{{detail.DE02_10_071_00}}</div>
-                          <div class="content_item_title">既往病史:</div>
-                          <div class="content_item_detail"></div>
-                          <div class="content_item_title">查体情况:</div>
-                          <div class="content_item_detail">{{detail.AP06_00_403_00}}</div>
-                          <div class="content_item_title">检查:</div>
-                          <div class="content_item_detail"></div>
-                          <div class="content_item_title">检验:</div>
-                          <div class="content_item_detail"></div>
-                          <div class="content_item_title">治疗建议:</div>
-                          <div class="content_item_detail">{{detail.AP06_00_403_00}}</div>
-                          <div class="content_footer">初步诊断:</div>
-                        </div>
-                        <div class="footer">
-                          <div class="footer_item">打印日期:</div>
-                          <div class="footer_item">医师签名:_________________</div>
-                          <div class="footer_item">1/1</div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗诊断记录" name="门急诊诊疗诊断记录">
-            <div class="tab_content">
-              <div class="tab_content_title">门急诊诊疗诊断记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>序号</td>
-                      <td>姓名</td>
-                      <td>年龄</td>
-                      <td>诊断疾病名称</td>
-                      <td>医师</td>
-                      <td>科室</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.BASIC_ACTIVE_ID }}</td>
-                      <td>{{ item.DE02_01_039_00 }}</td>
-                      <td>{{ item.DE02_01_032_00 }}</td>
-                      <td>{{ item.DE05_01_025_00 }}</td>
-                      <td>{{ item.AP02_01_039_29 }}</td>
-                      <td>{{ item.DE08_10_026_00 }}</td>
-                      <td class="handle" @click="changeDialogVisible('4',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog4"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="table_mabl_content">
-                        <div class="main_title">
-                          {{detail.ORGANIZATION_NAME}}
-                          <div class="little_tittle">{{detail.BASIC_ACTIVE_DES}}</div>
-                        </div>
-                        <div class="header"></div>
-                        <div class="content">
-                          <div
-                            class="content_item_detail"
-                          >兹证明 {{detail.DE02_01_039_00}}同志， {{detail.AP02_01_102_01}} ，经在我院 {{detail.BUSINESS_ACTIVE_DES}} 诊治</div>
-                          <div class="content_item_detail">诊疗号:{{detail.DE01_00_010_00}}</div>
-                          <div class="content_item_detail">临床诊断为: {{detail.DE05_01_025_00}}</div>
-                          <div class="content_item_detail">曾作处理: 药物治疗</div>
-                          <div class="content_item_detail">建议：1.禁烟酒。2避免劳累。3.动态监测相关指标变化。</div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗检查报告" name="门急诊诊疗检查报告">
-            <div class="tab_content">
-              <div class="tab_content_title">门急诊诊疗检查报告</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>性别</td>
-                      <td>检查日期</td>
-                      <td>科室</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.DE02_01_039_00 }}</td>
-                      <td>{{ item.AP02_01_102_01 }}</td>
-                      <td>{{ item.AP06_00_048_03 }}</td>
-                      <td>{{ item.AP04_30_060_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('5',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog5"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="wrap_jcbg">
-                        <div class="header">
-                          <div class="header_top">
-                            <h1>{{detail.AP04_50_076_02}}</h1>
-                            <h3>MR 检查报告单</h3>
-                          </div>
-                          <div class="header_cen">
-                            <p>
-                              <span>影像号：</span>
-                              <span>P170000000</span>
-                            </p>
-                          </div>
-                          <div class="header_bot">
-                            <ul>
-                              <li>
-                                <p>
-                                  <span>姓名：</span>
-                                  <span>{{ detail.DE02_01_039_00 }}</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>性别：</span>
-                                  <span>{{ detail.AP02_01_102_01 }}</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>年龄：</span>
-                                  <span>{{ detail.DE02_01_032_00 }}岁</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>检查号：</span>
-                                  <span>{{ detail.AP04_50_057_00 }}</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>科室：</span>
-                                  <span>{{ detail.AP04_30_060_00 }}</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>病房：</span>
-                                  <span>3</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span
-                                    v-if="detail.AP06_00_048_03"
-                                  >检查时间：{{detail.AP06_00_048_03.slice(0,4)+'-'+detail.AP06_00_048_03.slice(4,6)+'-'+detail.AP06_00_048_03.slice(6,8)}}</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>住院号：</span>
-                                  <span>000001</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span>床号：</span>
-                                  <span>15811</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span
-                                    v-if="detail.UPLOAD_TIME"
-                                  >报告时间：{{detail.UPLOAD_TIME.slice(0,4)+'-'+detail.UPLOAD_TIME.slice(4,6)+'-'+detail.UPLOAD_TIME.slice(6,8)}}</span>
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <div class="content_top">
-                            <div class="inspect">
-                              <p>检查项目：</p>
-                              <p>{{ detail.DE04_30_020_00 }}</p>
-                            </div>
-                            <div class="inspect">
-                              <p>检查方法：</p>
-                              <p>{{ detail.AP04_30_061_00 }}</p>
-                            </div>
-                            <div class="inspect">
-                              <p>影像表现：</p>
-                              <p>{{ detail.AP04_30_046_00 }}</p>
-                              <p></p>
-                            </div>
-                            <div class="opinion">
-                              <p>诊断意见：</p>
-                              <ul>
-                                <li>{{detail.AP04_30_046_00}}</li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="foot">
-                          <div class="foot_top">
-                            <p>
-                              <span>诊断医师：</span>
-                              <span>{{ detail.AP02_01_039_19 }}</span>
-                            </p>
-                            <p>
-                              <span>审核医师：</span>
-                              <span>{{ detail.AP02_01_039_19 }}</span>
-                            </p>
-                            <p>
-                              <span>审核时间：</span>
-                              <span>2018-07-18</span>
-                            </p>
-                          </div>
-                          <div class="foot_bot">
-                            <p>仅供参考</p>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗医嘱信息" name="住院诊疗医嘱信息">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗医嘱信息</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>医嘱号</td>
-                      <td>医嘱分类</td>
-                      <td>医嘱下达时间</td>
-                      <td>医嘱内容</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.AP01_00_024_00 }}</td>
-                      <td>{{ item.AP06_00_287_00 }}</td>
-                      <td
-                        v-if="item.AP06_00_207_00"
-                      >{{ item.AP06_00_207_00.slice(0,4)+'-'+item.AP06_00_207_00.slice(4,6)+'-'+item.AP06_00_207_00.slice(6,8)+" "+item.AP06_00_207_00.slice(9,11)+':'+item.AP06_00_207_00.slice(11,13)+':'+item.AP06_00_207_00.slice(13,15) }}</td>
-                      <td>{{ item.AP06_00_283_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('6',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog6"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="wrap_yz">
-                        <div class="header">
-                          <div class="header_top">
-                            <h1>延安大学附属医院</h1>
-                            <h3>长期医嘱单</h3>
-                          </div>
-                          <div class="header_bot">
-                            <p>
-                              <span>姓名：</span>
-                              <span>{{ detail.DE02_01_039_00 }}</span>
-                            </p>
-                            <p>
-                              <span>性别：</span>
-                              <span>{{ detail.AP02_01_102_01 }}</span>
-                            </p>
-                            <p>
-                              <span>年龄：</span>
-                              <span>{{ detail.DE02_01_032_00 }}</span>岁
-                            </p>
-                            <p>
-                              <span>住院号：</span>
-                              <span>{{ detail.DE01_00_014_00 }}</span>
-                            </p>
-                            <p>
-                              <span>住院科室：</span>
-                              <span>{{ detail.AP08_10_026_11 }}</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <table class="cont_t">
-                            <tr>
-                              <td colspan="2">开始</td>
-                              <td rowspan="2">执行时间</td>
-                              <td rowspan="2">长期医嘱</td>
-                              <td rowspan="2">执行频率</td>
-                              <td colspan="2">签名</td>
-                              <td colspan="2">停止时间</td>
-                              <td colspan="2">签名</td>
-                              <td rowspan="2">停止执行时间</td>
-                            </tr>
-                            <tr>
-                              <td>日期</td>
-                              <td>时间</td>
-                              <td>医师</td>
-                              <td>护士</td>
-                              <td>日期</td>
-                              <td>时间</td>
-                              <td>医师</td>
-                              <td>护士</td>
-                            </tr>
-                            <tr>
-                              <td
-                                v-if="detail.AP06_00_200_00"
-                              >{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)}}</td>
-                              <td
-                                v-if="detail.AP06_00_200_00"
-                              >{{detail.AP06_00_200_00.slice(9,11)+':'+detail.AP06_00_200_00.slice(11,13)+':'+detail.AP06_00_200_00.slice(13,15)}}</td>
-                              <td
-                                v-if="detail.AP06_00_200_00"
-                              >{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)+' '+detail.AP06_00_200_00.slice(9,11)+':'+detail.AP06_00_200_00.slice(11,13)+':'+detail.AP06_00_200_00.slice(13,15)}}</td>
-                              <td>{{ detail.AP06_00_283_00 }}</td>
-                              <td></td>
-                              <td>{{detail.AP02_01_039_83}}</td>
-                              <td>拓蕊蕊</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td
-                                v-if="detail.DE06_00_148_00"
-                              >{{detail.DE06_00_148_00.slice(0,4)+'-'+detail.DE06_00_148_00.slice(4,6)+'-'+detail.DE06_00_148_00.slice(6,8)+' '+detail.DE06_00_148_00.slice(9,11)+':'+detail.DE06_00_148_00.slice(11,13)+':'+detail.DE06_00_148_00.slice(13,15)}}</td>
-                            </tr>
-                          </table>
-
-                          <div class="content_bot">
-                            <p>
-                              第
-                              <span>1</span>页
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗挂号记录" name="门急诊诊疗挂号记录">
-            <div class="tab_content">
-              <div class="tab_content_title">挂号记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>就诊流水号</td>
-                      <td>姓名</td>
-                      <td>就诊地点</td>
-                      <td>就诊科室</td>
-                      <td>预约途径</td>
-                      <td>就诊类别</td>
-                      <td>挂号日期</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.DE01_00_010_00 }}</td>
-                      <td>{{ item.DE02_01_039_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td>{{ item.DE08_10_026_00 }}</td>
-                      <td>{{ item.AP06_00_401_02 }}</td>
-                      <td>{{ item.BUSINESS_ACTIVE_DES }}</td>
-                      <td
-                        v-if="item.AP09_00_024_00"
-                      >{{ item.AP09_00_024_00.slice(0,4)+'-'+item.AP09_00_024_00.slice(4,6)+'-'+item.AP09_00_024_00.slice(6,8)+" "+item.AP09_00_024_00.slice(9,11)+':'+item.AP09_00_024_00.slice(11,13)+':'+item.AP09_00_024_00.slice(13,15) }}</td>
-                      <td v-else-if="!item.AP09_00_024_00"></td>
-                      <el-dialog title visible.sync :before-close="handleClose" width="1000px"></el-dialog>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗出院记录" name="住院诊疗出院记录">
-            <div class="tab_content">
-              <div class="tab_content_title">出院记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>住院号</td>
-                      <td>入院日期</td>
-                      <td>出院日期</td>
-                      <td>住院患者入院科室</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.DE02_01_039_00 }}</td>
-                      <td>{{ item.DE01_00_014_00 }}</td>
-                      <td>{{ item.DE06_00_092_00 }}</td>
-                      <td>{{ item.DE06_00_016_00 }}</td>
-                      <td>{{ item.AP08_10_026_01 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('8',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog8"
-                      :before-close="handleClose"
-                      width="1100px"
-                    >
-                      <div class="tab_detail">
-                        <div class="table_cy_content">
-                          <div class="main_title">{{ detail.AP08_10_013_06 }}</div>
-                          <div class="header">
-                            <div class="header_item">住院科室：{{ detail.AP08_10_026_01 }}</div>
-                            <div class="header_item">
-                              <div class="header_item_top">出院记录</div>
-                              <div class="header_item_bottom">姓名：{{ detail.DE02_01_039_00 }}</div>
-                            </div>
-                            <div class="header_item">
-                              <div class="header_item_item">
-                                <span class="item_title">住院号:</span>
-                                <span class="item_text">{{ detail.DE01_00_014_00 }}</span>
-                              </div>
-                              <div class="header_item_item">
-                                <span class="item_title">影像号:</span>
-                                <span class="item_text">222</span>
-                              </div>
-                              <div class="header_item_item">
-                                <span class="item_title">床 &nbsp;号:</span>
-                                <span class="item_text">{{ detail.AP08_10_001_00 }}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="top">
-                            <table class="table">
-                              <tr class="row">
-                                <td>姓名:</td>
-                                <td colspan="2">{{ detail.DE02_01_039_00 }}</td>
-                                <td>性别:</td>
-                                <td>{{ detail.AP02_01_102_01 }}</td>
-                                <td>年龄:</td>
-                                <td>{{ detail.DE02_01_032_00 }}</td>
-                                <td>住院患者出院科室:</td>
-                                <td colspan="3">{{ detail.AP08_10_026_08 }}</td>
-                              </tr>
-                              <tr>
-                                <td>籍贯:</td>
-                                <td colspan="4">陕西，延安</td>
-                                <td>医疗费用支付方式:</td>
-                                <td colspan="5">{{ detail.AP07_00_011_01 }}</td>
-                              </tr>
-                              <tr v-if="detail.DE06_00_092_00">
-                                <td colspan="2">住院日期:</td>
-                                <td colspan="2" v-if="detail.DE06_00_092_00">
-                                  {{
-                                  detail.DE06_00_092_00.slice(0, 4) +
-                                  "-" +
-                                  detail.DE06_00_092_00.slice(4, 6) +
-                                  "-" +
-                                  detail.DE06_00_092_00.slice(6, 8)
-                                  }}
-                                </td>
-                                <td>出院:</td>
-                                <td colspan="2" v-if="detail.DE06_00_016_00">
-                                  {{
-                                  detail.DE06_00_016_00.slice(0, 4) +
-                                  "-" +
-                                  detail.DE06_00_016_00.slice(4, 6) +
-                                  "-" +
-                                  detail.DE06_00_016_00.slice(6, 8)
-                                  }}
-                                </td>
-                                <td>住院天数</td>
-                                <td>5 天</td>
-                              </tr>
-                            </table>
-                            <div class="cy_content">
-                              <div class="cy_content_box">
-                                <div class="content_item_title">入院时情况:</div>
-                                <div class="content_item_detail"></div>
-                              </div>
-                              <div class="cy_content_box">
-                                <div class="content_item_title">入院诊断:</div>
-                                <div class="content_item_detail"></div>
-                              </div>
-                              <div class="cy_content_box">
-                                <div class="content_item_title">住院后治疗及检查情况:</div>
-                                <div class="content_item_detail"></div>
-                              </div>
-                              <div class="cy_content_box">
-                                <div class="content_item_title">出院诊断:</div>
-                                <div class="content_item_detail"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗检验报告" name="住院诊疗检验报告">
-            <div class="tab_content">
-              <div class="tab_content_title">检验记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>序号</td>
-                      <td>姓名</td>
-                      <td>检验日期</td>
-                      <td>送检日期</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>1</td>
-                      <td>{{ item.DE02_01_039_00}}</td>
-                      <!-- <td>{{ item.AP06_00_048_02}}</td> -->
-                      <td
-                        v-if="item.AP06_00_048_02"
-                      >{{ item.AP06_00_048_02.slice(0,4)+'-'+item.AP06_00_048_02.slice(4,6)+'-'+item.AP06_00_048_02.slice(6,8)+" "+item.AP06_00_048_02.slice(9,11)+':'+item.AP06_00_048_02.slice(11,13)+':'+item.AP06_00_048_02.slice(13,15) }}</td>
-                      <td v-else-if="!item.AP06_00_048_02"></td>
-                      <td
-                        v-if="item.AP06_00_186_00"
-                      >{{ item.AP06_00_186_00.slice(0,4)+'-'+item.AP06_00_186_00.slice(4,6)+'-'+item.AP06_00_186_00.slice(6,8)+" "+item.AP06_00_186_00.slice(9,11)+':'+item.AP06_00_186_00.slice(11,13)+':'+item.AP06_00_186_00.slice(13,15) }}</td>
-                      <td v-else-if="!item.AP06_00_186_00"></td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('9',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog9"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <span>医师：{{ detail.AP02_01_039_37 }}</span>
-                          <span
-                            v-if="detail.DE06_00_095_00"
-                          >就诊时间: {{ detail.DE06_00_095_00.slice(0,4)+'-'+detail.DE06_00_095_00.slice(4,6)+'-'+detail.DE06_00_095_00.slice(6,8) }}</span>
-                        </div>
-                        <p>手术申请单号:{{ detail.AP01_00_022_00 }}</p>
-                        <p>手术/操作-名称:{{ detail.DE06_00_094_00 }}</p>
-                        <p>麻醉-方法:{{ detail.DE06_00_074_00 }}</p>
-                      </div>
-                    </el-dialog>
-
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院病案首页诊断记录" name="住院病案首页诊断记录">
-            <div class="tab_content">
-              <div class="tab_content_title">住院病案诊断</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>序号</td>
-                      <td>住院科室</td>
-                      <td>诊断类型</td>
-                      <td>诊断名称</td>
-                      <td>诊断日期</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>1</td>
-                      <td>{{ item.AP08_10_026_11}}</td>
-                      <td>{{ item.AP05_01_007_00 }}</td>
-                      <td>{{ item.DE05_01_025_00 }}</td>
-                      <td
-                        v-if="item.DE05_01_058_00"
-                      >{{ item.DE05_01_058_00.slice(0,4)+'-'+item.DE05_01_058_00.slice(4,6)+'-'+item.DE05_01_058_00.slice(6,8)}}</td>
-                      <td v-else-if="!item.DE05_01_058_00"></td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('10',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog10"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="dialog_hzjl">
-                        <div class="dialog_title">会诊记录</div>
-                        <div class="head">
-                          <div>科室：{{ detail.AP08_10_026_11 }}</div>
-                          <div>住院号:{{detail.DE01_00_014_00}}</div>
-                        </div>
-                        <div class="top">
-                          会诊类型：
-                          <div class="check_box">
-                            <input disabled type="checkbox" value id="jhz" />
-                            <label for="jhz">急会诊</label>
-                          </div>
-                          <div class="check_box">
-                            <input disabled type="checkbox" value id="pthz" />
-                            <label for="pthz">普通会诊</label>
-                          </div>
-                          <div class="check_box">
-                            <input disabled type="checkbox" value id="dkhz" />
-                            <label for="dkhz">多科会诊</label>
-                          </div>
-                          <div class="check_box">
-                            <input disabled type="checkbox" value id="zmhz" />
-                            <label for="zmhz">指名会诊</label>
-                          </div>
-                          <label class="check_box">
-                            <input disabled type="checkbox" value id="wyhz" />
-                            <label for="wyhz">请外院会诊</label>
-                          </label>
-                        </div>
-                        <div class="content">
-                          <div class="content_title">
-                            <div>姓名:{{detail.DE02_01_039_00}}</div>
-                            <div>病室:消化内科病区</div>
-                            <div>床号：17</div>
-                            <div>申请时间： 2019-08-01 08：55</div>
-                          </div>
-                          <div class="content_main">
-                            <p>患者病情及诊疗经过、申请会诊的理由及目的：</p>
-                            <p>患者因“反复胃胀胃痛30余年，加重10余天”入院。年前胃痛胃胀，当地医院诊断溃疡，给予药物治疗，症状好转。但易反复。</p>
-                          </div>
-                          <div class="content_title">
-                            <div class="content_title_item">被邀会诊科室：{{ detail.AP08_10_026_11 }}</div>
-                            <div class="content_title_item">被邀请医师：{{detail.AP02_01_039_29}}</div>
-                          </div>
-                          <div class="content_title">
-                            <div class="content_title_item">申请科室：消化内科</div>
-                            <div class="content_title_item">申请医师： 刘澜</div>
-                          </div>
-                          <div class="content_title">
-                            <div class="content_title_item">会诊意见：</div>
-                            <div
-                              v-if="detail.DE05_01_058_00"
-                              class="content_title_item"
-                            >会诊时间：{{detail.DE05_01_058_00.slice(0,4)+'-'+detail.DE05_01_058_00.slice(4,6)+'-'+detail.DE05_01_058_00.slice(6,8)}}</div>
-                          </div>
-                          <div class="content_main">
-                            <p>病史敬阅：</p>
-                            <p>专科检查：</p>
-                            <p>治疗意见：</p>
-                            <p>治疗原发病，暂无特殊处理</p>
-                          </div>
-                          <div class="content_title">
-                            <div class="content_title_item">会诊科室：</div>
-                            <div class="content_title_item">会诊医师：</div>
-                          </div>
-                          <div class="content_title">外院会诊医师所在医疗机构名称：</div>
-                        </div>
-                      </div>
-                    </el-dialog>
-
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗医嘱" name="门急诊诊疗医嘱">
-            <div class="tab_content">
-              <div class="tab_content_title">门急诊诊疗医嘱</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>医嘱项目类别</td>
-                      <td>医嘱项目</td>
-                      <td>药物剂型</td>
-                      <td>使用方法</td>
-                      <td>开具时间</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.AP06_00_276_00}}</td>
-                      <td>{{item.AP06_00_278_00}}</td>
-                      <td>{{item.AP06_00_313_00}}</td>
-                      <td>{{item.AP06_00_265_00}}</td>
-                      <td
-                        v-if="item.AP06_00_195_00"
-                      >{{item.AP06_00_195_00.slice(0,4)+'-'+item.AP06_00_195_00.slice(4,6)+'-'+item.AP06_00_195_00.slice(6,8)}}</td>
-                      <td class="handle" @click="changeDialogVisible('11',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog11"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="yz_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h3>北京大学第三医院延安分院</h3>
-                            <h3>(延安市中医医院)</h3>
-                            <h3>临时医嘱记录单</h3>
-                          </div>
-                          <div class="header_bot">
-                            <ul>
-                              <li>
-                                姓名：
-                                <span>{{detail.DE02_01_039_00}}</span>
-                              </li>
-                              <li>
-                                性别：
-                                <span>{{detail.AP02_01_102_01}}</span>
-                              </li>
-                              <li>
-                                年龄：
-                                <span>{{detail.DE02_01_032_00}}</span>岁
-                              </li>
-                              <li>
-                                科室：
-                                <span>{{detail.DE08_10_026_00}}</span>
-                              </li>
-                              <li>
-                                床号：
-                                <span>17</span>
-                              </li>
-                              <li>
-                                住院号：
-                                <span>202123</span>
-                              </li>
-                              <li>
-                                留观号：
-                                <span></span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <table>
-                            <tr>
-                              <td>列数</td>
-                              <td colspan="2">开始时间</td>
-                              <td colspan="2">临时医嘱</td>
-                              <td>医师签名</td>
-                              <td>执行时间</td>
-                              <td>护士签名</td>
-                              <td>嘱托</td>
-                            </tr>
-                            <tr>
-                              <td>1</td>
-                              <td
-                                v-if="detail.AP06_00_200_00"
-                              >{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)}}</td>
-                              <td
-                                v-if="detail.AP06_00_200_00"
-                              >{{detail.AP06_00_200_00.slice(8,10)+':'+detail.AP06_00_200_00.slice(10,12)}}</td>
-                              <td>{{detail.AP06_00_278_00}}</td>
-                              <td class="five">{{detail.AP06_00_265_00}}</td>
-                              <td>{{detail.AP02_01_039_72}}</td>
-                              <td
-                                v-if="detail.AP06_00_200_00"
-                              >{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)+' '+detail.AP06_00_200_00.slice(8,10)+':'+detail.AP06_00_200_00.slice(10,12)}}</td>
-                              <td>齐欣雨</td>
-                              <td></td>
-                            </tr>
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td class="five"></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                            </tr>
-                          </table>
-                        </div>
-                        <div class="bottom">
-                          <p>
-                            医师签名：
-                            <span>{{detail.AP02_01_039_72}}</span>
-                          </p>
-                          <p>
-                            护士签名：
-                            <span>xxx</span>
-                          </p>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <!-- 
-            <el-dialog
-              :visible.sync="dialogVisible.dialog4"
-              :before-close="handleClose"
-              width="1000px"
-            >
-              <div class="tab_detail">
-                <div class="detail_title">
-                  <span>医师：赵钱孙</span>
-                  <span>就诊时间: 2019-07-09</span>
-                </div>
-              </div>
-            </el-dialog>-->
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗费用明细信息" name="门急诊诊疗费用明细信息">
-            <div class="tab_content">
-              <div class="tab_content_title">门急诊诊疗费用明细信息</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>缴费科室</td>
-                      <td>缴费项目</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.DE02_01_039_00}}</td>
-                      <td>{{item.AP08_10_055_02}}</td>
-                      <td>{{item.AP07_00_018_00}}</td>
-                      <td>{{item.AP08_10_013_04}}</td>
-                      <td class="handle" @click="changeDialogVisible('12',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog12"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="fymx_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h2>门急诊诊疗费用明细信息</h2>
-                          </div>
-                          <div class="header_cen">
-                            <ul>
-                              <li>
-                                <p>
-                                  住院号：
-                                  <span>112111</span>
-                                </p>
-                                <p>
-                                  姓名：
-                                  <span>{{detail.DE02_01_039_00}}</span>
-                                </p>
-                                <p>
-                                  性别：
-                                  <span>{{detail.AP02_01_102_01}}</span>
-                                </p>
-                                <p>
-                                  年龄：
-                                  <span>{{detail.DE02_01_032_00}}</span>岁
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  就诊卡号：
-                                  <span></span>
-                                </p>
-                                <p>
-                                  职业：
-                                  <span>其他</span>
-                                </p>
-                                <p>
-                                  工作单位：
-                                  <span></span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  家庭地址：
-                                  <span>延安市安塞区化子坪镇洞姚村</span>
-                                </p>
-                                <p>
-                                  家庭电话：
-                                  <span>123345689</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  联系人姓名：
-                                  <span>郭四毛</span>
-                                </p>
-                                <p>
-                                  联系人关系：
-                                  <span>父母</span>
-                                </p>
-                                <p>
-                                  联系人电话：
-                                  <span>1235464646</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  入院日期：
-                                  <span>2019-07-12</span>
-                                </p>
-                                <p>
-                                  出院日期：
-                                  <span>2019-07-22</span>
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <div class="content_bot">
-                            <div class="content_bot_top">
-                              <p>结账费用明细</p>
-                            </div>
-                            <div class="content_bot_b">
-                              <table>
-                                <tr>
-                                  <td>日期</td>
-                                  <td>项目名</td>
-                                  <td>类型</td>
-                                  <td>单价</td>
-                                  <td>金额</td>
-                                  <td>科室</td>
-                                </tr>
-                                <tr>
-                                  <td
-                                    v-if="detail.AP07_00_026_00"
-                                  >{{detail.AP07_00_026_00.slice(0,4)+'-'+detail.AP07_00_026_00.slice(4,6)+'-'+detail.AP07_00_026_00.slice(6,8)}}</td>
-                                  <td>{{detail.AP07_00_018_00}}</td>
-                                  <td></td>
-                                  <td>{{detail.AP07_00_022_00}}</td>
-                                  <td>{{detail.AP07_00_022_00}}</td>
-                                  <td>{{detail.AP08_10_055_02}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <!-- 
-            <el-dialog
-              :visible.sync="dialogVisible.dialog4"
-              :before-close="handleClose"
-              width="1000px"
-            >
-              <div class="tab_detail">
-                <div class="detail_title">
-                  <span>医师：赵钱孙</span>
-                  <span>就诊时间: 2019-07-09</span>
-                </div>
-              </div>
-            </el-dialog>-->
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗总费用信息" name="门急诊诊疗总费用信息">
-            <div class="tab_content">
-              <div class="tab_content_title">门急诊诊疗总费用信息</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>结算日期</td>
-                      <td>缴费科室</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.DE02_01_039_00}}</td>
-                      <td
-                        v-if="item.AP07_00_026_00"
-                      >{{item.AP07_00_026_00.slice(0,4)+'-'+item.AP07_00_026_00.slice(4,6)+'-'+item.AP07_00_026_00.slice(6,8)}}</td>
-                      <td>{{item.DE08_10_026_00}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('13',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog13"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="fymx_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h2>门急诊诊疗总费用信息</h2>
-                          </div>
-                          <div class="header_cen">
-                            <ul>
-                              <li>
-                                <p>
-                                  住院号：
-                                  <span>112111</span>
-                                </p>
-                                <p>
-                                  姓名：
-                                  <span>{{detail.DE02_01_039_00}}</span>
-                                </p>
-                                <p>
-                                  性别：
-                                  <span>{{detail.AP02_01_102_01}}</span>
-                                </p>
-                                <p>
-                                  年龄：
-                                  <span>{{detail.DE02_01_032_00}}</span>岁
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  就诊卡号：
-                                  <span></span>
-                                </p>
-                                <p>
-                                  职业：
-                                  <span>其他</span>
-                                </p>
-                                <p>
-                                  工作单位：
-                                  <span></span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  家庭地址：
-                                  <span>延安市安塞区化子坪镇洞姚村</span>
-                                </p>
-                                <p>
-                                  家庭电话：
-                                  <span>123345689</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  联系人姓名：
-                                  <span>郭四毛</span>
-                                </p>
-                                <p>
-                                  联系人关系：
-                                  <span>父母</span>
-                                </p>
-                                <p>
-                                  联系人电话：
-                                  <span>1235464646</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  入院日期：
-                                  <span>2019-07-12</span>
-                                </p>
-                                <p>
-                                  出院日期：
-                                  <span>2019-07-22</span>
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <div class="content_top">
-                            <div class="content_top_t">
-                              <p>结账分类费用</p>
-                            </div>
-                            <div class="content_top_b">
-                              <table>
-                                <tr>
-                                  <td>医保范围总额</td>
-                                  <td>医保范围外个人自费</td>
-                                  <td>医保基金支付</td>
-                                  <td>医保自负部分</td>
-                                  <td>收费科室</td>
-                                  <td>支付方式</td>
-                                  <td>总费用</td>
-                                </tr>
-                                <tr>
-                                  <td>{{detail.AP07_00_044_00}}</td>
-                                  <td>{{detail.DE07_00_001_00}}</td>
-                                  <td>{{detail.AP07_00_044_01}}</td>
-                                  <td>{{detail.AP07_00_044_02}}</td>
-                                  <td>{{detail.DE08_10_026_00}}</td>
-                                  <td>{{detail.AP07_00_011_01}}</td>
-                                  <td>{{detail.DE07_00_004_00}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="门急诊诊疗检验明细记录" name="门急诊诊疗检验明细记录">
-            <div class="tab_content">
-              <div class="tab_content_title">检验记录明细</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>检验申请单号</td>
-                      <td>检验时间</td>
-                      <td>检验报告单号</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.AP01_00_022_00}}</td>
-                      <td>{{item.DATAGENERATE_DATE}}</td>
-                      <td>{{item.AP04_50_057_00}}</td>
-                      <td class="handle" @click="changeDialogVisible('14',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      title
-                      :visible.sync="dialogVisible.dialog14"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <div class="detail_title_block">
-                            <span>姓名:{{detail.DE02_01_039_00}}</span>
-                            <span>性别:{{detail.AP02_01_102_01}}</span>
-                            <span>年龄:{{detail.DE02_01_032_00}}</span>
-                          </div>
-                          <div class="detail_title_block">
-                            <span>样本号： 常 0015</span>
-                            <span>送检医生：{{detail.AP02_01_122_00}}</span>
-                            <span>备注:</span>
-                          </div>
-                        </div>
-                        <div class="detail_content">
-                          <div class="detail_content_title">
-                            <div class="title_left">
-                              <table>
-                                <tr>
-                                  <td>序号</td>
-                                  <td>项目名称</td>
-                                  <td>结果</td>
-                                  <td>单位</td>
-                                  <td>参考范围</td>
-                                </tr>
-                                <tr>
-                                  <td></td>
-                                  <td>{{detail.DE04_30_020_00}}</td>
-                                  <td>{{detail.AP04_30_003_00}}</td>
-                                  <td>{{detail.DE04_30_016_00}}</td>
-                                  <td>{{detail.AP05_10_042_00}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                          <div class="detail_content_content">
-                            <!-- <div class="detail_content_left">
-                                <span></span>
-                                <span>{{item.DE04_30_020_00}}</span>
-                                <span>{{item.AP04_30_003_00}}</span>
-                                <span></span>
-                                <span>{{item.AP05_10_042_00}}</span>
-                            </div>-->
-                            <div class="detail_content_right"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院病案首页手术记录" name="住院病案首页手术记录">
-            <div class="tab_content">
-              <div class="tab_content_title">住院手术记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>手术编号</td>
-                      <td>手术操作时间</td>
-                      <td>手术级别</td>
-                      <td>愈合等级</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.AP01_00_004_00}}</td>
-                      <td
-                        v-if="item.AP06_00_189_00"
-                      >{{ item.AP06_00_189_00.slice(0,4)+'-'+item.AP06_00_189_00.slice(4,6)+'-'+item.AP06_00_189_00.slice(6,8)}}</td>
-                      <td v-else-if="!item.AP06_00_189_00"></td>
-                      <td>{{ item.AP06_00_367_00 }}</td>
-                      <td>{{ item.AP05_01_054_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('15',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog15"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <span>住院病区：{{ detail.AP08_10_002_00 }}</span>
-                          <span>住院科室：{{ detail.AP08_10_026_11 }}</span>
-                          <span>住院床号：{{ detail.AP08_10_026_11 }}</span>
-                          <span
-                            v-if="detail.AP06_00_189_00"
-                          >手术操作时间: {{ detail.AP06_00_189_00.slice(0,4)+'-'+detail.AP06_00_189_00.slice(4,6)+'-'+detail.AP06_00_189_00.slice(6,8) }}</span>
-                          <span>病案号：{{ detail.AP08_10_001_00 }}</span>
-                        </div>
-                        <div class="detail">
-                          <div class="detail_left">
-                            <p>麻醉医师：{{ detail.AP02_01_039_79 }}</p>
-                            <p>助手1：{{ detail.AP02_01_039_75 }}</p>
-                            <p>助手2：{{ detail.AP02_01_039_78 }}</p>
-                          </div>
-                          <div class="detail_rig">
-                            <p>手术/操作-名称：{{ detail.DE06_00_094_00 }}</p>
-                            <p>麻醉-方法：{{ detail.DE06_00_074_00 }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗手术记录" name="住院诊疗手术记录">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗手术记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>手术申请单号</td>
-                      <td>手术时间</td>
-                      <td>手术级别</td>
-                      <td>愈合等级</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.AP01_00_024_00}}</td>
-                      <td
-                        v-if="item.DE06_00_095_00"
-                      >{{ item.DE06_00_095_00.slice(0,4)+'-'+item.DE06_00_095_00.slice(4,6)+'-'+item.DE06_00_095_00.slice(6,8)}}</td>
-                      <td v-else-if="!item.DE06_00_095_00"></td>
-                      <td>{{ item.AP06_00_367_00 }}</td>
-                      <td>{{ item.AP05_01_054_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('16',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog16"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <span>住院病区：{{ detail.AP08_10_002_00 }}</span>
-                          <span>住院科室：{{ detail.AP08_10_026_11 }}</span>
-                          <span>住院床号：{{ detail.AP08_10_026_11 }}</span>
-                          <span
-                            v-if="detail.AP06_00_189_00"
-                          >手术操作时间: {{ detail.AP06_00_189_00.slice(0,4)+'-'+detail.AP06_00_189_00.slice(4,6)+'-'+detail.AP06_00_189_00.slice(6,8) }}</span>
-                          <span>病案号：{{ detail.AP08_10_001_00 }}</span>
-                        </div>
-                        <div class="detail">
-                          <div class="detail_left">
-                            <p
-                              v-if="detail.AP06_00_393_00"
-                            >手术开始时间：{{ detail.AP06_00_393_00.slice(0,4)+'-'+detail.AP06_00_393_00.slice(4,6)+'-'+detail.AP06_00_393_00.slice(6,8) }}</p>
-                            <p
-                              v-if="detail.AP06_00_394_00"
-                            >手术结束时间：{{ detail.AP06_00_394_00.slice(0,4)+'-'+detail.AP06_00_394_00.slice(4,6)+'-'+detail.AP06_00_394_00.slice(6,8) }}</p>
-                            <p>麻醉执行科室：{{ detail.AP08_10_054_02 }}</p>
-                            <p>麻醉医师：{{ detail.AP02_01_039_76 }}</p>
-                            <p>助手1：{{ detail.AP02_01_039_75 }}</p>
-                            <p>助手2：{{ detail.AP02_01_039_78 }}</p>
-                          </div>
-                          <div class="detail_rig">
-                            <p>手术/操作-名称：{{ detail.DE06_00_094_00 }}</p>
-                            <p>手术操作部位：{{ detail.AP06_00_006_01 }}</p>
-                            <p>麻醉-方法：{{ detail.DE06_00_074_00 }}</p>
-                            <p>手术后情况：{{ detail.AP05_10_071_00 }}</p>
-                            <p>手术经过：{{ detail.AP06_00_302_00 }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗费用明细记录" name="住院诊疗费用明细记录">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗费用明细记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>缴费科室</td>
-                      <td>缴费项目</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.DE02_01_039_00}}</td>
-                      <td>{{ item.AP08_10_055_02 }}</td>
-                      <td>{{ item.AP07_00_018_00 }}</td>
-                      <td>{{ item.ORGANIZATION_NAME }}</td>
-                      <td class="handle" @click="changeDialogVisible('17',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog17"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="fymx_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h2>住院诊疗费用明细记录</h2>
-                          </div>
-                          <div class="header_cen">
-                            <ul>
-                              <li>
-                                <p>
-                                  住院号：
-                                  <span>{{ detail.DE01_00_014_00 }}</span>
-                                </p>
-                                <p>
-                                  姓名：
-                                  <span>{{detail.DE02_01_039_00}}</span>
-                                </p>
-                                <p>
-                                  性别：
-                                  <span>{{detail.AP02_01_102_01}}</span>
-                                </p>
-                                <p>
-                                  年龄：
-                                  <span>{{detail.DE02_01_032_00}}</span>岁
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  家庭地址：
-                                  <span>延安市安塞区化子坪镇洞姚村</span>
-                                </p>
-                                <p>
-                                  家庭电话：
-                                  <span>123345689</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  联系人姓名：
-                                  <span>郭四毛</span>
-                                </p>
-                                <p>
-                                  联系人关系：
-                                  <span>父母</span>
-                                </p>
-                                <p>
-                                  联系人电话：
-                                  <span>1235464646</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  入院日期：
-                                  <span>2019-07-12</span>
-                                </p>
-                                <p>
-                                  出院日期：
-                                  <span>2019-07-22</span>
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <div class="content_bot">
-                            <div class="content_bot_top">
-                              <p>结账费用明细</p>
-                            </div>
-                            <div class="content_bot_b">
-                              <table>
-                                <tr>
-                                  <td>日期</td>
-                                  <td>科室</td>
-                                  <td>项目名</td>
-                                  <td>类型</td>
-                                  <td>数量</td>
-                                  <td>金额</td>
-                                </tr>
-                                <tr>
-                                  <td
-                                    v-if="detail.AP07_00_027_00"
-                                  >{{detail.AP07_00_027_00.slice(0,4)+'-'+detail.AP07_00_027_00.slice(4,6)+'-'+detail.AP07_00_027_00.slice(6,8)}}</td>
-                                  <td>{{detail.AP08_10_055_02}}</td>
-                                  <td>{{detail.AP07_00_018_00}}</td>
-                                  <td></td>
-                                  <td>{{detail.AP07_00_021_00}}</td>
-                                  <td>{{detail.AP07_00_022_00}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗检验明细记录" name="住院诊疗检验明细记录">
-            <div class="tab_content">
-              <div class="tab_content_title">检验记录明细</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>检验项目</td>
-                      <td>申请单号</td>
-                      <td>报告单号</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.DE04_30_020_00}}</td>
-                      <td>{{item.AP01_00_024_00}}</td>
-                      <td>{{item.AP04_50_057_00}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('18',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      title
-                      :visible.sync="dialogVisible.dialog18"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="tab_detail">
-                        <div class="detail_title">
-                          <span>姓名:{{detail.DE02_01_039_00}}</span>
-                          <span>性别:{{detail.AP02_01_102_01}}</span>
-                          <span>年龄:{{detail.DE02_01_032_00}}</span>
-                        </div>
-                        <div class="detail_content">
-                          <div class="detail_content_title">
-                            <div class="title_left">
-                              <table>
-                                <tr>
-                                  <td>病案号</td>
-                                  <td>住院床号</td>
-                                  <td>项目名称</td>
-                                  <td>检验方法</td>
-                                  <td>结果</td>
-                                </tr>
-                                <tr>
-                                  <td>{{detail.DE01_00_004_00}}</td>
-                                  <td>{{detail.AP08_10_001_00}}</td>
-                                  <td>{{detail.DE04_30_020_00}}</td>
-                                  <td>{{detail.AP04_50_067_00}}</td>
-                                  <td>{{detail.AP04_30_003_00}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院病案首页评估报告" name="住院病案首页评估报告">
-            <div class="tab_content">
-              <div class="tab_content_title">住院病案首页评估报告</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>性别</td>
-                      <td>年龄</td>
-                      <td>入院日期</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.DE02_01_039_00}}</td>
-                      <td>{{item.AP02_01_102_01}}</td>
-                      <td>{{item.DE02_01_032_00}}</td>
-                      <td
-                        v-if="item.DE06_00_092_00"
-                      >{{item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8)}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('19',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      title
-                      :visible.sync="dialogVisible.dialog19"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="dialog_rypg">
-                        <div class="dialog_title">住院病案首页评估</div>
-                        <div class="dialog_head">
-                          <div class="dialog_head_items">
-                            <div class="dialog_head_item">入院科室：{{detail.AP08_10_026_01}}</div>
-                            <div class="dialog_head_item">住院号：{{detail.DE01_00_014_00}}</div>
-                            <div class="dialog_head_item">姓名：{{detail.DE02_01_039_00}}</div>
-                            <div class="dialog_head_item">年龄：{{detail.DE02_01_032_00}}岁</div>
-                            <div class="dialog_head_item">病案号：{{detail.DE01_00_004_00}}</div>
-                          </div>
-                          <div class="dialog_head_items">
-                            <div class="dialog_head_item">职业：{{detail.AP02_01_125_02}}</div>
-                            <div class="dialog_head_item">民族：{{detail.AP02_01_025_03}}</div>
-                            <div class="dialog_head_item">籍贯：{{detail.AP02_01_099_00}}</div>
-                          </div>
-                          <div class="dialog_head_items">
-                            <div
-                              v-if="detail.DE06_00_092_00"
-                              class="dialog_head_item"
-                            >入院日期：{{detail.DE06_00_092_00.slice(0,4)+'-'+detail.DE06_00_092_00.slice(4,6)+'-'+detail.DE06_00_092_00.slice(6,8)}}</div>
-                            <div class="dialog_head_item">联系电话：{{detail.DE02_01_010_00}}</div>
-                          </div>
-                          <div class="dialog_head_items">
-                            <div class="dialog_head_item">现住址：{{detail.AP02_01_009_00}}</div>
-                          </div>
-                          <div class="dialog_head_items">
-                            <div class="dialog_head_item">入院途径：{{detail.AP06_00_369_00}}</div>
-                          </div>
-                        </div>
-                        <div class="dialog_content">
-                          <div class="content">
-                            <div class="content_item">1.入院体重：{{detail.AP04_10_188_00}}</div>
-                            <div class="content_item">2.ABO血型：{{detail.AP04_50_022_00}}</div>
-                            <div class="content_item">3.RH血型：{{detail.AP04_50_023_00}}</div>
-                            <div class="content_item">4.住院患者过敏源名称：{{detail.AP05_01_174_00}}</div>
-                            <div class="content_item">5.住院患者过敏源名称：{{detail.AP05_01_175_00}}</div>
-                            <div class="content_item">6.住院患者诊断符合情况：{{detail.AP05_10_006_00}}</div>
-                            <div class="content_item">7.住院患者出院方式：{{detail.AP06_00_375_00}}</div>
-                            <div class="content_item">8.治疗类别：{{detail.AP06_00_373_00}}</div>
-                            <div class="content_item">9.医疗费用支付方式：{{detail.AP07_00_011_01}}</div>
-                            <div class="content_item">10.住院机构名称：{{detail.AP08_10_013_06}}</div>
-                            <div class="content_item">11.住院患者住院次数：{{detail.DE02_10_090_00}}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院病案首页费用记录" name="住院病案首页费用记录">
-            <div class="tab_content">
-              <div class="tab_content_title">住院病案首页费用记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>住院科室</td>
-                      <td>支付日期</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.DE02_01_039_00}}</td>
-                      <td>{{item.AP08_10_026_11}}</td>
-                      <td
-                        v-if="item.AP07_00_027_00"
-                      >{{item.AP07_00_027_00.slice(0,4)+'-'+item.AP07_00_027_00.slice(4,6)+'-'+item.AP07_00_027_00.slice(6,8)+' '+item.AP07_00_027_00.slice(9,11)+':'+item.AP07_00_027_00.slice(11,13)+':'+item.AP07_00_027_00.slice(13,15)}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('20',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog20"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="fymx_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h2>住院病案首页费用记录</h2>
-                          </div>
-                          <div class="header_cen">
-                            <ul>
-                              <li>
-                                <p>
-                                  姓名：
-                                  <span>{{detail.DE02_01_039_00}}</span>
-                                </p>
-                                <p>
-                                  性别：
-                                  <span>{{detail.AP02_01_102_01}}</span>
-                                </p>
-                                <p>
-                                  年龄：
-                                  <span>{{detail.DE02_01_032_00}}</span>岁
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  住院号：
-                                  <span>{{detail.DE01_00_014_00}}</span>
-                                </p>
-
-                                <p>
-                                  病案号：
-                                  <span>{{detail.DE01_00_004_00}}</span>
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <div class="content_top">
-                            <div class="content_top_t">
-                              <p>结账分类费用</p>
-                            </div>
-                            <div class="content_top_b">
-                              <table>
-                                <tr>
-                                  <td>住院科室</td>
-                                  <td>费用分类</td>
-                                  <td>发票编号</td>
-                                  <td>住院费用</td>
-                                  <td>支付方式</td>
-                                  <td>自付金额</td>
-                                </tr>
-                                <tr>
-                                  <td>{{detail.AP08_10_026_11}}</td>
-                                  <td>{{detail.AP07_00_029_00}}</td>
-                                  <td>{{detail.AP07_00_016_00}}</td>
-                                  <td>{{detail.DE07_00_010_00}}</td>
-                                  <td>{{detail.AP07_00_011_02}}</td>
-                                  <td>{{detail.DE07_00_001_00}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗检查报告" name="住院诊疗检查报告">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗检查报告</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>检查项目</td>
-                      <td>病案号</td>
-                      <td>住院号</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item,index) in tabData" :key="index">
-                      <td>{{item.DE04_30_020_00}}</td>
-                      <td>{{item.DE01_00_004_00}}</td>
-                      <td>{{item.DE01_00_014_00}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('21',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      title
-                      :visible.sync="dialogVisible.dialog21"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="jcbg_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <p>超声检查报告单</p>
-                          </div>
-                          <div class="header_cen">
-                            <ul>
-                              <li>
-                                报告单号：
-                                <span>{{detail.AP04_50_057_00}}</span>
-                              </li>
-                              <li>
-                                基本信息：
-                                <span>{{detail.DE02_01_039_00}}</span>，
-                                <span>{{detail.AP02_01_102_01}}</span>，
-                                <span>38</span>
-                                {{detail.DE02_01_032_00}}
-                              </li>
-                              <li>
-                                申请科室：
-                                <span>{{detail.AP08_10_059_02}}</span>
-                              </li>
-                              <li>
-                                检查科室：
-                                <span>{{detail.AP04_30_060_00}}</span>
-                              </li>
-                              <li>
-                                住院病区：
-                                <span>{{detail.AP08_10_002_00}}</span>
-                              </li>
-                              <li v-if="detail.AP06_00_048_03">
-                                检查日期：
-                                <span>{{detail.AP06_00_048_03.slice(0,4)+'-'+detail.AP06_00_048_03.slice(4,6)+'-'+detail.AP06_00_048_03.slice(6,8)}}</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div class="content">
-                          <div class="content_top">
-                            <p>检查所见：</p>
-                            <p>{{detail.AP04_30_062_00}}</p>
-                          </div>
-                          <div class="content_top">
-                            <p>检查目的：</p>
-                            <p>{{detail.AP04_30_069_00}}</p>
-                          </div>
-                          <div class="content_top">
-                            <p>检查结论：</p>
-                            <p>{{detail.AP04_30_046_00}}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗诊断记录信息" name="住院诊疗诊断记录信息">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗诊断记录信息</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>年龄</td>
-                      <td>诊断疾病名称</td>
-                      <td>科室</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{ item.DE02_01_039_00 }}</td>
-                      <td>{{ item.DE02_01_032_00 }}</td>
-                      <td>{{ item.AP05_01_025_01 }}</td>
-                      <td>{{ item.AP08_10_026_11 }}</td>
-                      <td class="handle" @click="changeDialogVisible('22',item)">
-                        <span>详情</span>
-                      </td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog22"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="table_mabl_content">
-                        <div class="main_title">
-                          {{detail.ORGANIZATION_NAME}}
-                          <div class="little_tittle">{{detail.BASIC_ACTIVE_DES}}</div>
-                        </div>
-                        <div class="header"></div>
-                        <div class="content">
-                          <div
-                            class="content_item_detail"
-                          >兹证明 {{detail.DE02_01_039_00}}同志， {{detail.AP02_01_102_01}} ，经在我院 {{detail.AP08_10_026_11}} 诊治</div>
-                          <div class="content_item_detail">住院号:{{detail.DE01_00_014_00}}</div>
-                          <div class="content_item_detail">疾病状态为: {{detail.AP05_01_114_00}}</div>
-                          <div class="content_item_detail">曾作处理: 药物治疗</div>
-                          <div class="content_item_detail">建议：1.禁烟酒。2避免劳累。3.动态监测相关指标变化。</div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗费用结算" name="住院诊疗费用结算">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗费用结算</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>结算日期</td>
-                      <td>住院科室</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item, index) in tabData" :key="index">
-                      <td>{{item.DE02_01_039_00}}</td>
-                      <td
-                        v-if="item.AP07_00_027_00"
-                      >{{item.AP07_00_027_00.slice(0,4)+'-'+item.AP07_00_027_00.slice(4,6)+'-'+item.AP07_00_027_00.slice(6,8)}}</td>
-                      <td>{{item.AP08_10_026_11}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('23',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog23"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="fymx_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h2>住院诊疗费用结算</h2>
-                          </div>
-                          <div class="header_cen">
-                            <ul>
-                              <li>
-                                <p>
-                                  住院号：
-                                  <span>{{detail.DE01_00_014_00}}</span>
-                                </p>
-                                <p>
-                                  姓名：
-                                  <span>{{detail.DE02_01_039_00}}</span>
-                                </p>
-                                <p>
-                                  性别：
-                                  <span>{{detail.AP02_01_102_01}}</span>
-                                </p>
-                                <p>
-                                  年龄：
-                                  <span>{{detail.DE02_01_032_00}}</span>岁
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  就诊卡号：
-                                  <span></span>
-                                </p>
-                                <p>
-                                  职业：
-                                  <span>其他</span>
-                                </p>
-                                <p>
-                                  工作单位：
-                                  <span></span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  家庭地址：
-                                  <span>延安市安塞区化子坪镇洞姚村</span>
-                                </p>
-                                <p>
-                                  家庭电话：
-                                  <span>123345689</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  联系人姓名：
-                                  <span>郭四毛</span>
-                                </p>
-                                <p>
-                                  联系人关系：
-                                  <span>父母</span>
-                                </p>
-                                <p>
-                                  联系人电话：
-                                  <span>1235464646</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  入院日期：
-                                  <span>2019-07-12</span>
-                                </p>
-                                <p>
-                                  出院日期：
-                                  <span>2019-07-22</span>
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <div class="content_top">
-                            <div class="content_top_t">
-                              <p>结账分类费用</p>
-                            </div>
-                            <div class="content_top_b">
-                              <table>
-                                <tr>
-                                  <td>医保范围总额</td>
-                                  <td>医保范围外个人自费</td>
-                                  <td>医保基金支付</td>
-                                  <td>医保自负部分</td>
-                                  <td>支付方式</td>
-                                  <td>总费用</td>
-                                </tr>
-                                <tr>
-                                  <td>{{detail.AP07_00_044_00}}</td>
-                                  <td>{{detail.DE07_00_001_00}}</td>
-                                  <td>{{detail.AP07_00_044_01}}</td>
-                                  <td>{{detail.AP07_00_044_02}}</td>
-                                  <td>{{detail.AP07_00_011_01}}</td>
-                                  <td>{{detail.AP07_00_003_00}}</td>
-                                </tr>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="住院诊疗临床路径记录" name="住院诊疗临床路径记录">
-            <div class="tab_content">
-              <div class="tab_content_title">住院诊疗临床路径记录</div>
-              <div class="tab_content_main">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>姓名</td>
-                      <td>年龄</td>
-                      <td>入径日期</td>
-                      <td>入径诊断</td>
-                      <td>机构名称</td>
-                      <td>操作</td>
-                    </tr>
-                    <tr v-for="(item,index) in tabData" :key="index">
-                      <td>{{item.DE02_01_039_00}}</td>
-                      <td>{{item.DE02_01_032_00}}</td>
-                      <td
-                        v-if="item.AP05_01_212_00"
-                      >{{item.AP05_01_212_00.slice(0,4)+'-'+item.AP05_01_212_00.slice(4,6)+'-'+item.AP05_01_212_00.slice(6,8)}}</td>
-                      <td>{{item.AP05_01_215_02}}</td>
-                      <td>{{item.ORGANIZATION_NAME}}</td>
-                      <td class="handle" @click="changeDialogVisible('23',item)">详情</td>
-                    </tr>
-                    <el-dialog
-                      :visible.sync="dialogVisible.dialog23"
-                      :before-close="handleClose"
-                      width="1000px"
-                    >
-                      <div class="lclj_wrap">
-                        <div class="header">
-                          <div class="header_top">
-                            <h2>住院诊疗临床路径记录</h2>
-                          </div>
-
-                          <div class="header_cen">
-                            <p>姓名：{{detail.DE02_01_039_00}}</p>
-                            <p>病案号：{{detail.DE01_00_004_00}}</p>
-                          </div>
-                        </div>
-                        <div class="content">
-                          <table>
-                            <tr>
-                              <td>住院号</td>
-                              <td>入径时间</td>
-                              <td>出径时间</td>
-                              <td>住院病区</td>
-                              <td>住院床号</td>
-                              <td>住院科室</td>
-                              <td>责任护士</td>
-                            </tr>
-                            <tr>
-                              <td>{{detail.DE01_00_014_00}}</td>
-                              <td
-                                v-if="detail.AP05_01_212_00"
-                              >{{detail.AP05_01_212_00.slice(0,4)+'-'+detail.AP05_01_212_00.slice(4,6)+'-'+detail.AP05_01_212_00.slice(6,8)}}</td>
-                              <td
-                                v-if="detail.AP05_01_214_00"
-                              >{{detail.AP05_01_214_00.slice(0,4)+'-'+detail.AP05_01_214_00.slice(4,6)+'-'+detail.AP05_01_214_00.slice(6,8)}}</td>
-                              <td>{{detail.AP08_10_002_00}}</td>
-                              <td>{{detail.AP08_10_001_00}}</td>
-                              <td>{{detail.AP08_10_026_11}}</td>
-                              <td>{{detail.AP02_01_105_00}}</td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                    </el-dialog>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div class="close-all" @click="closeAll">Close All</div>
+          <!-- <el-tab-pane label="患者总览" name="患者总览"> -->
+          <!-- <PatientOverView :patientInfo="patientInfo" /> -->
+          <!-- </el-tab-pane> -->
+          <el-tab-pane
+            v-for="(item,index) in editableTabs"
+            :key="index"
+            :label="item.title"
+            :name="item.name"
+            closable
+          >
+            <component
+              :tabData="RigData"
+              v-bind:is="item.content"
+              :patientInfo="patientInfo"
+              :DI_ADI_REGISTER_INFO_select="elTabsData"
+            ></component>
           </el-tab-pane>
         </el-tabs>
-        <el-dialog
-          title
-          :visible.sync="dialogVisible.shadow"
-          width="500px"
-          :before-close="handleClose"
-        >
+        <el-dialog title :visible.sync="dialogVisible" width="500px" :before-close="handleClose">
           <div class="read_card">
             请输入身份证号
             <div class="id_card">
@@ -2453,13 +149,40 @@
 </template>
 
 <script>
+import PatientOverView from "../components/hzzl"
+import mjzZlbl from "../components/mjzzlbl";
+import mjzZlfymx from "../components/mjzzlfymx";
+import mjzZlyz from "../components/mjzzlyz";
+import mjzZlzfyxx from "../components/mjzzlzfyxx";
+import mzsHjl from "../components/mzshjl";
+import zjzZlgh from "../components/zjzzlgh";
+import mjzzljcbg from "../components/mjzzljcbg";
+import zjzZljymxjl from "../components/zjzzljymxjl";
+import zjzZlzdjl from "../components/zjzzlzdjl";
+import zybAsyfyjl from "../components/zybasyfyjl";
+import zybAsyjl from "../components/zybasyjl";
+import zybAsypgbg from "../components/zybasypgbg";
+import zybAsyzd from "../components/zybasyzd";
+import zyzLcy from "../components/zyzlcy";
+import zyzLfyjs from "../components/zyzlfyjs";
+import zyzLfymxjl from "../components/zyzlfymxjl";
+import zyzLjcbg from "../components/zyzljcbg";
+import zyzLjymxjl from "../components/zyzljymxjl";
+import zyzLlcljjl from "../components/zyzllcljjl";
+import zyzLssjl from "../components/zyzlssjl";
+import zyzlyz from "../components/zyzlyz";
+import zyzLzdjlxx from "../components/zyzlzdjlxx";
+import ryjl from '../components/ryjl'
+import hospitalindex from '../components/inHospitalIndex'
+import InspectionRecord from '../components/InspectionRecord'
 import axios from "axios";
-
+import moment from 'moment'
 export default {
   name: "home",
+  components: { InspectionRecord, PatientOverView, hospitalindex, mjzZlbl, mjzZlfymx, mjzZlyz, mjzZlzfyxx, mzsHjl, zjzZlgh, mjzzljcbg, zjzZljymxjl, zjzZlzdjl, zybAsyfyjl, zybAsyjl, zybAsypgbg, zybAsyzd, zyzLcy, zyzLfyjs, zyzLfymxjl, zyzLjcbg, zyzLjymxjl, zyzLlcljjl, zyzLssjl, zyzlyz, zyzLzdjlxx, ryjl },
   data() {
     return {
-      id_card: "622823197406010645",
+      id_card: "612200194101051123",
       datePickVal: "",
       detail: "",
       timeLineData: [],
@@ -2495,6 +218,7 @@ export default {
           }
         ]
       },
+      dialogVisible: true,
       queryCondition: {
         startDate: "",
         endDate: "",
@@ -2504,163 +228,318 @@ export default {
       },
       personInfo: {},
       activities: [
-        {
-          timestamp: "2018-04-12 20:46",
-          size: "large",
-          type: "primary",
-          treedata: [
-            {
-              label: "延安市人民医院(门诊，骨科)",
-              children: [
-                {
-                  label: "检查报告",
-                  tab: "检查报告"
-                },
-                {
-                  label: "医嘱",
-                  tab: "医嘱"
-                },
-                {
-                  label: "费用记录",
-                  tab: "费用记录"
-                },
-                {
-                  label: "费用明细记录表",
-                  tab: "费用明细记录表"
-                },
-                {
-                  label: "检验报告明细表",
-                  tab: "检验报告明细表"
-                },
-                {
-                  label: "病历记录",
-                  tab: "病历记录"
-                },
-                {
-                  label: "检验记录",
-                  tab: "检验记录"
-                },
-                {
-                  label: "手术记录",
-                  tab: "手术记录"
-                },
-                {
-                  label: "其他诊疗记录",
-                  tab: "其他诊疗记录"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          timestamp: "2018-04-03 20:46",
-          size: "large",
-          type: "primary",
-          treedata: [
-            {
-              label: "延安市人民医院(住院，骨科)",
-              children: [
-                {
-                  label: "评估报告",
-                  tab: "评估报告"
-                },
-                {
-                  label: "诊断记录",
-                  tab: "诊断记录"
-                },
-                {
-                  label: "费用结算",
-                  tab: "费用结算"
-                },
-                {
-                  label: "手术记录",
-                  tab: "手术记录"
-                },
-                {
-                  label: "检查报告表",
-                  tab: "检查报告表"
-                },
-                {
-                  label: "临床路径记录表",
-                  tab: "临床路径记录表"
-                },
-                {
-                  label: "诊断记录",
-                  tab: "诊断记录"
-                },
-                {
-                  label: "医嘱信息",
-                  tab: "医嘱信息"
-                },
-                {
-                  label: "费用结算",
-                  tab: "费用结算"
-                },
-                {
-                  label: "费用明细记录",
-                  tab: "费用明细记录"
-                },
-                {
-                  label: "实验室检验详细记录",
-                  tab: "实验室检验详细记录"
-                },
-                {
-                  label: "检验报告头表",
-                  tab: "检验报告头表"
-                },
-                {
-                  label: "手术记录",
-                  tab: "手术记录"
-                },
-                {
-                  label: "出院记录",
-                  tab: "出院记录"
-                }
-              ]
-            }
-          ]
-        }
+        // {
+        //   dateTime: "2018-04-12 20:46",
+        //   size: "large",
+        //   type: "primary",
+        //   data: [
+        //     {
+        //       label: "延安市人民医院(门诊，骨科)",
+        //       children: [
+        //         {
+        //           label: "挂号记录",
+        //           tab: "挂号记录",
+        //           serviceName: "DI_ADI_REGISTER_INFO_select",
+        //           component: "zjzZlgh",
+        //         },
+        //         {
+        //           label: "病历",
+        //           tab: "病历",
+        //           serviceName: "DI_ADI_RECORD_INFO_select",
+        //           component: "mjzZlbl"
+        //         },
+        //         {
+        //           label: "诊断记录",
+        //           tab: "诊断记录",
+        //           serviceName: "DI_ADI_DIAREC_INFO_select",
+        //           component: "zjzZlzdjl"
+        //         },
+        //         {
+        //           label: "医嘱",
+        //           tab: "医嘱",
+        //           serviceName: "DI_ADI_DRUREC_INFO_select",
+        //           component: "mjzZlyz"
+        //         },
+        //         {
+        //           label: "检查报告",
+        //           tab: "门诊检查报告",
+        //           serviceName: "DI_ADI_CLIEXA_INFO_select",
+        //           component: "mjzzljcbg"
+        //         },
+        //         {
+        //           label: "检验报告(数量）",
+        //           tab: "检验报告",
+        //           serviceName: "DI_ADI_LAREXA_INFO_select",
+        //           component: "zjzZljymxjl"
+        //         },
+        //         {
+        //           label: "手术记录(数量）",
+        //           tab: "门诊手术记录",
+        //           serviceName: "DI_ADI_OPEREC_INFO_select",
+        //           component: "mzsHjl"
+        //         },
+        //         {
+        //           label: "费用记录",
+        //           tab: "费用记录",
+        //           serviceName: "DI_ADI_EXPSET_INFO_select",
+        //           component: "mjzZlfymx"
+        //         }
+        //       ]
+        //     },
+        //     {
+        //       label: "延安市人民医院(住院，骨科)",
+        //       children: [
+        //         {
+        //           label: "住院病案首页",
+        //           tab: "住院病案首页",
+        //           serviceName: "DI_HAI_APRNOT_INFO_MR_select",
+        //           component: "hospitalindex"
+        //         },
+        //         {
+        //           label: "入院记录（BUSINESS_ID）",
+        //           tab: "入院记录",
+        //           serviceName: "DI_HDI_INRECORD_INFO_select",
+        //           component: "ryjl"
+        //         },
+        //         {
+        //           label: "诊断记录",
+        //           tab: "住院诊断记录",
+        //           serviceName: "DI_HDI_DIAREC_INFO_select",
+        //           component: "zyzLzdjlxx"
+        //         },
+        //         {
+        //           label: "医嘱信息(数量）",
+        //           tab: "住院医嘱信息",
+        //           serviceName: "DI_HDI_DRUREC_INFO_select",
+        //           component: "zyzlyz"
+        //         },
+        //         {
+        //           label: "临床路径记录表",
+        //           tab: "临床路径记录表",
+        //           serviceName: "DI_HDI_CPATH_INFO_select",
+        //           component: "zyzLlcljjl"
+        //         },
+        //         {
+        //           label: "检查报告表(数量）",
+        //           tab: "住院检查报告",
+        //           serviceName: "DI_HDI_CLIEXA_INFO_select",
+        //           component: "zyzLjcbg"
+        //         },
+        //         {
+        //           label: "检验报告(数量）",
+        //           tab: "住院检验报告",
+        //           serviceName: "DI_HDI_LAREXA_INFO_select",
+        //           component: "InspectionRecord"
+        //         },
+        //         {
+        //           label: "手术记录(数量）",
+        //           tab: "住院手术记录",
+        //           serviceName: "DI_HDI_OPEREC_INFO_select",
+        //           component: "zyzLssjl"
+        //         },
+        //         {
+        //           label: "出院记录",
+        //           tab: "出院记录",
+        //           serviceName: "DI_HDI_OUTRECORD_INFO_select",
+        //           component: "zyzLcy"
+        //         },
+        //         {
+        //           label: "费用结算",
+        //           tab: "住院费用结算",
+        //           serviceName: "DI_HDI_EXPSET_INFO_select",
+        //           component: "zyzLfyjs"
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // },
+        // {
+        //   dateTime: "2018-04-03 20:46",
+        //   size: "large",
+        //   type: "primary",
+        //   data: [
+        //     {
+        //       label: "延安市人民医院(住院，骨科)",
+        //       children: [
+        //         {
+        //           label: "住院病案首页",
+        //           tab: "住院病案首页",
+        //           serviceName: "DI_HAI_APRNOT_INFO_MR_select",
+        //           component: "hospitalindex"
+        //         },
+        //         {
+        //           label: "入院记录",
+        //           tab: "入院记录",
+        //           serviceName: "DI_HDI_INRECORD_INFO_select",
+        //           component: "ryjl"
+        //         },
+        //         {
+        //           label: "诊断记录",
+        //           tab: "住院诊断记录",
+        //           serviceName: "DI_HDI_DIAREC_INFO_select",
+        //           component: "zyzLzdjlxx"
+        //         },
+        //         {
+        //           label: "医嘱信息(数量）",
+        //           tab: "住院医嘱信息",
+        //           serviceName: "DI_HDI_DRUREC_INFO_select",
+        //           component: "zyzlyz"
+        //         },
+        //         {
+        //           label: "临床路径记录表",
+        //           tab: "临床路径记录表",
+        //           serviceName: "DI_HDI_CPATH_INFO_select",
+        //           component: "zyzLlcljjl"
+        //         },
+        //         {
+        //           label: "检查报告表(数量）",
+        //           tab: "住院检查报告",
+        //           serviceName: "DI_HDI_CLIEXA_INFO_select",
+        //           component: "zyzLjcbg"
+        //         },
+        //         {
+        //           label: "检验报告(数量）",
+        //           tab: "住院检验报告",
+        //           serviceName: "DI_HDI_LAREXA_INFO_select",
+        //           component: "InspectionRecord"
+        //         },
+        //         {
+        //           label: "手术记录(数量）",
+        //           tab: "住院手术记录",
+        //           serviceName: "DI_HDI_OPEREC_INFO_select",
+        //           component: "zyzLssjl"
+        //         },
+        //         {
+        //           label: "出院记录",
+        //           tab: "出院记录",
+        //           serviceName: "DI_HDI_OUTRECORD_INFO_select",
+        //           component: "zyzLcy"
+        //         },
+        //         {
+        //           label: "费用结算",
+        //           tab: "住院费用结算",
+        //           serviceName: "DI_HDI_EXPSET_INFO_select",
+        //           component: "zyzLfyjs"
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }
       ],
       defaultProps: {
         children: "children",
         label: "label"
       },
+      RigData: [],
+      elTabsData: {
+        // mz_ghjl: [], // 挂号记录
+        // mz_bl: [], //病历
+        // mz_zdjl: [], // 门急诊诊断记录
+        // mz_yz: [], // 医嘱
+        // mz_jcbg: [], // 检查报告
+        // mz_jybg: [], // 检验报告
+        // mz_ssjl: [], // 手术记录
+        // mz_fyjl: [], // 费用记录
+        // zy_basy: [], // 住院病案首页
+        // zy_ryjl: [], // 入院记录
+        // zy_zdjl: [], // 诊断记录
+        // zy_yz: [], // 医嘱
+        // zy_lclj: [], // 临床路径记录
+        // zy_jcbg: [], // 检查报告表
+        // zy_jybg: [], // 检验报告
+        // zy_ssjl: [], // 手术记录
+        // zy_cyjl: [], // 出院记录
+        // zy_fy: [] // 费用结算
+      },
+      editableTabs: [{
+        title: "患者总览",
+        name: "患者总览",
+        content: PatientOverView
+      }],
       editableTabsValue: "患者总览",
-      tabIndex: 2,
+      tabIndex: 1,
       testData: [],
       showContent: false,
       needData: [],
       tabData: [],
-      dialogVisible: {
-        shadow: false,
-        dialog1: false,
-        dialog2: false,
-        dialog3: false,
-        dialog4: false,
-        dialog5: false,
-        dialog6: false,
-        dialog7: false,
-        dialog8: false,
-        dialog9: false,
-        dialog10: false,
-        dialog11: false,
-        dialog12: false,
-        dialog13: false,
-        dialog14: false,
-        dialog15: false,
-        dialog16: false,
-        dialog17: false,
-        dialog18: false,
-        dialog19: false,
-        dialog20: false,
-        dialog21: false,
-        dialog22: false,
-        dialog23: false,
-        ghjl: false
-      }
     };
   },
   methods: {
+    addTab(data) {
+      console.log(data)
+      if (data.serviceName && data.BUSINESS_ID) {
+        let req = {
+          serviceName: data.serviceName,
+          condition: [
+            {
+              colName: "BUSINESS_ID",
+              ruleType: "eq",
+              value: data.BUSINESS_ID
+            },
+            {
+              colName: "HOSPITAL_NAME",
+              ruleType: "eq",
+              value: data.HOSPITAL_NAME
+            }
+          ]
+        };
+        let url = this.getServiceUrl("select", data.serviceName, "emr");
+        axios({
+          method: "POST",
+          url: url,
+          data: req,
+          headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
+        }).then(res => {
+          console.log('xxx')
+          let ser = req.serviceName
+          this.elTabsData[ser] = res.data.data
+          this.RigData = res.data.data;
+          console.log("selectedtabData", this.elTabsData);
+        }).catch(err => {
+          console.log(err);
+        });
+        let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab
+        if (!exists) {
+          this.editableTabs.push({
+            title: data.tab,
+            name: data.tab,
+            content: data.component
+          });
+        }
+        this.editableTabsValue = data.tab;
+      } else if (data.tab == "入院记录") {
+        let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab,
+        if (!exists) { // 若当前点击item对应的tab页不存在，则创建（push）对应的tab页
+          this.editableTabs.push({
+            title: data.tab,
+            name: data.tab,
+            content: data.component,
+            serviceName: data.serviceName
+          });
+        }
+        this.editableTabsValue = data.tab;
+      }
+    },
+    removeTab(targetName) {
+      let tabs = this.editableTabs;
+      let activeName = this.editableTabsValue;
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1];
+            if (nextTab) {
+              activeName = nextTab.name;
+            }
+          }
+        });
+      }
+      this.editableTabsValue = activeName;
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+    },
+    closeAll() {
+      this.editableTabsValue = '患者总览'
+      this.editableTabs = this.editableTabs.slice(0, 1)
+    },
     initData(cod) {
       this.timeLineData = [];
       let req = {
@@ -2696,70 +575,223 @@ export default {
           req.condition[1].value = cod.type;
         }
         if (cod.department) {
-          req.condition[2].colName = "AP08_10_025_01";
+          req.condition[2].colName = "DE08_10_025_00";
           req.condition[2].value = cod.department;
         }
       }
-      let url = this.getServiceUrl("select", req.serviceName, "test");
+      // let url = this.getServiceUrl("select", req.serviceName, "zjr");
+      let url = this.getServiceUrl("select", req.serviceName, "emr");
       axios({
         method: "POST",
         headers: {
           bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket")
         },
         url: url,
-        data: req,
-        headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
+        data: req
       })
         .then(res => {
           let data = res.data.data;
           if (data && data.length > 0) {
-            console.log("data", data);
-            let arr = [];
+            console.log("dataaaaaa\n", data);
+            let arr = []
             data.map(item => {
-              let date = "";
-              // console.log(item)
-              item.data.data.map(item2 => {
-                let obj = {};
-                obj.label = "";
-                obj.children = [];
-                // console.log("item2", item2)
-                obj.label = item.data.label + "(" + item2.label;
-                item2.data.map(item3 => {
-                  obj.label =
-                    item.data.label +
-                    "(" +
-                    item2.label +
-                    "," +
-                    item3.label +
-                    ")";
-                  // console.log("item3", item3)
-                  item3.data.map(item4 => {
-                    // console.log('item4', item4)
-                    item4.tab = item4.label;
-                    item4.label = item4.label + "," + item4.count;
-                    obj.children.push(item4);
-                    date =
-                      item4.dateTime.slice(0, 4) +
-                      "-" +
-                      item4.dateTime.slice(4, 6) +
-                      "-" +
-                      item4.dateTime.slice(6, 8);
-                    obj.timestamp = date;
-                  });
-                });
-                (obj.size = "large"),
-                  (obj.type = "primary"),
-                  // console.log('obj', obj)
-                  arr.push(obj);
-              });
-              // console.log('arr', arr)
-              this.timeLineData.push({
-                timestamp: date,
-                size: "large",
-                type: "primary",
-                data: arr
-              });
-            });
+              let timeLineData = {}
+              timeLineData.data = []
+              timeLineData.dateTime = item.dateTime
+              timeLineData.size = "large"
+              timeLineData.type = "primary"
+              item.data.map(item2 => {
+                let label = item2.data.label
+                if (item2.data.typeCode === "C0001") {
+                  let count = {
+                    "病历": item2.data.RECORD_INFO_COUNT,
+                    "诊断记录": item2.data.DIAREC_INFO_COUNT,
+                    "检查报告": item2.data.CLIEXA_INFO_COUNT,
+                    "医嘱": item2.data.DRUREC_INFO_COUNT,
+                    "费用记录": item2.data.EXPSET_INFO_COUNT,
+                    "检验报告": item2.data.LAREXA_INFO_COUNT,
+                    "手术记录": item2.data.OPEREC_INFO_COUNT,
+                  }
+                  timeLineData.data.push(
+                    {
+                      label: label,
+                      children: [
+                        {
+                          label: "挂号记录",
+                          tab: "挂号记录",
+                          serviceName: "DI_ADI_REGISTER_INFO_select",
+                          component: "zjzZlgh",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "病历" + "(" + count.病历 + ")",
+                          tab: "病历",
+                          serviceName: "DI_ADI_RECORD_INFO_select",
+                          component: "mjzZlbl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "诊断记录" + "(" + count.诊断记录 + ")",
+                          tab: "诊断记录",
+                          serviceName: "DI_ADI_DIAREC_INFO_select",
+                          component: "zjzZlzdjl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "医嘱" + "(" + count.医嘱 + ")",
+                          tab: "医嘱",
+                          serviceName: "DI_ADI_DRUREC_INFO_select",
+                          component: "mjzZlyz",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "检查报告" + "(" + count.检查报告 + ")",
+                          tab: "门诊检查报告",
+                          serviceName: "DI_ADI_CLIEXA_INFO_select",
+                          component: "mjzzljcbg",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "检验报告" + "(" + count.检验报告 + ")",
+                          tab: "检验报告",
+                          serviceName: "DI_ADI_LAREXA_INFO_select",
+                          component: "zjzZljymxjl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "手术记录" + "(" + count.手术记录 + ")",
+                          tab: "门诊手术记录",
+                          serviceName: "DI_ADI_OPEREC_INFO_select",
+                          component: "mzsHjl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "费用记录",
+                          tab: "费用记录",
+                          serviceName: "DI_ADI_EXPSET_INFO_select",
+                          component: "mjzZlfymx",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        }
+                      ]
+
+                    }
+                  )
+                  // arr.push(timeLineData)
+                }
+                else if (item2.data.typeCode === "C0002") {
+                  let count = {
+                    "住院病案首页": item2.data.APRNOT_INFO_MR_COUNT,
+                    "检验报告": item2.data.LAREXA_INFO_COUNT,
+                    "费用记录": item2.data.EXPSET_INFO_COUNT,
+                    "临床路径记录": item2.data.CPATH_INFO_COUNT,
+                    "住院检查报告": item2.data.CLIEXA_INFO_COUNT,
+                    "出院记录": item2.data.OUTRECORD_INFO_COUNT,
+                    "手术记录": item2.data.OPEREC_INFO_COUNT,
+                    "医嘱": item2.data.DRUREC_INFO_COUNT,
+                    "诊断记录": item2.data.DIAREC_INFO_COUNT,
+                  }
+                  timeLineData.data.push(
+                    {
+                      label: label,
+                      children: [
+                        {
+                          label: "住院病案首页",
+                          tab: "住院病案首页",
+                          serviceName: "DI_HAI_APRNOT_INFO_MR_select",
+                          component: "hospitalindex",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "入院记录",
+                          tab: "入院记录",
+                          serviceName: "DI_HDI_INRECORD_INFO_select",
+                          component: "ryjl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "诊断记录" + "(" + count.诊断记录 + ")",
+                          tab: "住院诊断记录",
+                          serviceName: "DI_HDI_DIAREC_INFO_select",
+                          component: "zyzLzdjlxx",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "医嘱信息" + "(" + count.医嘱 + ")",
+                          tab: "住院医嘱信息",
+                          serviceName: "DI_HDI_DRUREC_INFO_select",
+                          component: "zyzlyz",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "临床路径记录表" + "(" + count.临床路径记录 + ")",
+                          tab: "临床路径记录表",
+                          serviceName: "DI_HDI_CPATH_INFO_select",
+                          component: "zyzLlcljjl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "检查报告表" + "(" + count.住院检查报告 + ")",
+                          tab: "住院检查报告",
+                          serviceName: "DI_HDI_CLIEXA_INFO_select",
+                          component: "zyzLjcbg",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "检验报告" + "(" + count.检验报告 + ")",
+                          tab: "住院检验报告",
+                          serviceName: "DI_HDI_LAREXA_INFO_select",
+                          component: "InspectionRecord",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "手术记录" + "(" + count.手术记录 + ")",
+                          tab: "住院手术记录",
+                          serviceName: "DI_HDI_OPEREC_INFO_select",
+                          component: "zyzLssjl",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "出院记录" + "(" + count.出院记录 + ")",
+                          tab: "出院记录",
+                          serviceName: "DI_HDI_OUTRECORD_INFO_select",
+                          component: "zyzLcy",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        },
+                        {
+                          label: "费用结算",
+                          tab: "住院费用结算",
+                          serviceName: "DI_HDI_EXPSET_INFO_select",
+                          component: "zyzLfyjs",
+                          BUSINESS_ID: item2.data.BUSINESS_ID,
+                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
+                        }
+                      ]
+
+                    }
+                  )
+                  // arr.push(timeLineData)
+                }
+              })
+              arr.push(timeLineData)
+            })
+            this.timeLineData = arr
             console.log("timeLineData", this.timeLineData);
           }
         })
@@ -2767,114 +799,47 @@ export default {
           console.log("err", err);
         });
     },
-    handleNodeClick(data) {
-      console.log(data);
-      if (data.code) {
-        let req = {
-          serviceName: data.code,
-          condition: data.condition,
-          page: {
-            pageNo: 1,
-            rownumber: 5,
-            total: 17
-          }
-        };
-        let url = this.getServiceUrl("select", data.code, "emr");
-        axios({
-          method: "POST",
-          headers: {
-            bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket")
-          },
-          url: url,
-          data: req,
-          headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
-        })
-          .then(res => {
-            console.log("rrr", res.data.data);
-            this.tabData = res.data.data;
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-      if (data.tab) {
-        this.editableTabsValue = data.tab;
-      }
-    },
-    changeDialogVisible(num, item) {
-      if (item) {
-        this.detail = item;
-      }
-      console.log(num, item);
-      if (num === "1") {
-        this.dialogVisible.dialog1 = true;
-      }
-      if (num === "2") {
-        this.dialogVisible.dialog2 = true;
-      }
-      if (num === "3") {
-        this.dialogVisible.dialog3 = true;
-      }
-      if (num === "4") {
-        this.dialogVisible.dialog4 = true;
-      }
-      if (num === "5") {
-        this.dialogVisible.dialog5 = true;
-      }
-      if (num === "6") {
-        this.dialogVisible.dialog6 = true;
-      }
-      if (num === "7") {
-        this.dialogVisible.dialog7 = true;
-      }
-      if (num === "8") {
-        this.dialogVisible.dialog8 = true;
-      }
-      if (num === "9") {
-        this.dialogVisible.dialog9 = true;
-      }
-      if (num === "10") {
-        this.dialogVisible.dialog10 = true;
-      }
-      if (num === "11") {
-        this.dialogVisible.dialog11 = true;
-      }
-      if (num === "12") {
-        this.dialogVisible.dialog12 = true;
-      }
-      if (num === "13") {
-        this.dialogVisible.dialog13 = true;
-      }
-      if (num === "14") {
-        this.dialogVisible.dialog14 = true;
-      }
-      if (num === "15") {
-        this.dialogVisible.dialog15 = true;
-      }
-      if (num === "16") {
-        this.dialogVisible.dialog16 = true;
-      }
-      if (num === "17") {
-        this.dialogVisible.dialog17 = true;
-      }
-      if (num === "18") {
-        this.dialogVisible.dialog18 = true;
-      }
-      if (num === "19") {
-        this.dialogVisible.dialog19 = true;
-      }
-      if (num === "20") {
-        this.dialogVisible.dialog20 = true;
-      }
-      if (num === "21") {
-        this.dialogVisible.dialog21 = true;
-      }
-      if (num === "22") {
-        this.dialogVisible.dialog22 = true;
-      }
-      if (num === "23") {
-        this.dialogVisible.dialog23 = true;
-      }
+    // handleNodeClick(data) {
+    //   console.log(data);
+    //   if (data.serviceName && data.BUSINESS_ID) {
+    //     let req = {
+    //       serviceName: data.serviceName,
+    //       condition: [
+    //         {
+    //           colName: "BUSINESS_ID",
+    //           ruleType: "eq",
+    //           value: data.BUSINESS_ID
+    //         },
+    //         {
+    //           colName: "LOCAL_ID",
+    //           ruleType: "eq",
+    //           value: this.patientInfo.LOCAL_ID
+    //         }
+    //       ]
+    //     };
+    //     let url = this.getServiceUrl("select", data.serviceName, "emr");
+    //     axios({
+    //       method: "POST",
+    //       url: url,
+    //       data: req,
+    //       headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
+    //     }).then(res => {
+    //       this.RigData = res.data.data;
+    //       console.log("rrr", this.RigData);
+    //     }).catch(err => {
+    //       console.log(err);
+    //     });
+    //   }
+    //   if (data.tab) {
+    //     this.editableTabsValue = data.tab;
+    //   }
+    // },
+    toManangerment() {
+      let str = window.location.href;
+      let num = str.indexOf("?");
+      str = str.substr(num + 1);
+      console.log(str);
+      window.location.href = "../../main/index.html";
     },
     handleClose(done) {
       this.$confirm("确认关闭？")
@@ -2889,91 +854,84 @@ export default {
       this.editableTabsValue = "患者总览";
       this.patientInfo = {};
       this.timeLineData = [];
-      this.dialogVisible.shadow = true;
+      this.dialogVisible = true;
     },
     closeReadCard() {
-      this.dialogVisible.shadow = false;
+      this.dialogVisible = false;
       this.getData();
       this.initData();
     },
     getData() {
       this.patientInfo = {
-        name: "吴阳阳",
-        gender: "{{detail.AP02_01_102_01}}",
-        age: "35",
+        name: "",
+        gender: "",
+        age: "",
         identityCard: this.id_card,
         profession: "",
         familyAddress: "",
-        contact: ""
+        contact: "",
+        LOCAL_ID: ""
       };
+      // 根据身份证号查找证件信息及LOCAL_ID
       let req = {
-        serviceName: "DI_MPI_REGISTERINFO_select",
+        serviceName: "DI_MPI_CERT_REGISTERINFO_select",
         condition: [
           {
-            colName: "id",
+            colName: "CERT_NUMBER",
             ruleType: "eq",
-            value: "5d43ac9b76daabe29d605f8a"
+            value: this.id_card
           }
         ]
       };
       let url = this.getServiceUrl("select", req.serviceName, "emr");
       axios({
         method: "POST",
-        headers: {
-          bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket")
-        },
+        headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") },
         url: url,
         data: req
-      })
-        .then(res => {
-          if (res.data.resultCode === "0011") {
-            this.$router.push({ name: 'login' })
-            console.log(res.data.resultCode)
-          }
-          if (res.data.data[0]) {
-            this.patientInfo = res.data.data[0]
-            let birth = res.data.data[0].BIRTHDAY
-            birth = new Date(birth.slice(0, 4) + '-' + birth.slice(4, 6) + '-' + birth.slice(6, 8)).getTime()
-            let today = new Date().getTime()
-            let age = Math.round((today - birth) / 31536000000)
-            // console.log(age)
-            // console.log(new Date(birth))
-            this.patientInfo.name = res.data.data[0].NAME
-            this.patientInfo.gender = res.data.data[0].SEX_NAME
+      }).then(res => {
+        if (res.data.resultCode === "0011") {
+          this.$router.push({ name: "login" });
+          console.log(res.data.resultCode);
+        }
+        if (res.data.data[0]) {
+          this.patientInfo.LOCAL_ID = res.data.data[0].LOCAL_ID
+          // 根据localid查找基本信息
+          let req2 = {
+            hisVer: true,
+            "serviceName": "DI_MPI_REGISTERINFO_select",
+            "condition": [
+              {
+                "colName": "LOCAL_ID",
+                "ruleType": "eq",
+                "value": this.patientInfo.LOCAL_ID
+              }
+            ],
+          };
+          let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
+          axios({
+            method: "POST",
+            headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") },
+            url: url2,
+            data: req2
+          }).then(res => {
+            let data = res.data.data[0]
+            console.log("基本信息：", data);
+            this.patientInfo.name = data.NAME
+            this.patientInfo.gender = data.SEX_NAME
+            let birth = data.BIRTHDAY.toString().slice(0, 4)
+            birth = new Date(birth).getFullYear();
+            let today = new Date().getFullYear();
+            let age = today - birth
             this.patientInfo.age = age
-            this.patientInfo.identityCard = this.id_card
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      let req2 = {
-        hisVer: true,
-        serviceName: "DI_MPI_CERT_REGISTERINFO_select",
-        condition: [
-          {
-            colName: "id",
-            ruleType: "eq",
-            value: "5d43ac9b76daabe29d605f8b"
-          }
-        ]
-      };
-      let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
-      axios({
-        method: "POST",
-        headers: {
-          bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket")
-        },
-        url: url2,
-        data: req2,
-        headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
-      })
-        .then(res => {
-          console.log("zjxx", res.data.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+            console.log(age)
+          }).catch(err => {
+            console.log(err);
+          });
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     },
     goHomePage() {
       console.log("返回首页");
@@ -2999,7 +957,11 @@ export default {
       console.log(condition);
     },
     removeTab(targetName) {
-      console.log(targetName);
+      // console.log("关闭标签页" + targetName);
+      if (targetName === "患者总览") {
+        alert("不可关闭！")
+        return
+      }
       let tabs = this.editableTabs;
       let activeName = this.editableTabsValue;
       if (activeName === targetName) {
@@ -3017,10 +979,8 @@ export default {
       this.editableTabs = tabs.filter(tab => tab.name !== targetName);
     }
   },
-
   created() {
     this.readCard();
-    // this.initData();
   }
 };
 </script>
@@ -3032,7 +992,6 @@ body {
   background-image: none;
   position: relative;
   left: 0;
-  // width: 1361px;
   width: 100%;
   min-width: 1361px;
   margin-left: auto;
@@ -3041,7 +1000,7 @@ body {
 }
 
 .el-timeline-item .el-timeline-item__wrapper {
-  padding-left: 15px;
+  padding-left: 15px !important;
 }
 
 .el-timeline-item__timestamp {
@@ -3072,10 +1031,6 @@ body {
   text-align: left;
 }
 
-.el-timeline-item__wrapper {
-  padding-left: 15px;
-}
-
 .el-timeline-item__timestamp {
   padding-left: 10px;
 }
@@ -3086,11 +1041,12 @@ body {
 }
 
 .el-tabs--border-card {
-  height: 545px;
+  // height: 545px;
+  height: 100%;
 }
 
-.el-tabs--border-card .el-tabs__content {
-  height: 478px;
+.el-tabs--border-card /deep/ .el-tabs__content {
+  overflow: visible;
 }
 
 .el-timeline-item__wrapper .el-timeline-item__timestamp {
@@ -3110,6 +1066,9 @@ body {
   .el-tree-node__content {
     padding-left: 0 !important;
   }
+}
+.el-tabs__nav-scroll .el-tabs__nav /deep/#tab-患者总览 span {
+  display: none !important;
 }
 .home {
   width: 1500px;
@@ -3140,7 +1099,6 @@ body {
   width: 240px;
   display: block;
   box-sizing: border-box;
-  height: 100%;
   border: 1px #666 solid;
 }
 
@@ -3157,10 +1115,13 @@ body {
 
 .header_user_info .header_user_info_item {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
+  min-width: 30%;
+  height: 30px;
+  line-height: 30px;
 }
 
-.header_user_info .label {
+.header_user_info .user {
   font-weight: 100;
   font-size: 14px;
 }
@@ -3193,6 +1154,7 @@ body {
 
 .content {
   /* height: 550px; */
+  height: 700px;
   margin-top: 10px;
   box-sizing: border-box;
 }
@@ -3280,94 +1242,15 @@ select {
   background-color: #fff;
   width: 325px;
   border: 1px solid rgba(228, 228, 228, 1);
-  height: 374px;
+  height: 500px;
   overflow-y: auto;
 }
 
 .content_right {
   box-sizing: border-box;
-  width: 1092px;
+  width: 1155px;
   float: left;
-}
-
-.content_right_tab {
-  width: 100%;
-  box-sizing: border-box;
-  height: 32px;
-  border: 1px solid rgba(228, 228, 228, 1);
-  border-bottom: none;
-}
-
-.content_right_main {
-  box-sizing: border-box;
-  width: 100%;
-  height: 518px;
-  border: 1px solid rgba(228, 228, 228, 1);
-  background-color: #fff;
-}
-
-.tab_content {
-  width: 100%;
   height: 100%;
-  text-align: center;
-}
-
-.tab_content_title {
-  font-family: "Arial Negreta", "Arial Normal", "Arial";
-  font-weight: 700;
-  height: 60px;
-  line-height: 60px;
-  font-style: normal;
-  font-size: 16px;
-  color: #7f7f7f;
-}
-
-/* 详情 */
-.tab_detail {
-  box-sizing: border-box;
-  // width: 900px;
-  margin: 0 auto;
-  min-height: 500px;
-  text-align: left;
-  p {
-    margin-left: 2%;
-  }
-}
-
-.detail_title {
-  display: flex;
-  justify-content: space-around;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #333;
-}
-
-.detail_title_block {
-  width: 25%;
-  line-height: 20px;
-  display: flex;
-  text-align: left;
-  flex-direction: column;
-}
-.detail {
-  display: flex;
-  justify-content: space-between;
-  .detail_left {
-    width: 45%;
-    min-height: 530px;
-    text-align: center;
-    border-right: 1px solid black;
-    p {
-      margin-left: 5%;
-    }
-  }
-  .detail_rig {
-    width: 45%;
-    text-align: center;
-    margin-right: 2%;
-    p {
-      margin-right: 5%;
-    }
-  }
 }
 
 .read_card {
@@ -3376,759 +1259,58 @@ select {
   font-weight: 600;
   font-size: 20px;
 }
-/* 内容 */
-.detail_content_title {
-  display: flex;
-  width: 100%;
+// .close {
+//   display: none;
+// }
+.close-all {
+  position: absolute;
+  top: -40px;
+  right: 0px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 38px;
+  font-weight: 600;
+  line-height: 38px;
+  width: 80px;
+  text-align: center;
+  background-color: #fff;
+  color: #333;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  z-index: 999;
 }
-
-.title_left {
-  flex: 1;
-
-  display: flex;
-  justify-content: space-around;
-  table,
-  tr,
-  td {
-    border: 1px solid #333;
-    margin-top: 15px;
-  }
-  table {
-    width: 100%;
-  }
-}
-
-.title_right {
-  display: flex;
-  justify-content: space-around;
-  flex: 1;
-}
-
-.detail_content_content {
-  width: 100%;
-  min-height: 300px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.detail_content_left {
-  border-right: 1px #333 solid;
-  height: 300px;
-  width: 50%;
-}
-
-.detail_content_right {
-  height: 300px;
-  width: 50%;
-}
-
 table {
   width: 80%;
   border-spacing: 0px;
   border-collapse: collapse;
   margin: 0 auto;
+  td {
+    min-width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 0 10px;
+    white-space: nowrap;
+    font-size: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    color: #7f7f7f;
+    &.handle {
+      cursor: pointer;
+      color: blue;
+    }
+  }
 }
-
-table td {
-  min-width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 0 10px;
-  white-space: nowrap;
-  font-size: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  color: #7f7f7f;
-}
-
-td.handle {
-  cursor: pointer;
-  color: blue;
-}
-
 .text {
   margin: 0;
   padding: 0;
 }
-
 html {
   width: 100%;
   height: 100%;
   background-color: rgba(238, 238, 238, 1);
 }
-.table_cy_content {
-  // width: 800px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  text-align: left;
-  .main_title {
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
-  }
-  .header {
-    width: 100%;
-    display: flex;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    border-bottom: 3px solid #333;
-    box-shadow: none;
-  }
-  .header_item {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .header_item:nth-child(2) {
-    text-align: center;
-  }
-  .header_item:nth-child(3) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  .header_item_top {
-    font-size: 24px;
-    font-weight: 600;
-    height: 50px;
-    line-height: 50px;
-  }
-  .header_item_item {
-    display: flex;
-  }
-  .item_title {
-    display: inline-block;
-    letter-spacing: 3px;
-    width: 80px;
-  }
-  .top {
-    width: 100%;
-    min-height: 300px;
-    box-sizing: border-box;
-  }
-  /**table**/
-  .table {
-    width: 100%;
-    box-sizing: border-box;
-    border-collapse: collapse;
-    .row {
-      box-sizing: border-box;
-    }
-  }
-  /** content**/
-  .cy_content {
-    min-height: 400px;
-    padding: 20px 0;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    border-bottom: 3px solid #333;
-    .cy_content_box {
-      min-height: 100px;
-    }
-    .content_item_title {
-      text-indent: 32px;
-      font-weight: 600;
-    }
-    .content_item_detail {
-      text-indent: 32px;
-    }
-  }
-}
-.table_mzbl_content {
-  width: 1000px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  min-height: 500px;
-  .main_title {
-    width: 100%;
-    letter-spacing: 5px;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 50px;
-    text-align: center;
-  }
-  .little_tittle {
-    letter-spacing: 5px;
-    font-size: 18px;
-    font-weight: 600;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-  }
-  .header {
-    width: 90%;
-    display: flex;
-    box-shadow: none;
-    margin: 0 auto;
-    height: 50px;
-    justify-content: space-between;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    border-bottom: 3px solid #333;
-    .header_item {
-      height: 30px;
-    }
-  }
-  .content {
-    width: 90%;
-    margin: 0 auto;
-    padding-bottom: 20px;
-    min-height: 500px;
-    margin-bottom: 20px;
-    border-bottom: 3px solid #333;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    .content_item_title {
-      text-indent: 32px;
-      font-weight: 600;
-      padding-top: 30px;
-    }
-    .content_item_detail {
-      text-indent: 32px;
-      line-height: 30px;
-    }
-    .content_footer {
-      text-align: right;
-    }
-  }
-  .footer {
-    // padding: 0 30px;
-    width: 90%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-around;
-  }
-}
-.table_mabl_content {
-  width: 1000px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  min-height: 500px;
-  .main_title {
-    width: 100%;
-    letter-spacing: 5px;
-    font-size: 20px;
-    font-weight: 600;
-    /* height: 50px; */
-    line-height: 50px;
-    text-align: center;
-  }
-  .little_tittle {
-    letter-spacing: 5px;
-    font-size: 18px;
-    font-weight: 600;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-  }
-  .header {
-    width: 95%;
-    box-shadow: none;
-    margin: 0 auto;
-    height: 20px;
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    border-bottom: 2px solid #333;
-  }
-
-  .content {
-    padding-bottom: 20px;
-    min-height: 500px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #333;
-    flex-direction: column;
-    text-align: left;
-    text-indent: 20px;
-  }
-  .content_item_title {
-    text-indent: 32px;
-    font-weight: 600;
-    padding-top: 30px;
-  }
-  .content_item_detail {
-    text-indent: 32px;
-    line-height: 30px;
-  }
-  .content_footer {
-    text-align: right;
-  }
-
-  .footer {
-    padding: 0 30px;
-    display: flex;
-    justify-content: space-between;
-  }
-}
-.wrap_jcbg {
-  width: 100%;
-  height: 100%;
-  .header {
-    width: 100%;
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;
-  }
-  .header_top {
-    text-align: center;
-  }
-  .header_top h1 {
-    margin: 15px 0;
-  }
-  .header_cen {
-    text-align: right;
-  }
-  .header_cen p {
-    margin-right: 5%;
-    margin-top: 15px;
-  }
-  .header_bot {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    width: 95%;
-    margin: 0 auto;
-  }
-  .header_bot ul {
-    overflow: hidden;
-    list-style: none;
-    margin: 15px 0;
-  }
-  .header_bot ul li {
-    float: left;
-    width: 25%;
-    margin: 10px 0;
-  }
-  .header_bot p {
-    float: left;
-    width: 100%;
-    display: flex;
-    margin-left: 1%;
-  }
-  // .header_bot p:last-child {
-  //   float: left;
-  //   width: 22%;
-  //   margin-left: 1%;
-  // }
-  // .header_bot ul li:nth-child(6) {
-  //   width: 50%;
-  // }
-  // .header_bot ul li:nth-child(9) {
-  //   width: 50%;
-  // }
-  .content {
-    width: 95%;
-    margin: 0 auto;
-  }
-
-  .content_top {
-    width: 100%;
-    margin-top: 20px;
-    margin-left: 15px;
-  }
-  .inspect {
-    margin: 15px 0;
-    overflow: hidden;
-    text-align: left;
-  }
-  .inspect p {
-    text-indent: 30px;
-    margin-top: 10px;
-  }
-  .inspect p:first-child {
-    font-weight: 700;
-    text-indent: 0;
-    margin-top: 0;
-  }
-
-  .inspect:nth-child(1) p {
-    float: left;
-    text-indent: 0;
-    margin-top: 0;
-  }
-  .inspect:nth-child(3) {
-    min-height: 200px;
-  }
-  .opinion {
-    margin-top: 30px;
-    min-height: 200px;
-    text-align: left;
-  }
-  .opinion p {
-    font-weight: 700;
-  }
-  .opinion ul {
-    list-style-type: decimal;
-    margin-left: 3%;
-  }
-  .foot {
-    width: 95%;
-    margin: 0 auto;
-  }
-  .foot_top {
-    overflow: hidden;
-    border-bottom: 1px solid black;
-    padding-bottom: 10px;
-  }
-  .foot_top p {
-    float: left;
-    width: 30%;
-    margin-left: 3%;
-  }
-  .foot_bot {
-    text-align: center;
-    margin-top: 10px;
-  }
-}
-.wrap_yz {
-  width: 1000px;
-  margin: 0 auto;
-  .header {
-    width: 90%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    box-shadow: none;
-  }
-  .header_top {
-    text-align: center;
-  }
-  .header_top h1 {
-    margin: 15px 0;
-  }
-  .header_bot {
-    overflow: hidden;
-    margin-top: 20px;
-  }
-  .header_bot p {
-    float: left;
-    width: 18%;
-    margin-left: 1%;
-  }
-  .header_bot p:last-child {
-    float: left;
-    width: 22%;
-    margin-left: 1%;
-  }
-  .content {
-    width: 90%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  table,
-  th,
-  td {
-    border: 1px solid black;
-    text-align: center;
-    font-size: 14px;
-  }
-  td {
-    padding: 5px 0px;
-  }
-  .cont_t {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-  }
-  .content_bot {
-    text-align: center;
-    margin-top: 15px;
-  }
-}
-.dialog_hzjl {
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  padding: 10px 20px;
-  background-color: #fff;
-  margin: 50px auto;
-  .dialog_title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 50px;
-    height: 50px;
-  }
-  .head {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #333;
-  }
-  .top {
-    display: flex;
-    justify-content: space-between;
-  }
-  .content {
-    display: flex;
-    flex-direction: column;
-    .content_title {
-      text-indent: 20px;
-      border: 1px solid #333;
-      border-bottom: none;
-      height: 30px;
-      line-height: 30px;
-      display: flex;
-      justify-content: space-between;
-      .content_title_item {
-        min-width: 200px;
-        text-align: left;
-      }
-      &:last-child {
-        border-bottom: 1px solid #333;
-      }
-    }
-    .content_main {
-      text-align: left;
-      border: 1px solid #333;
-      border-bottom: none;
-      text-indent: 40px;
-      min-height: 200px;
-    }
-  }
-}
-.yz_wrap {
-  * {
-    padding: 0;
-    margin: 0;
-  }
-  ul,
-  li {
-    list-style: none;
-  }
-  .header {
-    width: 90%;
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-  }
-  .header_top {
-    margin: 0 auto;
-    overflow: hidden;
-    width: 40%;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .header_bot ul {
-    overflow: hidden;
-  }
-  .header_bot ul li {
-    margin-right: 4%;
-    float: left;
-  }
-  .header_bot ul li:first-child {
-    margin-left: 3%;
-  }
-  .content {
-    width: 100%;
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  table,
-  td,
-  tr {
-    border: 1px solid black;
-    text-align: center;
-    font-size: 14px;
-  }
-  td {
-    padding: 2px 5px;
-  }
-  .five {
-    width: 50px;
-  }
-  .bottom {
-    margin-top: 30px;
-    overflow: hidden;
-  }
-  .bottom p {
-    float: left;
-  }
-  .bottom p:first-child {
-    margin-right: 5%;
-  }
-}
-.fymx_wrap {
-  .header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: none;
-  }
-  .header_top {
-    text-align: center;
-    margin: 15px 0;
-  }
-  .header_cen ul li {
-    overflow: hidden;
-    margin-top: 5px;
-  }
-  .header_cen ul li p {
-    float: left;
-    margin-right: 5%;
-    padding: 0;
-  }
-  .content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .content_top_t {
-    overflow: hidden;
-  }
-  .content_top_t p {
-    text-align: center;
-  }
-  .content_top_b {
-    overflow: hidden;
-  }
-
-  table,
-  td,
-  tr {
-    border: 1px solid black;
-    text-align: center;
-    font-size: 14px;
-    border-left: none;
-  }
-  table {
-    border-collapse: collapse;
-    width: 22%;
-  }
-  td {
-    padding: 2px 5px;
-  }
-  .content_top_b table:nth-child(1) {
-    border-left: 1px solid black;
-  }
-  .content_bot_b table:nth-child(1) {
-    border-left: 1px solid black;
-  }
-  .content_top_b table {
-    margin: 0 auto;
-  }
-  .content_bot_b table {
-    width: 49%;
-    margin: 0 auto;
-  }
-  .content_bot_top,
-  .content_top_t {
-    margin-bottom: 5px;
-  }
-}
-.dialog_rypg {
-  display: flex;
-  flex-direction: column;
-  width: 800px;
-  padding: 10px 20px;
-  background-color: #fff;
-  margin: 50px auto;
-  .bold {
-    font-weight: 600;
-    min-width: 100px;
-  }
-  .dialog_title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 50px;
-    height: 50px;
-    border-bottom: 1px solid #333;
-  }
-  .dialog_head {
-    padding-top: 20px;
-    .dialog_head_items {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-  .dialog_content {
-    .title {
-      padding-top: 10px;
-      text-align: left;
-      line-height: 20px;
-    }
-    .content {
-      display: flex;
-      flex-wrap: wrap;
-      .content_item {
-        margin-left: 5px;
-      }
-    }
-  }
-}
-.jcbg_wrap {
-  .header {
-    width: 90%;
-    box-shadow: none;
-    display: flex;
-    margin: 0 auto;
-    flex-direction: column;
-  }
-
-  .header_top {
-    font-weight: 700;
-    margin-top: 15px;
-    font-size: 22px;
-    width: 100%;
-    text-align: center;
-  }
-  .header_cen {
-    margin-top: 15px;
-  }
-  .header_cen ul li {
-    margin-top: 15px;
-    text-align: left;
-  }
-  .content {
-    width: 90%;
-    margin: 15px auto 0;
-    padding-left: 40px;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-  .content_top {
-    margin: 15px 0;
-  }
-  .content_top p {
-    text-indent: 20px;
-    margin: 10px 0 10px 5%;
-  }
-  .content_top p:first-child {
-    text-indent: 0;
-    margin: 0;
-  }
-}
-.lclj_wrap {
-  .header {
-    width: 90%;
-    box-shadow: none;
-    display: flex;
-    margin: 0 auto;
-    flex-direction: column;
-  }
-  .header_top {
-    font-weight: 700;
-    margin-top: 15px;
-    font-size: 22px;
-    width: 100%;
-    text-align: center;
-  }
-}
-.lclj_wrap {
-  .header_cen {
-    display: flex;
-    justify-content: space-around;
-  }
+.title {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 15px;
 }
 </style>

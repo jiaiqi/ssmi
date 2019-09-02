@@ -69,7 +69,9 @@ export default {
             if (res.data.resultCode === "SUCCESS") {
               let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
               sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
-              self.$router.go(-1)
+              // console.log('self.$router', this.history)
+              // self.$router.go(-1)
+              self.$router.push({ name: 'dzbl' })
             }
             console.log(res)
           }).catch(err => {
@@ -98,7 +100,6 @@ html {
   box-sizing: border-box;
 }
 body {
-  background: url(../assets/images/bg.png) no-repeat center;
   background-size: cover;
   display: flex;
   justify-content: center;
