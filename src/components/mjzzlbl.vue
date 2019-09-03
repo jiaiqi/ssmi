@@ -87,7 +87,7 @@ export default {
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.mzbl
-    }, 500);
+    }, 300);
   },
   mounted() {
   },

@@ -164,7 +164,7 @@ export default {
     setTimeout(() => {
       this.tabsData = this.elTabsData.mzjcbg
       console.log("mzjcbg", this.mzjcbg)
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {

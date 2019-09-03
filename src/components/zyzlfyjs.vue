@@ -67,8 +67,6 @@
                         工作单位：
                         <span></span>
                       </p>
-                    </li>
-                    <li>
                       <p>
                         家庭地址：
                         <span></span>
@@ -91,8 +89,6 @@
                         联系人电话：
                         <span></span>
                       </p>
-                    </li>
-                    <li>
                       <p>
                         入院日期：
                         <span></span>
@@ -109,6 +105,26 @@
                 <div class="content_top">
                   <div class="content_top_t">
                     <p>结账分类费用</p>
+                  </div>
+                  <div class="content_top_b" style="margin-bottom:20px;">
+                    <table>
+                      <tr>
+                        <td>时间</td>
+                        <td>收费科室</td>
+                        <td>项目代码</td>
+                        <td>项目名称</td>
+                        <td>数量</td>
+                        <td>金额</td>
+                      </tr>
+                      <tr v-for="(item,index) in datalist" :key="index">
+                        <td>{{item.AP07_00_027_00.slice(0,4)+'-'+item.AP07_00_027_00.slice(4,6)+'-'+item.AP07_00_027_00.slice(6,8)}}</td>
+                        <td>{{item.AP08_10_055_02}}</td>
+                        <td>{{item.AP06_00_290_01}}</td>
+                        <td>{{item.AP07_00_018_00}}</td>
+                        <td>{{item.AP07_00_021_00}}</td>
+                        <td>{{item.AP07_00_022_00}}</td>
+                      </tr>
+                    </table>
                   </div>
                   <div class="content_top_b">
                     <table>
@@ -141,6 +157,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "zyzlfyjs",
   props: ["tabData", "elTabsData"],
@@ -148,13 +165,14 @@ export default {
     return {
       dialogVisible: false,
       detail: {},
-      tabsData: []
+      tabsData: [],
+      datalist: []
     };
   },
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyfyjl
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {
@@ -162,6 +180,23 @@ export default {
       if (item) {
         this.detail = item;
       }
+      let req = {
+        serviceName: "DI_HDI_EXPSET_LIST_select"
+      };
+      let url = this.getServiceUrl("select", req.serviceName, "emr");
+      axios({
+        method: "POST",
+        url: url,
+        data: req,
+        headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
+      }).then(res => {
+        this.datalist = res.data.data;
+      }).catch(err => {
+        console.log(err);
+      });
+    },
+    getDataList() {
+
     }
   }
 };
@@ -318,13 +353,21 @@ td.handle {
     text-align: center;
     margin: 15px 0;
   }
+  .header_cen {
+    width: 85%;
+    margin: 0 auto;
+  }
   .header_cen ul li {
     overflow: hidden;
     margin-top: 5px;
   }
   .header_cen ul li p {
+    min-width: 150px;
+    text-align: left;
+    margin: 0;
+    line-height: 25px;
     float: left;
-    margin-right: 5%;
+    // margin-right: 5%;
     padding: 0;
   }
   .content {

@@ -35,8 +35,14 @@
           <p class="text">医生</p>
           <p class="text">服务</p>
         </div>-->
-        <div class="header_btn" onclick="toManangerment">
-          <p class="text">用户名：{{userInfo.user_no}}</p>
+        <div class="header_btn" v-if="userInfo.user_no">
+          <p class="text">
+            账号:
+            <span style="font-weight:600;">{{userInfo.user_no}}</span>
+          </p>
+        </div>
+        <!-- <div class="header_btn" onclick="toManangerment"> -->
+        <div class="header_btn" @click="exit_login">
           <p class="text">退出</p>
         </div>
       </div>
@@ -193,6 +199,7 @@ export default {
     return {
       id_card: "612200194101051123",
       datePickVal: "",
+      userName: '',
       detail: "",
       componentsKey: 0,
       userInfo: {},
@@ -238,205 +245,7 @@ export default {
         department: "就诊科室"
       },
       personInfo: {},
-      activities: [
-        // {
-        //   dateTime: "2018-04-12 20:46",
-        //   size: "large",
-        //   type: "primary",
-        //   data: [
-        //     {
-        //       label: "延安市人民医院(门诊，骨科)",
-        //       children: [
-        //         {
-        //           label: "挂号记录",
-        //           tab: "挂号记录",
-        //           serviceName: "DI_ADI_REGISTER_INFO_select",
-        //           component: "zjzZlgh",
-        //         },
-        //         {
-        //           label: "病历",
-        //           tab: "病历",
-        //           serviceName: "DI_ADI_RECORD_INFO_select",
-        //           component: "mjzZlbl"
-        //         },
-        //         {
-        //           label: "诊断记录",
-        //           tab: "诊断记录",
-        //           serviceName: "DI_ADI_DIAREC_INFO_select",
-        //           component: "zjzZlzdjl"
-        //         },
-        //         {
-        //           label: "医嘱",
-        //           tab: "医嘱",
-        //           serviceName: "DI_ADI_DRUREC_INFO_select",
-        //           component: "mjzZlyz"
-        //         },
-        //         {
-        //           label: "检查报告",
-        //           tab: "门诊检查报告",
-        //           serviceName: "DI_ADI_CLIEXA_INFO_select",
-        //           component: "mjzzljcbg"
-        //         },
-        //         {
-        //           label: "检验报告(数量）",
-        //           tab: "检验报告",
-        //           serviceName: "DI_ADI_LAREXA_INFO_select",
-        //           component: "zjzZljymxjl"
-        //         },
-        //         {
-        //           label: "手术记录(数量）",
-        //           tab: "门诊手术记录",
-        //           serviceName: "DI_ADI_OPEREC_INFO_select",
-        //           component: "mzsHjl"
-        //         },
-        //         {
-        //           label: "费用记录",
-        //           tab: "费用记录",
-        //           serviceName: "DI_ADI_EXPSET_INFO_select",
-        //           component: "mjzZlfymx"
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       label: "延安市人民医院(住院，骨科)",
-        //       children: [
-        //         {
-        //           label: "住院病案首页",
-        //           tab: "住院病案首页",
-        //           serviceName: "DI_HAI_APRNOT_INFO_MR_select",
-        //           component: "hospitalindex"
-        //         },
-        //         {
-        //           label: "入院记录（BUSINESS_ID）",
-        //           tab: "入院记录",
-        //           serviceName: "DI_HDI_INRECORD_INFO_select",
-        //           component: "ryjl"
-        //         },
-        //         {
-        //           label: "诊断记录",
-        //           tab: "住院诊断记录",
-        //           serviceName: "DI_HDI_DIAREC_INFO_select",
-        //           component: "zyzLzdjlxx"
-        //         },
-        //         {
-        //           label: "医嘱信息(数量）",
-        //           tab: "住院医嘱信息",
-        //           serviceName: "DI_HDI_DRUREC_INFO_select",
-        //           component: "zyzlyz"
-        //         },
-        //         {
-        //           label: "临床路径记录表",
-        //           tab: "临床路径记录表",
-        //           serviceName: "DI_HDI_CPATH_INFO_select",
-        //           component: "zyzLlcljjl"
-        //         },
-        //         {
-        //           label: "检查报告表(数量）",
-        //           tab: "住院检查报告",
-        //           serviceName: "DI_HDI_CLIEXA_INFO_select",
-        //           component: "zyzLjcbg"
-        //         },
-        //         {
-        //           label: "检验报告(数量）",
-        //           tab: "住院检验报告",
-        //           serviceName: "DI_HDI_LAREXA_INFO_select",
-        //           component: "InspectionRecord"
-        //         },
-        //         {
-        //           label: "手术记录(数量）",
-        //           tab: "住院手术记录",
-        //           serviceName: "DI_HDI_OPEREC_INFO_select",
-        //           component: "zyzLssjl"
-        //         },
-        //         {
-        //           label: "出院记录",
-        //           tab: "出院记录",
-        //           serviceName: "DI_HDI_OUTRECORD_INFO_select",
-        //           component: "zyzLcy"
-        //         },
-        //         {
-        //           label: "费用结算",
-        //           tab: "住院费用结算",
-        //           serviceName: "DI_HDI_EXPSET_INFO_select",
-        //           component: "zyzLfyjs"
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // },
-        // {
-        //   dateTime: "2018-04-03 20:46",
-        //   size: "large",
-        //   type: "primary",
-        //   data: [
-        //     {
-        //       label: "延安市人民医院(住院，骨科)",
-        //       children: [
-        //         {
-        //           label: "住院病案首页",
-        //           tab: "住院病案首页",
-        //           serviceName: "DI_HAI_APRNOT_INFO_MR_select",
-        //           component: "hospitalindex"
-        //         },
-        //         {
-        //           label: "入院记录",
-        //           tab: "入院记录",
-        //           serviceName: "DI_HDI_INRECORD_INFO_select",
-        //           component: "ryjl"
-        //         },
-        //         {
-        //           label: "诊断记录",
-        //           tab: "住院诊断记录",
-        //           serviceName: "DI_HDI_DIAREC_INFO_select",
-        //           component: "zyzLzdjlxx"
-        //         },
-        //         {
-        //           label: "医嘱信息(数量）",
-        //           tab: "住院医嘱信息",
-        //           serviceName: "DI_HDI_DRUREC_INFO_select",
-        //           component: "zyzlyz"
-        //         },
-        //         {
-        //           label: "临床路径记录表",
-        //           tab: "临床路径记录表",
-        //           serviceName: "DI_HDI_CPATH_INFO_select",
-        //           component: "zyzLlcljjl"
-        //         },
-        //         {
-        //           label: "检查报告表(数量）",
-        //           tab: "住院检查报告",
-        //           serviceName: "DI_HDI_CLIEXA_INFO_select",
-        //           component: "zyzLjcbg"
-        //         },
-        //         {
-        //           label: "检验报告(数量）",
-        //           tab: "住院检验报告",
-        //           serviceName: "DI_HDI_LAREXA_INFO_select",
-        //           component: "InspectionRecord"
-        //         },
-        //         {
-        //           label: "手术记录(数量）",
-        //           tab: "住院手术记录",
-        //           serviceName: "DI_HDI_OPEREC_INFO_select",
-        //           component: "zyzLssjl"
-        //         },
-        //         {
-        //           label: "出院记录",
-        //           tab: "出院记录",
-        //           serviceName: "DI_HDI_OUTRECORD_INFO_select",
-        //           component: "zyzLcy"
-        //         },
-        //         {
-        //           label: "费用结算",
-        //           tab: "住院费用结算",
-        //           serviceName: "DI_HDI_EXPSET_INFO_select",
-        //           component: "zyzLfyjs"
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // }
-      ],
+      activities: [],
       defaultProps: {
         children: "children",
         label: "label"
@@ -457,22 +266,28 @@ export default {
     };
   },
   mounted() {
+    let user = sessionStorage.getItem("current_login_user")
+    this.userInfo = JSON.parse(user)
     window.ReadCommCardRet = (para) => {
       alert("收到读卡返回信息： " + para);
       localStorage.setItem("CardInfo", para)
       let CardInfo = JSON.parse(para)
-      alert("当前身份证号：" + CardInfo.id)
+      window.CardInfo = CardInfo
+      // alert("当前身份证号：" + CardInfo.id)
 
     }
-    let userInfo = sessionStorage.getItem("current_login_user")
-    if (userInfo.user_no) {
-      this.userInfo = JSON.parse(userInfo)
-    } else {
-      userInfo = localStorage.getItem("current_login_user")
-      this.userInfo = JSON.parse(userInfo)
-    }
+    // let userInfo = sessionStorage.getItem("current_login_user")
+    // userInfo = localStorage.getItem("current_login_user")
+    // if (userInfo) {
+    //   this.userInfo = JSON.parse(userInfo)
+    // }
   },
   methods: {
+    alertCardInfo() {
+      // let CardInfo = JSON.stringify(window.CardInfo)
+      let CardInfo = localStorage.getItem("CardInfo")
+      alert(CardInfo)
+    },
     addTab(data) {
       console.log(data)
       if (data.serviceName && data.BUSINESS_ID) {
@@ -498,7 +313,6 @@ export default {
           data: req,
           headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
         }).then(res => {
-          console.log('xxx')
           let ser = req.serviceName
           if (ser === "DI_ADI_REGISTER_INFO_select") {
             ser = "mzghjl"
@@ -539,7 +353,7 @@ export default {
           }
           this.elTabsData[ser] = res.data.data
           this.RigData = res.data.data;
-          console.log("selectedtabData", this.elTabsData);
+          // console.log("selectedtabData", this.elTabsData);
         }).catch(err => {
           console.log(err);
         });
@@ -585,6 +399,9 @@ export default {
       }
       this.editableTabsValue = activeName;
       this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+    },
+    exit_login() {
+      localStorage.setItem("current_login_user", "")
     },
     closeAll() {
       this.editableTabsValue = '患者总览'
@@ -642,7 +459,6 @@ export default {
         .then(res => {
           let data = res.data.data;
           if (data && data.length > 0) {
-            console.log("dataaaaaa\n", data);
             let arr = []
             data.map(item => {
               let timeLineData = {}
@@ -734,7 +550,6 @@ export default {
 
                     }
                   )
-                  // arr.push(timeLineData)
                 }
                 else if (item2.data.typeCode === "C0002") {
                   let count = {
@@ -836,13 +651,12 @@ export default {
 
                     }
                   )
-                  // arr.push(timeLineData)
                 }
               })
               arr.push(timeLineData)
             })
             this.timeLineData = arr
-            console.log("timeLineData", this.timeLineData);
+            // console.log("timeLineData", this.timeLineData);
           }
         })
         .catch(err => {
@@ -853,7 +667,6 @@ export default {
       let str = window.location.href;
       let num = str.indexOf("?");
       str = str.substr(num + 1);
-      console.log(str);
       window.location.href = "../../main/index.html";
     },
     handleClose(done) {
@@ -872,11 +685,20 @@ export default {
       this.dialogVisible = true;
     },
     closeReadCard() {
-      this.dialogVisible = false;
       this.BtnReadCard();
-      alert("即将展示身份证号为：" + this.id_card + "的患者的病历信息")
+      if (this.userInfo.user_no) {
+        this.$message({
+          message: "当前展示的是身份证号为：" + this.id_card + "的患者的病历信息",
+          type: 'warning',
+          duration: '5000',
+          offset: '100',
+          showClose: 'true'
+        });
+      }
+      // alert("即将展示身份证号为：" + this.id_card + "的患者的病历信息")
       this.getData();
       this.initData();
+      this.dialogVisible = false;
     },
     getData() {
       this.patientInfo = {
@@ -961,11 +783,11 @@ export default {
       alert("")
     },
     BtnReadCard() {
-      // if (typeof jsObj == "undefined") {
-      //   alert("jsObj参数未初始化")
-      //   return;
-      // }
-      // jsObj.ReadCommCard();
+      if (typeof jsObj == "undefined") {
+        alert("jsObj参数未初始化")
+        return;
+      }
+      jsObj.ReadCommCard();
     },
     BtnClickArgs() {
       if (typeof jsObj == "undefined") {

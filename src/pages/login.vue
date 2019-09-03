@@ -36,17 +36,14 @@ export default {
       bxReq.data = [{ "user_no": user_no, "pwd": pwd }];
       bxReqs.push(bxReq);
       sessionStorage.setItem("need_login_flag", null);
-      let path = "http://192.168.0.192:8101/sso/operate/srvuser_login";
+      // let path = "http://192.168.0.192:8101/sso/operate/srvuser_login";
+      let path = this.getServiceUrl("operate", bxReq.serviceName, "sso");
       let callBack = function (data) {
         if (data.state == "SUCCESS") {
           let resp = data.response[0];
           let bx_auth_ticket = resp.response.bx_auth_ticket;
           let current_login_user = resp.response.login_user_info;
           sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket);
-          sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
-          localStorage.setItem("current_login_user", JSON.stringify(current_login_user))
-          top.user = current_login_user;
-          alert("user:", top.user)
         } else {
           alert(data.resultMessage);
         }
@@ -55,11 +52,9 @@ export default {
         console.log(jsonData)
         if (sessionStorage.getItem("need_login_flag") == "need_login") {
         } else {
-          var bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
+          let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
           axios({
-            headers: {
-              "bx_auth_ticket": bx_auth_ticket
-            },
+            headers: { "bx_auth_ticket": bx_auth_ticket },
             url: url,
             method: method,
             data: jsonData,
@@ -72,14 +67,13 @@ export default {
               let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
               sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
               let current_login_user = resp.response.login_user_info;
-              // localStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+              sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
               top.user = current_login_user;
-              // console.log('self.$router', this.history)
+              // window.user = current_login_user
               // self.$router.go(-1)
               self.$router.push({ name: 'dzbl' })
             }
             console.log(res)
-
           }).catch(err => {
             console.log(err)
           });

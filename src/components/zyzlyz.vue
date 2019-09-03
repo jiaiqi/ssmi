@@ -12,17 +12,15 @@
             <td>机构名称</td>
             <td>操作</td>
           </tr>
-          <tr>
-            <td v-if="!tabData[0]"></td>
-            <td v-if="!tabData[0].AP06_00_287_00"></td>
-            <td v-if="tabData[0]">{{ tabData[0].AP01_00_024_00 }}</td>
-            <td v-if="tabData[0].AP06_00_287_00">{{ tabData[0].AP06_00_287_00 }}</td>
+          <tr v-if="datas">
+            <td>{{ datas.AP01_00_024_00 }}</td>
+            <td>{{ datas.AP06_00_287_00 }}</td>
             <td
-              v-if="tabData[0].AP06_00_207_00"
-            >{{ tabData[0].AP06_00_207_00.slice(0,4)+'-'+tabData[0].AP06_00_207_00.slice(4,6)+'-'+tabData[0].AP06_00_207_00.slice(6,8)+" "+tabData[0].AP06_00_207_00.slice(9,11)+':'+tabData[0].AP06_00_207_00.slice(11,13)+':'+tabData[0].AP06_00_207_00.slice(13,15) }}</td>
-            <td v-if="!tabData[0].AP06_00_207_00"></td>
-            <td>{{ tabData[0].ORGANIZATION_NAME }}</td>
-            <td class="handle" @click="changeDialogVisible(tabData)">
+              v-if="datas.AP06_00_207_00"
+            >{{ datas.AP06_00_207_00.slice(0,4)+'-'+datas.AP06_00_207_00.slice(4,6)+'-'+datas.AP06_00_207_00.slice(6,8)+" "+datas.AP06_00_207_00.slice(9,11)+':'+datas.AP06_00_207_00.slice(11,13)+':'+datas.AP06_00_207_00.slice(13,15) }}</td>
+            <td v-if="!datas.AP06_00_207_00"></td>
+            <td>{{ datas.ORGANIZATION_NAME }}</td>
+            <td class="handle" @click="changeDialogVisible(tabsData)">
               <span>详情</span>
             </td>
           </tr>
@@ -42,7 +40,7 @@
                 <div class="header_top">
                   <h3>住院诊疗医嘱信息</h3>
                 </div>
-                <div class="header_bot">
+                <div class="header_bot" v-if="tabData[0]">
                   <p>
                     <span>姓名：</span>
                     <span>{{ tabData[0].DE02_01_039_00 }}</span>
@@ -126,18 +124,26 @@
 
 <script>
 export default {
-  name: "zyzlyz", props: ["tabData", "patientInfo"],
+  name: "zyzlyz", props: ["tabData", "patientInfo", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
       detail: {},
-      tabsData: []
+      tabsData: [],
+      datas: {}
     };
   },
-  created() {
+  mounted() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyyzxx
-    }, 500);
+      let data = this.tabsData
+      data.map((item, index) => {
+        if (index == 1) {
+          this.datas = item
+        }
+      })
+    }, 300);
+
   },
   methods: {
     changeDialogVisible(item) {

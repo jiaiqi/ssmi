@@ -113,7 +113,7 @@ export default {
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyjybg
-    }, 500);
+    }, 300);
   },
   mounted() {
 

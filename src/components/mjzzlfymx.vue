@@ -73,6 +73,7 @@
                         <td>科室</td>
                       </tr>
                       <tr v-for="(item,index) in data" :key="index">
+                        <td v-if="!item.AP07_00_026_00"></td>
                         <td
                           v-if="item.AP07_00_026_00"
                         >{{item.AP07_00_026_00.slice(0,4)+'-'+item.AP07_00_026_00.slice(4,6)+'-'+item.AP07_00_026_00.slice(6,8)}}</td>
@@ -109,7 +110,7 @@ export default {
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.mzfyjl
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {
@@ -133,7 +134,6 @@ export default {
         headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
       }).then(res => {
         this.data = res.data.data;
-        console.log("selectedtabData", this.data);
       }).catch(err => {
         console.log(err);
       });

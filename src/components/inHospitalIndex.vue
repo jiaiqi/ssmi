@@ -142,6 +142,11 @@
                                 <p> {{item.DE05_01_024_00}}</p>
                                 <p>{{item.AP05_01_185_00}}</p>
                             </li>
+                            <li class="zd" >
+                                <p>主要诊断：<span></span></p>
+                                <p> </p>
+                                <p></p>
+                            </li>
                         </ul>
                         <ul class="content_b_title_bot_ul" v-for="(item,index) in zdjl" :key="index">
                             <li>
@@ -247,18 +252,68 @@
                                     <div class="td">{{item.AP02_01_039_79}}</div>
                                   </div>
                                 </div>                               
-                                <!-- <p></p>
-                                <p></p>
-                                <p></p>
-                                <p></p>
-                                <p></p> -->
+                                <div class="operation_note" v-if="!ssjl.length>0">
+                                  <div class="tr">
+                                    <div class="td">编码</div>
+                                    <div class="td">日期</div>
+                                    <div class="td">手术级别</div>
+                                    <div class="td">名称</div>
+                                    <div class="td">
+                                      <div class="td" style="border-right:none;">
+                                        手术、操作医师
+                                      </div>
+                                      <div class="td" style="display:flex;">
+                                        <div class="td td_little">术者</div>
+                                        <div class="td td_little">I助</div>
+                                        <div class="td td_little">Ⅱ助</div>
+                                      </div>
+                                    </div>
+                                    <div class="td">切口愈合等级</div>
+                                    <div class="td">麻醉方式</div>
+                                    <div class="td">麻醉医师</div>
+                                  </div>
+                                  <div class="tr">
+                                    <div class="td"></div>
+                                    <div class="td"></div>
+                                    <div class="td"></div>
+                                    <div class="td"></div>
+                                    <div  class="td" style="display:flex;">
+                                      <div class="td td_little"></div>
+                                      <div class="td td_little"></div>
+                                      <div class="td td_little"></div>
+                                    </div>
+                                    <div class="td"></div>
+                                    <div class="td"></div>
+                                    <div class="td"></div>
+                                  </div>
+                                </div>                               
+
                                 <P>离院方式<span>     </span>1.医嘱离院 2.医嘱转院，拟接收医疗机构名称：<input type="text"></P>  
                                 <p>3.医嘱转社区卫生服务机构/乡镇卫生院，拟接收医疗机构名称：<input type="text">4.非医嘱离院 5.死亡 6.其他</p>
                                 <p>是否有出院31天内在住院计划 <span>   </span>  1.无 2.有    目的<input type="text"></p>
-                                <p id="content_list_one_pp">颅脑损伤患者昏迷时间：入院前<input type="text">天<input type="text">小时<input type="text">分钟 &nbsp  &nbsp  &nbsp 入院后<input type="text">天<input type="text">小时<input type="text">分钟</p>                            
+                                <p id="content_list_one_pp">颅脑损伤患者昏迷时间：入院前<input type="text">天<input type="text">小时<input type="text">分钟  入院后<input type="text">天<input type="text">小时<input type="text">分钟</p>                            
                             </li>
                         </ul>
                         <ul class="content_page2_ul_two">
+                             <li v-if="!fyjs.length>0">
+                            <!-- <li> -->
+                                <p>住院费用（元）总费用<input type="text"> （自付金额：<input type="text">）</p>
+                                <p>1.综合医疗服务费：（1）一般医疗服务费<input type="text">（2）一般治疗操作费：<input type="text">(3) 护理费:<input type="text"></p>
+                                <p> （4）其他费用：<input type="text"></p>
+                                <p>2.诊断类：（5）病理诊断费:<input type="text"> （6）实验室诊断费:<input type="text">（7）影像学诊断费:<input type="text"></p>
+                                <p> （5）临床诊断项目费:<input type="text"></p>
+                                <p>3.治疗类：（9）非手术治疗项目费:<input type="text"></p>
+                                <p> （10）手术治疗费:<input type="text">（麻醉费:<input type="text">手术费:<input type="text">）</p>
+                                <p>4.康复类：（11）康复费:<input type="text"></p>
+                                <p>5.中医类：（12）中医治疗费:<input type="text"></p>
+                                <p>6.西药类：（13）西药费:<input type="text">（抗菌药物费用：<input type="text">）</p>
+                                <p>7.中药类：（14）中成药费:<input type="text">（15）中草药费:<input type="text"></p>
+                                <p>8.血液和血液制品类：（16）血费:<input type="text">（17）白蛋白类制品费:<input type="text">（18）球蛋白类制品费:<input type="text"></p>
+                                <p> （19）凝血因子类制品费:<input type="text">（20）细胞因子类制品费:<input type="text"></p>
+                                <p>9.耗材类：（21）检查用一次性医用材料费:<input type="text">（22）治疗用一次性医用材料费:<input type="text"></p>
+                                <p> （23）手术用一次性医用材料费:<input type="text"></p>
+                                <p>10.其他类：（24）其他费:<input type="text"></p>                       
+                            </li>
                             <li v-for="(item,index) in fyjs" :key="index">
                             <!-- <li> -->
                                 <p>住院费用（元）总费用<input type="text" v-model="item.DE07_00_010_00"> （自付金额：<input type="text" v-model="item.DE07_00_001_00">）</p>
@@ -302,21 +357,18 @@ export default {
     return {
       dialogVisible: false,
       detail: {},
+      tabsData: [],
       zdjl:[],
       ssjl:[],
-      fyjl:[]
+      fyjl:[],
+      fyjs:[] // 费用结算
     }
   },
   props: ["tabData","elTabsData"],
-  data() {
-      return {
-          tabsData: [],
-      }
-  },
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zybasy
-    }, 500);
+    }, 300);
   },
   mounted() {
     const tabsData = this.tabsData
@@ -325,7 +377,9 @@ export default {
   methods: {
     changeDialogVisible(item) {
       this.dialogVisible = true;
-      this.detail = item;
+      if(item){
+          this.detail = item;
+      }
     },
     getData(){
         let req = {
@@ -424,8 +478,10 @@ ul, ol { list-style: none; }
 }
 .zybasy_wrap{
   margin:0 auto;
+  border:1px solid #333;
 .header{
-    width: 80%;
+    // width: 80%;
+    border-bottom: none;
     margin:30px auto 0;
 }
 .operation_note{
@@ -498,7 +554,7 @@ ul, ol { list-style: none; }
     padding: 0px 5px;
 }
 .content{
-    width: 80%;
+    // width: 80%;
     margin: 0 auto;
     padding-bottom: 20px;
 }
@@ -520,8 +576,8 @@ ul, ol { list-style: none; }
 .content_center ul{
     overflow: hidden;
     list-style: none;
-    margin-top: 15px;
-    border: 1px solid black;
+    // margin-top: 15px;
+    // border: 1px solid black;
 }
 .content_ul li{
     margin: 5px 10px;
@@ -651,12 +707,13 @@ ul, ol { list-style: none; }
     overflow: hidden;
 }
 .content_b_title_ul li p{
+    border-top: 1px solid black;
     float: left;
 }
 
 .content_b_title_ul li:nth-child(1) p{
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+    // border-bottom: 1px solid black;
+    // border-right: 1px solid black;
     /* padding: 0 5px; */
     width: 10%;
     box-sizing: border-box;
@@ -665,20 +722,20 @@ ul, ol { list-style: none; }
 
 .content_b_title_ul li:nth-child(1) p:nth-child(1){
     width: 80%;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+    // border-bottom: 1px solid black;
+    // border-right: 1px solid black;
     box-sizing: border-box;
     /* border-left: none; */
 }
 .content_b_title_ul li:nth-child(1) p:last-child{
     border-right: none;
 }
+
 .zd p{
     border-bottom: 1px solid black;
     width: 10%;
     box-sizing: border-box;
     text-align: center;
-    border-right: 1px solid black;
     min-height: 20px;
 }
 .zd p:nth-child(1){
@@ -690,7 +747,7 @@ ul, ol { list-style: none; }
     border-right: none;
 }
 .zd:last-child p{
-    border-bottom: none;
+    // border-bottom: none;
 }
 .content_b_title_bot_ul,.content_b_title_ul{
     margin-top: 0!important;
@@ -804,6 +861,9 @@ ul, ol { list-style: none; }
 .content_page2_list4 {
     width: 20%;
 }
+.content_page2_ul_two{
+    height: auto;
+}
 .content_page2_ul_two>li>p>input {
     width: 95px;
     border-top: none;
@@ -840,8 +900,8 @@ ul, ol { list-style: none; }
 .content_page2_ul_three {
     width: 99.8%;
     height: 50px;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    // border-left: 1px solid black;
+    // border-right: 1px solid black;
     border-bottom: 1px solid black;
 }
 .content_list_one {
@@ -851,15 +911,15 @@ ul, ol { list-style: none; }
 }
 .content_page2_ul_two {
     border-bottom: none;
-    margin-top: 100px;
+    // margin-top: 100px;
 }
 .content_page2_ul_one {
-    margin-top: -3px!important;
+    // margin-top: -3px!important;
     border-top: none!important; 
     border-bottom: none!important;
 }
 .content_page2_ul_two {
-    margin-top: -3px!important;
+    // margin-top: -3px!important;
     border-top: none!important;
 }
 #content_list_one_pp > input {

@@ -164,7 +164,7 @@ export default {
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyjcbg
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {

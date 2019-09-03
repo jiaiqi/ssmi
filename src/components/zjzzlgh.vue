@@ -56,7 +56,7 @@ export default {
     console.log("data:", this.elTabsData);
     setTimeout(() => {
       this.tabsData = this.elTabsData.mzghjl
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {

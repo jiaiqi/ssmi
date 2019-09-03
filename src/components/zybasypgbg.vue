@@ -98,7 +98,7 @@ export default {
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zybasy
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {

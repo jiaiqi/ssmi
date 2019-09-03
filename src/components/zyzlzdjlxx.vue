@@ -69,7 +69,7 @@ export default {
   created() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyzdjl
-    }, 500);
+    }, 300);
   },
   methods: {
     changeDialogVisible(item) {
