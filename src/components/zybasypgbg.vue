@@ -12,7 +12,7 @@
             <td>机构名称</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.AP02_01_102_01}}</td>
             <td>{{item.DE02_01_032_00}}</td>
@@ -88,7 +88,7 @@
 <script>
 export default {
   name: "zybasypgbg",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
@@ -96,7 +96,9 @@ export default {
     };
   },
   created() {
-    console.log("住院病案首页评估报告:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zybasy
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

@@ -12,7 +12,7 @@
             <td>开具时间</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.AP06_00_276_00}}</td>
             <td>{{item.AP06_00_278_00}}</td>
             <td>{{item.AP06_00_313_00}}</td>
@@ -122,15 +122,18 @@
 <script>
 export default {
   name: "OutPatientMedicalAdvice",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
-      detail: {}
+      detail: {},
+      tabsData: []
     }
   },
   created() {
-    console.log("门急诊诊疗医嘱:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.mzyz
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

@@ -11,7 +11,7 @@
             <td>机构名称</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item,index) in tabData" :key="index">
+          <tr v-for="(item,index) in tabsData" :key="index">
             <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.DE08_10_026_00}}</td>
             <td>{{item.AP07_00_011_01}}</td>
@@ -97,26 +97,19 @@
 import axios from 'axios'
 export default {
   name: "OutpatientCostDetail",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
       detail: {},
+      tabsData: [],
       data: []
     };
   },
   created() {
-    console.log("门急诊诊疗费用明细信息:", this.tabData);
-    let data = this.tabData
-    // data.map(item => {
-    //   console.log(item)
-    // })
-  },
-  mounted() {
-    let data = this.tabData
-    data.map(item => {
-      console.log(item)
-    })
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.mzfyjl
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

@@ -12,7 +12,7 @@
             <td>机构名称</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{ item.AP01_00_004_00}}</td>
             <td
               v-if="item.AP06_00_189_00"
@@ -78,15 +78,18 @@
 <script>
 export default {
   name: "zybasyjl",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
-      detail: {}
+      detail: {},
+      tabsData: []
     };
   },
   created() {
-    console.log("住院手术记录:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zyssjl
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

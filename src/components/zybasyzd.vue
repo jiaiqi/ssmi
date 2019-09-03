@@ -13,7 +13,7 @@
             <td>机构名称</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>1</td>
             <td>{{ item.AP08_10_026_11}}</td>
             <td>{{ item.AP05_01_007_00 }}</td>
@@ -129,7 +129,7 @@
 <script>
 export default {
   name: "zybasyzd",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
@@ -137,7 +137,9 @@ export default {
     };
   },
   created() {
-    console.log("住院病案诊断:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zybazd
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

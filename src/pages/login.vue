@@ -30,10 +30,8 @@ export default {
       let self = this
       let user_no = this.userName
       let pwd = this.pwd
-
       let bxReqs = [];
       let bxReq = {};
-
       bxReq.serviceName = "srvuser_login";
       bxReq.data = [{ "user_no": user_no, "pwd": pwd }];
       bxReqs.push(bxReq);
@@ -46,6 +44,9 @@ export default {
           let current_login_user = resp.response.login_user_info;
           sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket);
           sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+          localStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+          top.user = current_login_user;
+          alert("user:", top.user)
         } else {
           alert(data.resultMessage);
         }
@@ -67,13 +68,18 @@ export default {
             },
           }).then(res => {
             if (res.data.resultCode === "SUCCESS") {
+              let resp = res.data.response[0]
               let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
               sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
+              let current_login_user = resp.response.login_user_info;
+              // localStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+              top.user = current_login_user;
               // console.log('self.$router', this.history)
               // self.$router.go(-1)
               self.$router.push({ name: 'dzbl' })
             }
             console.log(res)
+
           }).catch(err => {
             console.log(err)
           });

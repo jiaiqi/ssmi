@@ -13,7 +13,7 @@
             <td>就诊类别</td>
             <td>挂号日期</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{ item.DE01_00_010_00 }}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.ORGANIZATION_NAME }}</td>
@@ -43,17 +43,20 @@
 <script>
 export default {
   name: "OutpatientRegistrationRecord",
-  props: ["DI_ADI_REGISTER_INFO_select", "tabData"],
+  props: ["elTabsData", "tabData"],
   data() {
     return {
       dialogVisible: false,
       detail: {},
-      data: []
+      tabsData: [],
+      DI_ADI_REGISTER_INFO_select: {}
     };
   },
-  mounted() {
-    console.log("挂号记录:", this.tabData);
-    this.data = this.tabData
+  created() {
+    console.log("data:", this.elTabsData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.mzghjl
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {
@@ -82,6 +85,7 @@ table {
   }
 }
 .tab_content_title {
+  text-align: center;
   line-height: 50px;
   font-weight: 600;
 }

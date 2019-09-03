@@ -31,11 +31,14 @@
           <p class="text">返回</p>
           <p class="text">首页</p>
         </div>
-        <div class="header_btn">
+        <!-- <div class="header_btn">
           <p class="text">医生</p>
           <p class="text">服务</p>
+        </div>-->
+        <div class="header_btn" onclick="toManangerment">
+          <p class="text">用户名：{{userInfo.user_no}}</p>
+          <p class="text">退出</p>
         </div>
-        <div class="header_btn" onclick="toManangerment">退出</div>
       </div>
     </header>
     <div class="content">
@@ -112,7 +115,7 @@
       </div>
       <div class="content_right">
         <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
-          <div class="close-all" @click="closeAll">Close All</div>
+          <div class="close-all" @click="closeAll">关闭所有</div>
           <!-- <el-tab-pane label="患者总览" name="患者总览"> -->
           <!-- <PatientOverView :patientInfo="patientInfo" /> -->
           <!-- </el-tab-pane> -->
@@ -127,20 +130,26 @@
               :tabData="RigData"
               v-bind:is="item.content"
               :patientInfo="patientInfo"
-              :DI_ADI_REGISTER_INFO_select="elTabsData"
+              :elTabsData="elTabsData"
+              :key="componentsKey"
             ></component>
           </el-tab-pane>
         </el-tabs>
         <el-dialog title :visible.sync="dialogVisible" width="500px" :before-close="handleClose">
-          <div class="read_card">
+          <!-- <div class="read_card">
             请输入身份证号
             <div class="id_card">
               <el-input v-model="id_card" style="width:200px;margin-top:50px;"></el-input>
             </div>
+          </div>-->
+          <div class="read_card">
+            点击按钮读卡
+            <div class="id_card">
+              <!-- <el-input v-model="id_card" style="width:200px;margin-top:50px;"></el-input> -->
+            </div>
           </div>
-
           <span slot="footer" class="dialog-footer">
-            <el-button @click="closeReadCard">确定</el-button>
+            <el-button ref="sendMsg" @click="closeReadCard()">确定</el-button>
           </span>
         </el-dialog>
       </div>
@@ -185,6 +194,8 @@ export default {
       id_card: "612200194101051123",
       datePickVal: "",
       detail: "",
+      componentsKey: 0,
+      userInfo: {},
       timeLineData: [],
       patientInfo: {},
       pickerOptions: {
@@ -431,26 +442,7 @@ export default {
         label: "label"
       },
       RigData: [],
-      elTabsData: {
-        // mz_ghjl: [], // 挂号记录
-        // mz_bl: [], //病历
-        // mz_zdjl: [], // 门急诊诊断记录
-        // mz_yz: [], // 医嘱
-        // mz_jcbg: [], // 检查报告
-        // mz_jybg: [], // 检验报告
-        // mz_ssjl: [], // 手术记录
-        // mz_fyjl: [], // 费用记录
-        // zy_basy: [], // 住院病案首页
-        // zy_ryjl: [], // 入院记录
-        // zy_zdjl: [], // 诊断记录
-        // zy_yz: [], // 医嘱
-        // zy_lclj: [], // 临床路径记录
-        // zy_jcbg: [], // 检查报告表
-        // zy_jybg: [], // 检验报告
-        // zy_ssjl: [], // 手术记录
-        // zy_cyjl: [], // 出院记录
-        // zy_fy: [] // 费用结算
-      },
+      elTabsData: {},
       editableTabs: [{
         title: "患者总览",
         name: "患者总览",
@@ -463,6 +455,22 @@ export default {
       needData: [],
       tabData: [],
     };
+  },
+  mounted() {
+    window.ReadCommCardRet = (para) => {
+      alert("收到读卡返回信息： " + para);
+      localStorage.setItem("CardInfo", para)
+      let CardInfo = JSON.parse(para)
+      alert("当前身份证号：" + CardInfo.id)
+
+    }
+    let userInfo = sessionStorage.getItem("current_login_user")
+    if (userInfo.user_no) {
+      this.userInfo = JSON.parse(userInfo)
+    } else {
+      userInfo = localStorage.getItem("current_login_user")
+      this.userInfo = JSON.parse(userInfo)
+    }
   },
   methods: {
     addTab(data) {
@@ -492,6 +500,43 @@ export default {
         }).then(res => {
           console.log('xxx')
           let ser = req.serviceName
+          if (ser === "DI_ADI_REGISTER_INFO_select") {
+            ser = "mzghjl"
+          } else if (ser === "DI_ADI_RECORD_INFO_select") {
+            ser = "mzbl"
+          } else if (ser === "DI_ADI_DIAREC_INFO_select") {
+            ser = "mzzdjl"
+          } else if (ser === "DI_ADI_DRUREC_INFO_select") {
+            ser = "mzyz"
+          } else if (ser === "DI_ADI_CLIEXA_INFO_select") {
+            ser = "mzjcbg"
+          } else if (ser === "DI_ADI_LAREXA_INFO_select") {
+            ser = "mzjybg"
+          } else if (ser === "DI_ADI_OPEREC_INFO_select") {
+            ser = "mzssjl"
+          } else if (ser === "DI_ADI_EXPSET_INFO_select") {
+            ser = "mzfyjl"
+          } else if (ser === "DI_HAI_APRNOT_INFO_MR_select") {
+            ser = "zybasy"
+          } else if (ser === "DI_HDI_INRECORD_INFO_select") {
+            ser = "zyryjl"
+          } else if (ser === "DI_HDI_DIAREC_INFO_select") {
+            ser = "zyzdjl"
+          } else if (ser === "DI_HDI_DRUREC_INFO_select") {
+            ser = "zyyzxx"
+          } else if (ser === "DI_HDI_CPATH_INFO_select") {
+            ser = "zylclj"
+          } else if (ser === "DI_HDI_CLIEXA_INFO_select") {
+            ser = "zyjcbg"
+          } else if (ser === "DI_HDI_LAREXA_INFO_select") {
+            ser = "zyjybg"
+          } else if (ser === "DI_HDI_OPEREC_INFO_select") {
+            ser = "zyssjl"
+          } else if (ser === "DI_HDI_OUTRECORD_INFO_select") {
+            ser = "zycyjl"
+          } else if (ser === "DI_HDI_EXPSET_INFO_select") {
+            ser = "zyfyjl"
+          }
           this.elTabsData[ser] = res.data.data
           this.RigData = res.data.data;
           console.log("selectedtabData", this.elTabsData);
@@ -507,6 +552,8 @@ export default {
           });
         }
         this.editableTabsValue = data.tab;
+        this.dataState = !this.dataState
+
       } else if (data.tab == "入院记录") {
         let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab,
         if (!exists) { // 若当前点击item对应的tab页不存在，则创建（push）对应的tab页
@@ -516,9 +563,12 @@ export default {
             content: data.component,
             serviceName: data.serviceName
           });
+
         }
         this.editableTabsValue = data.tab;
+        this.dataState = !this.dataState
       }
+      ++this.componentsKey
     },
     removeTab(targetName) {
       let tabs = this.editableTabs;
@@ -799,41 +849,6 @@ export default {
           console.log("err", err);
         });
     },
-    // handleNodeClick(data) {
-    //   console.log(data);
-    //   if (data.serviceName && data.BUSINESS_ID) {
-    //     let req = {
-    //       serviceName: data.serviceName,
-    //       condition: [
-    //         {
-    //           colName: "BUSINESS_ID",
-    //           ruleType: "eq",
-    //           value: data.BUSINESS_ID
-    //         },
-    //         {
-    //           colName: "LOCAL_ID",
-    //           ruleType: "eq",
-    //           value: this.patientInfo.LOCAL_ID
-    //         }
-    //       ]
-    //     };
-    //     let url = this.getServiceUrl("select", data.serviceName, "emr");
-    //     axios({
-    //       method: "POST",
-    //       url: url,
-    //       data: req,
-    //       headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
-    //     }).then(res => {
-    //       this.RigData = res.data.data;
-    //       console.log("rrr", this.RigData);
-    //     }).catch(err => {
-    //       console.log(err);
-    //     });
-    //   }
-    //   if (data.tab) {
-    //     this.editableTabsValue = data.tab;
-    //   }
-    // },
     toManangerment() {
       let str = window.location.href;
       let num = str.indexOf("?");
@@ -858,6 +873,8 @@ export default {
     },
     closeReadCard() {
       this.dialogVisible = false;
+      this.BtnReadCard();
+      alert("即将展示身份证号为：" + this.id_card + "的患者的病历信息")
       this.getData();
       this.initData();
     },
@@ -936,6 +953,26 @@ export default {
     goHomePage() {
       console.log("返回首页");
       window.location.reload();
+    },
+    ReadCommCardRet(para) {
+      alert("xxx")
+      alert("收到读卡返回信息 " + para);
+
+      alert("")
+    },
+    BtnReadCard() {
+      // if (typeof jsObj == "undefined") {
+      //   alert("jsObj参数未初始化")
+      //   return;
+      // }
+      // jsObj.ReadCommCard();
+    },
+    BtnClickArgs() {
+      if (typeof jsObj == "undefined") {
+        alert("jsObj参数未初始化")
+        return;
+      }
+      jsObj.ShowTestArg("xxx");
     },
     querySelector() {
       let condition = {

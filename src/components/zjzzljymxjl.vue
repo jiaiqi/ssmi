@@ -10,7 +10,7 @@
             <td>检验报告单号</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.AP01_00_022_00}}</td>
             <td
               v-if="item.DATAGENERATE_DATE"
@@ -76,15 +76,18 @@
 <script>
 export default {
   name: "OutpatientInspectionRecordDetails",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
-      detail: {}
+      detail: {},
+      tabsData: []
     };
   },
   created() {
-    console.log("门诊诊疗检验记录明细:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.mzjyjl
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

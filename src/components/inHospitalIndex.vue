@@ -14,7 +14,7 @@
               <td>入院科别</td>
               <td>操作</td>
             </tr>
-            <tr v-for="(item, index) in tabData" :key="index">
+            <tr v-for="(item, index) in tabsData" :key="index">
               <td>{{ item.DE02_01_039_00 }}</td>
               <td>{{ item.ORGANIZATION_NAME }}</td>
               <td>{{ item.DE01_00_014_00 }}</td>
@@ -307,13 +307,25 @@ export default {
       fyjl:[]
     }
   },
-  props: ["tabData"],
-  
+  props: ["tabData","elTabsData"],
+  data() {
+      return {
+          tabsData: [],
+      }
+  },
+  created() {
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zybasy
+    }, 500);
+  },
+  mounted() {
+    const tabsData = this.tabsData
+    this.tabsData = tabsData
+  },
   methods: {
     changeDialogVisible(item) {
       this.dialogVisible = true;
       this.detail = item;
-      console.log("data",item)
     },
     getData(){
         let req = {

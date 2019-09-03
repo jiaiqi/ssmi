@@ -130,11 +130,14 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      detail: {}
+      detail: {},
+      tabsData: []
     };
   },
   created() {
-    console.log("住院诊疗医嘱信息:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zyyzxx
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

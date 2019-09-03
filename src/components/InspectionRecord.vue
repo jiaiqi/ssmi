@@ -11,7 +11,7 @@
               <td>检验报告单号</td>
               <td>操作</td>
             </tr>
-            <tr v-for="(item, index) in tabData" :key="index">
+            <tr v-for="(item, index) in tabsData" :key="index">
               <td>{{index}}</td>
               <td v-if="!item.AP09_00_074_00"></td>
               <td
@@ -106,10 +106,19 @@ export default {
     return {
       dialogVisible: false,
       detail: {},
-      detailData: []
+      detailData: [],
+      tabsData: []
     }
   },
-  props: ["tabData"],
+  created() {
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zyjybg
+    }, 500);
+  },
+  mounted() {
+
+  },
+  props: ["tabData", "elTabsData"],
   methods: {
     getData() {
       let req = {

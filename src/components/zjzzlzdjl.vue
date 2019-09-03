@@ -13,7 +13,7 @@
             <td>科室</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{ item.BASIC_ACTIVE_ID }}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.DE02_01_032_00 }}</td>
@@ -70,15 +70,18 @@
 <script>
 export default {
   name: "zjzzlzdjl",
-  props: ["tabData"],
+  props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
-      detail: []
+      detail: [],
+      tabsData: []
     };
   },
   created() {
-    console.log("门急诊诊疗诊断记录：", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.mzzdjl
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

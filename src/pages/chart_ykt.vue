@@ -19,7 +19,7 @@
             <!-- <span class="btn">退出</span> -->
             <div class="accountInfo">
               当前帐号:
-              <span>{{user.user_no}}</span>
+              <span></span>
             </div>
           </div>
         </div>

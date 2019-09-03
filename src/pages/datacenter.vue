@@ -1,259 +1,274 @@
 <template>
-    <div class="page_box">
-        <div class="tabletop">
-            <ul>
-                <li></li>
-                <li class="lilastone">数据中心</li>
-                <li class="lilast">{{date}}</li>  
-            </ul>
-        </div>
-        <div class="tableheaderone">
-            <div class="tableheaderonea">
-                <span class="tableheaderoneas_png">图标</span>
-                <span class="tableheaderoneas">数据共享</span>
-            </div>
-            <div class="tableheaderoneb">管理入口</div>
-        </div> 
-            <div class="tableheadertwo">
-            <ul>
-                <li>累计运行时间：30天5小时26分</li>
-                <li>数据量（数据库/表/记录）：5/325/18656.3万</li>
-                <li>共享数据量（目录/记录）：56/235.63万</li>
-                <li>共享数据服务次数：3156.3万</li>
-                <li>ETL数据量（表/记录）：28/123.3万</li>
-            </ul>
-        </div>
-        <div class="databox">
-            <div class="databox_content">  
-<!-- page1              -->
-                <div class="data_change">
-                    <span 
-                    class="changebutton_data"
-                    :class="{ active: checkDataType === 'day' }"
-                    @click="checkTimeHorizon('day')"
-                    >今日</span>
-                    <span 
-                    class="changebutton_data"
-                    :class="{ active: checkDataType === 'week' }"
-                    @click="checkTimeHorizon('week')"
-                    >本周</span>
-                    <span 
-                    class="changebutton_data"
-                    :class="{ active: checkDataType === 'month' }"
-                    @click="checkTimeHorizon('month')"
-                    >本月</span>
-                    <span 
-                    class="changebutton_data"
-                    :class="{ active: checkDataType === 'year' }"
-                    @click="checkTimeHorizon('year')"
-                    >本年</span>
-                    <span class="changebutton_data">自定义时间段</span>
-                </div>
-                <div class="databox_one">
-                    <div class="databoxone_left">
-                        <div class="databoxoneleft_one"> 
-                        <ve-line
-                            :data="chartData01"
-                            :settings="chartSetting1"
-                            :textStyle="legend.textStyle"
-                            :legend="legend"
-                            ></ve-line>
-                        </div>
-                        <div class="databoxoneleft_two">
-                            <div class="databoxonelefttwo_top">
-                                <ve-pie 
-                                height="163px"
-                                :data="pieData1.hospital" :legend="legend" :settings="pieSetting"></ve-pie>
-                            </div>
-                            <div class="databoxonelefttwo_bottom">
-                                <ve-pie 
-                                height="163px"
-                                :data="pieData1.card" :legend="legend" :settings="pieSetting">
-                                </ve-pie>
-                            </div>
-                        </div>           
-                    </div>
-                    <div class="databoxone_right">
-                        <div class="databoxoneright_center">
-                            <ve-histogram
-                            height="340px"
-                            :data="chartData01"
-                            :settings="chartSetting1"
-                            :textStyle="legend.textStyle"
-                            :legend="legend"
-                            ></ve-histogram>
-                        </div>
-
-                    </div>
-                </div> 
-<!-- page2 -->
-                <div class="data_change2">
-                    <span class="changebutton_data2">今日</span>
-                    <span 
-                    class="changebutton_data2"
-                    :class="{ active: checkDataType === 'week' }"
-                    @click="checkTimeHorizon('week')"
-                    >本周</span>
-                    <span 
-                    class="changebutton_data2"
-                    :class="{ active: checkDataType === 'month' }"
-                    @click="checkTimeHorizon('month')"
-                    >本月</span>
-                    <span 
-                    class="changebutton_data2"
-                    :class="{ active: checkDataType === 'year' }"
-                    @click="checkTimeHorizon('year')"
-                    >本年</span>
-                    <span class="changebutton_data2">自定义时间段</span>
-                </div> 
-                <div class="databox_two">
-                    <div class="databoxtwo_left">
-                        <div class="databoxtwoleft_one">
-                          <swiper :options="swiperOptionTop" ref="swiperTop">
-                            <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
-                            <swiper-slide class="slide-1">
-                              <ve-line :data="chartData02.hos1" :textStyle="legend.textStyle" :legend="legend"></ve-line>
-                            </swiper-slide>
-                            <swiper-slide class="slide-2">
-                              <ve-line :data="chartData02.hos2" :textStyle="legend.textStyle" :legend="legend"></ve-line>
-                            </swiper-slide>
-                            <swiper-slide class="slide-3">
-                              <ve-line :data="chartData02.hos3" :textStyle="legend.textStyle" :legend="legend"></ve-line>
-                            </swiper-slide>
-                            <swiper-slide class="slide-4">
-                              <ve-line :data="chartData02.hos4" :textStyle="legend.textStyle" :legend="legend"></ve-line>
-                            </swiper-slide>
-                            <swiper-slide class="slide-5">
-                              <ve-line :data="chartData02.hos5" :textStyle="legend.textStyle" :legend="legend"></ve-line>
-                            </swiper-slide>
-                            <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
-                          </swiper>  
-
-                        </div>
-                        <div class="databoxtwoleft_two">
-                            <div class="databoxtwolefttwo_top">
-                                <ve-pie 
-                                height="163px"
-                                :data="pieData1.hospital" :legend="legend" :settings="pieSetting"></ve-pie>
-                            </div>
-                            <div class="databoxtwolefttwo_bottom">
-                                <ve-pie 
-                                height="163px"
-                                :data="pieData1.card" :legend="legend" :settings="pieSetting"></ve-pie>
-                            </div>
-                        </div>           
-                    </div>
-                    <div class="databoxtwo_right">
-                        <div class="databoxtworight_center">
-                            <div class="databoxtworight_center_header1">
-                                <span>2019-08-12</span><span>|</span>
-                                <span>上一天</span><span>|</span>
-                                <span>下一天</span><span>|</span>
-                                <span>选择日期</span>                                                    
-                            </div> 
-                            <div class="databoxtworight_center_header2">
-                                <span>任务1</span><span>|</span>
-                                <span>任务2</span><span>|</span>
-                                <span>任务3</span><span>|</span>
-                                <span>（自动切换）</span>
-                            </div>
-                            <div class="databoxtworight_center_header3">
-                              <swiper :options="swiperOptionTop" ref="swiperTop">
-                                <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
-                                <swiper-slide class="slide-1">
-                                  <ve-histogram
-                                    :data="chartData02.hos1"
-                                    :textStyle="legend.textStyle"
-                                    :legend="legend"
-                                    height="340px"
-                                  ></ve-histogram>
-                                </swiper-slide>
-                                <swiper-slide class="slide-2">
-                                  <ve-histogram
-                                    :data="chartData02.hos2"
-                                    :textStyle="legend.textStyle"
-                                    :legend="legend"
-                                    height="340px"
-                                  ></ve-histogram>
-                                </swiper-slide>
-                                <swiper-slide class="slide-3">
-                                  <ve-histogram
-                                    :data="chartData02.hos3"
-                                    :textStyle="legend.textStyle"
-                                    :legend="legend"
-                                    height="340px"
-                                  ></ve-histogram>
-                                </swiper-slide>
-                                <swiper-slide class="slide-4">
-                                  <ve-histogram
-                                    :data="chartData02.hos4"
-                                    :textStyle="legend.textStyle"
-                                    :legend="legend"
-                                    height="340px"
-                                  ></ve-histogram>
-                                </swiper-slide>
-                                <swiper-slide class="slide-5">
-                                  <ve-histogram
-                                    :data="chartData02.hos5"
-                                    :textStyle="legend.textStyle"
-                                    :legend="legend"
-                                    height="340px"
-                                  ></ve-histogram>
-                                </swiper-slide>
-                                <!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
-                              </swiper>                                                                                
-                            </div>                                                      
-                        </div>
-                    </div>
-                </div>               
-<!-- page3   -->        
-                <div class="databox_three">
-                  <div class="databox_three_top">数据库监控</div>
-                  <div class="databox_three_content">
-                    <ul class="databox_three_contentheader">                     
-                      <li>状态</li>
-                      <li>数据库</li>
-                      <li>数据库类型</li>
-                      <li>节点数</li>
-                      <li>schema数量</li>
-                      <li>表/集合数</li>
-                      <li>数据量</li>
-                      <li>当前链接数</li>
-                      <li>进程数</li>
-                      <li>线程数</li>
-                      <li>每秒SQL执行次数</li>
-                      <li>每秒锁次数</li>
-                      <li>IOPS</li>
-                      <li>入流速</li>
-                      <li>出流速</li>
-                    </ul>
-                    <ul class="databox_three_contentdata1" v-if="databox3list1">                                      
-                      <li>{{databox3list1.item01}}</li>                     
-                      <li>{{databox3list1.item02}}</li>
-                      <li>{{databox3list1.item03}}</li>
-                      <li>{{databox3list1.item04}}</li>
-                      <li>{{databox3list1.item05}}</li>
-                      <li>{{databox3list1.item06}}</li>
-                      <li>{{databox3list1.item07}}</li>
-                      <li>{{databox3list1.item08}}</li>
-                      <li>{{databox3list1.item09}}</li>
-                    </ul> 
-                    <ul class="databox_three_contentdata2" v-if="databox3list2">                                      
-                      <li>{{databox3list2.item01}}</li>                     
-                      <li>{{databox3list2.item02}}</li>
-                      <li>{{databox3list2.item03}}</li>
-                      <li>{{databox3list2.item04}}</li>
-                      <li>{{databox3list2.item05}}</li>
-                      <li>{{databox3list2.item06}}</li>
-                      <li>{{databox3list2.item07}}</li>
-                      <li>{{databox3list2.item08}}</li>
-                      <li>{{databox3list2.item09}}</li>
-                    </ul> 
-                  </div>
-                </div>             
-            </div>
-        </div>
+  <div class="page_box">
+    <div class="tabletop">
+      <ul>
+        <li></li>
+        <li class="lilastone">数据中心</li>
+        <li class="lilast">{{date}}</li>
+      </ul>
     </div>
+    <div class="tableheaderone">
+      <div class="tableheaderonea">
+        <span class="tableheaderoneas_png">图标</span>
+        <span class="tableheaderoneas">数据共享</span>
+      </div>
+      <div class="tableheaderoneb" @click="toManangerment">管理入口</div>
+    </div>
+    <div class="tableheadertwo">
+      <ul>
+        <li>累计运行时间：30天5小时26分</li>
+        <li>数据量（数据库/表/记录）：5/325/18656.3万</li>
+        <li>共享数据量（目录/记录）：56/235.63万</li>
+        <li>共享数据服务次数：3156.3万</li>
+        <li>ETL数据量（表/记录）：28/123.3万</li>
+      </ul>
+    </div>
+    <div class="databox">
+      <div class="databox_content">
+        <!-- page1              -->
+        <div class="data_change">
+          <span
+            class="changebutton_data"
+            :class="{ active: checkDataType === 'day' }"
+            @click="checkTimeHorizon('day')"
+          >今日</span>
+          <span
+            class="changebutton_data"
+            :class="{ active: checkDataType === 'week' }"
+            @click="checkTimeHorizon('week')"
+          >本周</span>
+          <span
+            class="changebutton_data"
+            :class="{ active: checkDataType === 'month' }"
+            @click="checkTimeHorizon('month')"
+          >本月</span>
+          <span
+            class="changebutton_data"
+            :class="{ active: checkDataType === 'year' }"
+            @click="checkTimeHorizon('year')"
+          >本年</span>
+          <span class="changebutton_data">自定义时间段</span>
+        </div>
+        <div class="databox_one">
+          <div class="databoxone_left">
+            <div class="databoxoneleft_one">
+              <ve-line
+                :data="chartData01"
+                :settings="chartSetting1"
+                :textStyle="legend.textStyle"
+                :legend="legend"
+              ></ve-line>
+            </div>
+            <div class="databoxoneleft_two">
+              <div class="databoxonelefttwo_top">
+                <ve-pie
+                  height="163px"
+                  :data="pieData1.hospital"
+                  :legend="legend"
+                  :settings="pieSetting"
+                ></ve-pie>
+              </div>
+              <div class="databoxonelefttwo_bottom">
+                <ve-pie
+                  height="163px"
+                  :data="pieData1.card"
+                  :legend="legend"
+                  :settings="pieSetting"
+                ></ve-pie>
+              </div>
+            </div>
+          </div>
+          <div class="databoxone_right">
+            <div class="databoxoneright_center">
+              <ve-histogram
+                height="340px"
+                :data="chartData01"
+                :settings="chartSetting1"
+                :textStyle="legend.textStyle"
+                :legend="legend"
+              ></ve-histogram>
+            </div>
+          </div>
+        </div>
+        <!-- page2 -->
+        <div class="data_change2">
+          <span class="changebutton_data2">今日</span>
+          <span
+            class="changebutton_data2"
+            :class="{ active: checkDataType === 'week' }"
+            @click="checkTimeHorizon('week')"
+          >本周</span>
+          <span
+            class="changebutton_data2"
+            :class="{ active: checkDataType === 'month' }"
+            @click="checkTimeHorizon('month')"
+          >本月</span>
+          <span
+            class="changebutton_data2"
+            :class="{ active: checkDataType === 'year' }"
+            @click="checkTimeHorizon('year')"
+          >本年</span>
+          <span class="changebutton_data2">自定义时间段</span>
+        </div>
+        <div class="databox_two">
+          <div class="databoxtwo_left">
+            <div class="databoxtwoleft_one">
+              <swiper :options="swiperOptionTop" ref="swiperTop">
+                <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+                <swiper-slide class="slide-1">
+                  <ve-line :data="chartData02.hos1" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+                </swiper-slide>
+                <swiper-slide class="slide-2">
+                  <ve-line :data="chartData02.hos2" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+                </swiper-slide>
+                <swiper-slide class="slide-3">
+                  <ve-line :data="chartData02.hos3" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+                </swiper-slide>
+                <swiper-slide class="slide-4">
+                  <ve-line :data="chartData02.hos4" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+                </swiper-slide>
+                <swiper-slide class="slide-5">
+                  <ve-line :data="chartData02.hos5" :textStyle="legend.textStyle" :legend="legend"></ve-line>
+                </swiper-slide>
+                <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+              </swiper>
+            </div>
+            <div class="databoxtwoleft_two">
+              <div class="databoxtwolefttwo_top">
+                <ve-pie
+                  height="163px"
+                  :data="pieData1.hospital"
+                  :legend="legend"
+                  :settings="pieSetting"
+                ></ve-pie>
+              </div>
+              <div class="databoxtwolefttwo_bottom">
+                <ve-pie
+                  height="163px"
+                  :data="pieData1.card"
+                  :legend="legend"
+                  :settings="pieSetting"
+                ></ve-pie>
+              </div>
+            </div>
+          </div>
+          <div class="databoxtwo_right">
+            <div class="databoxtworight_center">
+              <div class="databoxtworight_center_header1">
+                <span>2019-08-12</span>
+                <span>|</span>
+                <span>上一天</span>
+                <span>|</span>
+                <span>下一天</span>
+                <span>|</span>
+                <span>选择日期</span>
+              </div>
+              <div class="databoxtworight_center_header2">
+                <span>任务1</span>
+                <span>|</span>
+                <span>任务2</span>
+                <span>|</span>
+                <span>任务3</span>
+                <span>|</span>
+                <span>（自动切换）</span>
+              </div>
+              <div class="databoxtworight_center_header3">
+                <swiper :options="swiperOptionTop" ref="swiperTop">
+                  <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+                  <swiper-slide class="slide-1">
+                    <ve-histogram
+                      :data="chartData02.hos1"
+                      :textStyle="legend.textStyle"
+                      :legend="legend"
+                      height="340px"
+                    ></ve-histogram>
+                  </swiper-slide>
+                  <swiper-slide class="slide-2">
+                    <ve-histogram
+                      :data="chartData02.hos2"
+                      :textStyle="legend.textStyle"
+                      :legend="legend"
+                      height="340px"
+                    ></ve-histogram>
+                  </swiper-slide>
+                  <swiper-slide class="slide-3">
+                    <ve-histogram
+                      :data="chartData02.hos3"
+                      :textStyle="legend.textStyle"
+                      :legend="legend"
+                      height="340px"
+                    ></ve-histogram>
+                  </swiper-slide>
+                  <swiper-slide class="slide-4">
+                    <ve-histogram
+                      :data="chartData02.hos4"
+                      :textStyle="legend.textStyle"
+                      :legend="legend"
+                      height="340px"
+                    ></ve-histogram>
+                  </swiper-slide>
+                  <swiper-slide class="slide-5">
+                    <ve-histogram
+                      :data="chartData02.hos5"
+                      :textStyle="legend.textStyle"
+                      :legend="legend"
+                      height="340px"
+                    ></ve-histogram>
+                  </swiper-slide>
+                  <!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
+                </swiper>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- page3   -->
+        <div class="databox_three">
+          <div class="databox_three_top">数据库监控</div>
+          <div class="databox_three_content">
+            <ul class="databox_three_contentheader">
+              <li>状态</li>
+              <li>数据库</li>
+              <li>数据库类型</li>
+              <li>节点数</li>
+              <li>schema数量</li>
+              <li>表/集合数</li>
+              <li>数据量</li>
+              <li>当前链接数</li>
+              <li>进程数</li>
+              <li>线程数</li>
+              <li>每秒SQL执行次数</li>
+              <li>每秒锁次数</li>
+              <li>IOPS</li>
+              <li>入流速</li>
+              <li>出流速</li>
+            </ul>
+            <ul class="databox_three_contentdata1" v-if="databox3list1">
+              <li>{{databox3list1.item01}}</li>
+              <li>{{databox3list1.item02}}</li>
+              <li>{{databox3list1.item03}}</li>
+              <li>{{databox3list1.item04}}</li>
+              <li>{{databox3list1.item05}}</li>
+              <li>{{databox3list1.item06}}</li>
+              <li>{{databox3list1.item07}}</li>
+              <li>{{databox3list1.item08}}</li>
+              <li>{{databox3list1.item09}}</li>
+            </ul>
+            <ul class="databox_three_contentdata2" v-if="databox3list2">
+              <li>{{databox3list2.item01}}</li>
+              <li>{{databox3list2.item02}}</li>
+              <li>{{databox3list2.item03}}</li>
+              <li>{{databox3list2.item04}}</li>
+              <li>{{databox3list2.item05}}</li>
+              <li>{{databox3list2.item06}}</li>
+              <li>{{databox3list2.item07}}</li>
+              <li>{{databox3list2.item08}}</li>
+              <li>{{databox3list2.item09}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -992,11 +1007,11 @@ export default {
         }
       },
       // page3_mock_data
-      databox3list1:{
-          item01:"Mysql",item02:"√",item03:"×",item04:"√",item05:"√",item06:"√",item07:"×",item08:"√",item09:"√"
+      databox3list1: {
+        item01: "Mysql", item02: "√", item03: "×", item04: "√", item05: "√", item06: "√", item07: "×", item08: "√", item09: "√"
       },
-      databox3list2:{
-          item01:"MongoDB",item02:"√",item03:"×",item04:"√",item05:"√",item06:"√",item07:"×",item08:"√",item09:"√"
+      databox3list2: {
+        item01: "MongoDB", item02: "√", item03: "×", item04: "√", item05: "√", item06: "√", item07: "×", item08: "√", item09: "√"
       }
 
     };
@@ -1027,300 +1042,309 @@ export default {
 }
 </script>
 <style scoped>
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    ul {
-        list-style: none;
-    }
-    .page_box {
-      width: 100%;
-      background: url("../assets/images/wrapper-bg.png") no-repeat;
-      background-size: 100% 100%;
-      border-bottom: 1px solid transparent;
-      background-color:#0b0f34;
-    }
-    .tabletop{
-        width: 100%;
-        height: 40px;
-    }
-    .tabletop>ul {
-        width: 100%;
-        height: 30px;
-        line-height: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .lilastone {
-        font-weight: bold;
-        font-size: 20px;
-        color: #f0f8ff;
-        margin-left: 225px;
-    }
-    .lilast{
-        color: #f0f8ff;
-        font-size: 16px;
-        margin-right: 50px;
-    }
-    .tableheaderone {
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 16px;
-    }
-    .tableheaderonea{
-        width: 70%; 
-        color: #f0f8ff;
-    }
-    .tableheaderoneb {
-        margin-right: 50px;
-        color: #f0f8ff;
-    }
-    .tableheaderoneb:hover {
-        background-color: chocolate;
-        cursor:pointer;
-        border-radius: 5px;
-        
-    }
-    .tableheaderoneas_png {
-      margin-left: 20px;
-    }
-    .tableheaderoneas {
-        margin-left: 10%;
-    }
-    .tableheadertwo {
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        font-size: 16px;
-        color: #f0f8ff;
-    }
-    .tableheadertwo>ul {
-        width:  100%;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;        
-    }       
-    .data_change,.data_change2 {
-        width: 100%;
-        height: 20px;
-        line-height: 20px;
-        font-size: 10px;
-        margin: 10px 0;
-        color: #f0f8ff;
-    }
-    .data_change2 {
-        margin-top:30px;
-        width: 100%;
-        height: 20px;
-        line-height: 20px;
-        font-size: 10px;
-    }
-    .changebutton_data {
-        cursor: pointer;
-        margin-left: 12px;
-    }
-    .changebutton_data2 {
-        cursor: pointer;
-        margin-left: 12px;
-    }
-    .changebutton_data:hover,.changebutton_data2:hover {
-        background-color: chocolate;
-    }
-    .databox {
-        width: 100%;           
-    }
-    .databox_content {
-        width: 97.5%;
-        margin: 0 auto;
-    }
-    .databox_one,.databox_two {
-        width: 100%;
-        height: 360px;  
-        display: flex;
-        justify-content: space-between;
-        align-items: center;          
-    }
-    .databoxone_left,.databoxtwo_left {
-        width: 63%;
-        height: 340px;
-        display: flex;
-        justify-content: space-between;
-        border:1px solid black;
-        background: url("../assets/images/panel-r-b.png") no-repeat;
-        background-size: 100% 100%; 
-    }
-    .databoxone_right,.databoxtwo_right { 
-        width: 35%;
-        height: 340px;
-        border:1px solid black;
-        background: url("../assets/images/panel-r-b.png") no-repeat;
-        background-size: 100% 100%; 
-    }
-    .databoxoneleft_one,.databoxtwoleft_one {
-        width: 62%;
-        height: 340px;
-        background: url("../assets/images/panel-r-b.png") no-repeat;
-        background-size: 100% 100%; 
-    }
-    .databoxoneleft_two,.databoxtwoleft_two {
-        width: 35%;
-        height: 340px;
-        background: url("../assets/images/panel-r-b.png") no-repeat;
-        background-size: 100% 100%; 
-    }
-    .databoxonelefttwo_top,.databoxtwolefttwo_top {
-        width: 100%;
-        height: 163px;
-        border-left: 1px solid black;
-        border-bottom: 1px solid black;
-        background: url("../assets/images/panel-r-b.png") no-repeat;
-        background-size: 100% 100%; 
-    }
-    .databoxonelefttwo_bottom,.databoxtwolefttwo_bottom {
-        width: 100%;
-        height: 163px;
-        margin-top: 14px;
-        border-top: 1px solid black;
-        border-left: 1px solid black;
-        background: url("../assets/images/panel-r-b.png") no-repeat;
-        background-size: 100% 100%; 
-    }
-    .databoxoneright_center,.databoxtworight_center{
-        height: 320px;
-        line-height: 320px;
-        width: 95%;
-        margin: 0 auto;
-        margin-top: 10px;
-    }
-    .databoxtworight_center_header1 {
-        font-size: 10px;
-        height: 20px;
-        line-height: 20px;
-        text-align: center;
-    }
-    .databoxtworight_center_header1>span {
-        margin-left:3px;
-        margin-right: 3px;
-        color: #f0f8ff;
-    }
-    .databoxtworight_center_header1>span:hover {
-        background-color: chocolate;
-        cursor:pointer;
-    }
-    .databoxtworight_center_header2 {
-        font-size: 10px;
-        height: 20px;
-        line-height: 20px;
-        color: #f0f8ff;
-    }
-    .databoxtworight_center_header3 {
-      height: 340px;
-      width: 100%;
-    }
-    .databoxtworight_center_header2>span {       
-        margin-right: 3px;
-    }
-    .databoxtworight_center_header2>span:hover {
-        cursor: pointer;
-        background-color: chocolate;
-    }  
+* {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: none;
+}
+.page_box {
+  width: 100%;
+  background: url("../assets/images/wrapper-bg.png") no-repeat;
+  background-size: 100% 100%;
+  border-bottom: 1px solid transparent;
+  background-color: #0b0f34;
+}
+.tabletop {
+  width: 100%;
+  height: 40px;
+}
+.tabletop > ul {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lilastone {
+  font-weight: bold;
+  font-size: 20px;
+  color: #f0f8ff;
+  margin-left: 225px;
+}
+.lilast {
+  color: #f0f8ff;
+  font-size: 16px;
+  margin-right: 50px;
+}
+.tableheaderone {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+.tableheaderonea {
+  width: 70%;
+  color: #f0f8ff;
+}
+.tableheaderoneb {
+  margin-right: 50px;
+  color: #f0f8ff;
+}
+.tableheaderoneb:hover {
+  background-color: chocolate;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.tableheaderoneas_png {
+  margin-left: 20px;
+}
+.tableheaderoneas {
+  margin-left: 10%;
+}
+.tableheadertwo {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  color: #f0f8ff;
+}
+.tableheadertwo > ul {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.data_change,
+.data_change2 {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  font-size: 10px;
+  margin: 10px 0;
+  color: #f0f8ff;
+}
+.data_change2 {
+  margin-top: 30px;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  font-size: 10px;
+}
+.changebutton_data {
+  cursor: pointer;
+  margin-left: 12px;
+}
+.changebutton_data2 {
+  cursor: pointer;
+  margin-left: 12px;
+}
+.changebutton_data:hover,
+.changebutton_data2:hover {
+  background-color: chocolate;
+}
+.databox {
+  width: 100%;
+}
+.databox_content {
+  width: 97.5%;
+  margin: 0 auto;
+}
+.databox_one,
+.databox_two {
+  width: 100%;
+  height: 360px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.databoxone_left,
+.databoxtwo_left {
+  width: 63%;
+  height: 340px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databoxone_right,
+.databoxtwo_right {
+  width: 35%;
+  height: 340px;
+  border: 1px solid black;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databoxoneleft_one,
+.databoxtwoleft_one {
+  width: 62%;
+  height: 340px;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databoxoneleft_two,
+.databoxtwoleft_two {
+  width: 35%;
+  height: 340px;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databoxonelefttwo_top,
+.databoxtwolefttwo_top {
+  width: 100%;
+  height: 163px;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databoxonelefttwo_bottom,
+.databoxtwolefttwo_bottom {
+  width: 100%;
+  height: 163px;
+  margin-top: 14px;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databoxoneright_center,
+.databoxtworight_center {
+  height: 320px;
+  line-height: 320px;
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+.databoxtworight_center_header1 {
+  font-size: 10px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+.databoxtworight_center_header1 > span {
+  margin-left: 3px;
+  margin-right: 3px;
+  color: #f0f8ff;
+}
+.databoxtworight_center_header1 > span:hover {
+  background-color: chocolate;
+  cursor: pointer;
+}
+.databoxtworight_center_header2 {
+  font-size: 10px;
+  height: 20px;
+  line-height: 20px;
+  color: #f0f8ff;
+}
+.databoxtworight_center_header3 {
+  height: 340px;
+  width: 100%;
+}
+.databoxtworight_center_header2 > span {
+  margin-right: 3px;
+}
+.databoxtworight_center_header2 > span:hover {
+  cursor: pointer;
+  background-color: chocolate;
+}
 /* page3 */
-      .databox_three {
-      width: 100%;
-      height: 360px; 
-      margin-top: 30px;
-      margin-bottom: 50px; 
-      background: url("../assets/images/panel-r-b.png") no-repeat;
-      background-size: 100% 100%;         
-    }
-    .databox_three_top {
-      width: 100%;
-      height: 50px;
-      color: white;
-      padding-left: 50px;
-      line-height: 50px;
-      background: url("../assets/images/title-bg-long.png") no-repeat;
-      background-size: 100% 100%;
-    }
-    .databox_three_content {
-      width: 98%;
-      height: 310px;
-      margin: 0 auto;
-    }
-    .databox_three_contentheader {
-      width: 100%;
-      height: 20px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      color: white;
-      padding-top: 10px;
-    }
-    .databox_three_contentdata1,.databox_three_contentdata2 {
-      color: white;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 40px;     
-    }
-    .databox_three_contentdata1>li:nth-of-type(1){
-      margin-left: 120px;
-    } 
-    .databox_three_contentdata2>li:nth-of-type(1) {
-      margin-left: 105px
-    }
-    .databox_three_contentdata1>li:nth-of-type(2) {
-      margin-left: 730px;
-    } 
-    .databox_three_contentdata2>li:nth-of-type(2) {
-      margin-left: 714px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(3) {
-      margin-left: 110px;
-    }
-    .databox_three_contentdata2>li:nth-of-type(3) {
-      margin-left: 107px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(4) {
-      margin-left: 98px;
-    } 
-    .databox_three_contentdata2>li:nth-of-type(4) {
-      margin-left: 99px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(5) {
-      margin-left: 135px;
-    } 
-    .databox_three_contentdata2>li:nth-of-type(5) {
-      margin-left: 136px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(6) {
-      margin-left: 150px;
-    } 
-    .databox_three_contentdata2>li:nth-of-type(6) {
-      margin-left: 151px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(7) {
-      margin-left: 110px;
-    }  
-    .databox_three_contentdata2>li:nth-of-type(7) {
-      margin-left: 110px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(8) {
-      margin-left: 93px;
-    }
-    .databox_three_contentdata2>li:nth-of-type(8) {
-      margin-left: 93px;
-    }
-    .databox_three_contentdata1>li:nth-of-type(9) {
-      margin-left: 90px;
-    }
-    .databox_three_contentdata2>li:nth-of-type(9) {
-      margin-left: 90px;
-    } 
-    
+.databox_three {
+  width: 100%;
+  height: 360px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  background: url("../assets/images/panel-r-b.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databox_three_top {
+  width: 100%;
+  height: 50px;
+  color: white;
+  padding-left: 50px;
+  line-height: 50px;
+  background: url("../assets/images/title-bg-long.png") no-repeat;
+  background-size: 100% 100%;
+}
+.databox_three_content {
+  width: 98%;
+  height: 310px;
+  margin: 0 auto;
+}
+.databox_three_contentheader {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  padding-top: 10px;
+}
+.databox_three_contentdata1,
+.databox_three_contentdata2 {
+  color: white;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+}
+.databox_three_contentdata1 > li:nth-of-type(1) {
+  margin-left: 120px;
+}
+.databox_three_contentdata2 > li:nth-of-type(1) {
+  margin-left: 105px;
+}
+.databox_three_contentdata1 > li:nth-of-type(2) {
+  margin-left: 730px;
+}
+.databox_three_contentdata2 > li:nth-of-type(2) {
+  margin-left: 714px;
+}
+.databox_three_contentdata1 > li:nth-of-type(3) {
+  margin-left: 110px;
+}
+.databox_three_contentdata2 > li:nth-of-type(3) {
+  margin-left: 107px;
+}
+.databox_three_contentdata1 > li:nth-of-type(4) {
+  margin-left: 98px;
+}
+.databox_three_contentdata2 > li:nth-of-type(4) {
+  margin-left: 99px;
+}
+.databox_three_contentdata1 > li:nth-of-type(5) {
+  margin-left: 135px;
+}
+.databox_three_contentdata2 > li:nth-of-type(5) {
+  margin-left: 136px;
+}
+.databox_three_contentdata1 > li:nth-of-type(6) {
+  margin-left: 150px;
+}
+.databox_three_contentdata2 > li:nth-of-type(6) {
+  margin-left: 151px;
+}
+.databox_three_contentdata1 > li:nth-of-type(7) {
+  margin-left: 110px;
+}
+.databox_three_contentdata2 > li:nth-of-type(7) {
+  margin-left: 110px;
+}
+.databox_three_contentdata1 > li:nth-of-type(8) {
+  margin-left: 93px;
+}
+.databox_three_contentdata2 > li:nth-of-type(8) {
+  margin-left: 93px;
+}
+.databox_three_contentdata1 > li:nth-of-type(9) {
+  margin-left: 90px;
+}
+.databox_three_contentdata2 > li:nth-of-type(9) {
+  margin-left: 90px;
+}
 </style>

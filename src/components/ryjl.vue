@@ -13,7 +13,7 @@
             <td>住院医师</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.AP02_01_103_00 }}</td>
             <td>{{ item.AP02_01_099_00 }}</td>
@@ -128,15 +128,18 @@
 
 <script>
 export default {
-  name: "BeHospitalizedRecord", props: ["tabData"],
+  name: "BeHospitalizedRecord", props: ["tabData", "elTabsData"],
   data() {
     return {
       dialogVisible: false,
-      detail: []
+      detail: [],
+      tabsData: []
     };
   },
   created() {
-    console.log("入院记录:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.zyryjl
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

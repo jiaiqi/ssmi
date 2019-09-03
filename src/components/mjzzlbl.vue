@@ -11,7 +11,7 @@
             <td>处理意见</td>
             <td>操作</td>
           </tr>
-          <tr v-for="(item, index) in tabData" :key="index">
+          <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{ item.DE06_00_062_00 }}</td>
             <td v-if="!item.DE06_00_062_00"></td>
             <td
@@ -76,15 +76,20 @@
 <script>
 export default {
   name: "OutpatientMedicalRecords", // 门急诊诊疗病历
-  props: ["tabData"],
+  props: ["tabData", "elTabsData", "changeData"],
   data() {
     return {
       dialogVisible: false,
-      detail: []
+      detail: [],
+      tabsData: []
     };
   },
   created() {
-    console.log("门急诊诊疗病历:", this.tabData);
+    setTimeout(() => {
+      this.tabsData = this.elTabsData.mzbl
+    }, 500);
+  },
+  mounted() {
   },
   methods: {
     changeDialogVisible(item) {
