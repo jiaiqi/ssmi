@@ -31,7 +31,35 @@
 <script >
 export default {
   name: "PatientOverView",
-  props: ["patientInfo"]
+  props: ["patientInfo"],
+  methods: {
+    getData() {
+      // 根据local_id 查找居住信息
+      let req = {
+        hisVer: true,
+        "serviceName": "DI_MPI_ADDRESS_select",
+        "condition": [
+          {
+            "colName": "LOCAL_ID",
+            "ruleType": "eq",
+            "value": this.patientInfo.LOCAL_ID
+          }
+        ],
+      };
+      let url = this.getServiceUrl("select", req.serviceName, "emr");
+      this.axios({
+        method: "POST",
+        url: url,
+        data: req
+      }).then(res => {
+        // console.log(res3)
+        let data = res.data.data[0]
+        this.patientInfo.detailAddress = data.DETAIL
+      }).catch(err3 => {
+        console.log(err3)
+      })
+    }
+  },
 };
 </script>
 

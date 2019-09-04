@@ -19,8 +19,9 @@
             <!-- <span class="btn">退出</span> -->
             <div class="accountInfo">
               当前帐号:
-              <span></span>
+              <span>{{user.user_no}}</span>
             </div>
+            <span class="btn" @click="toLogin">注销账号</span>
           </div>
         </div>
         <div class="top_header">
@@ -293,9 +294,17 @@
 
 <script>
 let moment = require('moment');
+moment.locale("zh-CN")
 import axios from 'axios'
 export default {
   methods: {
+    toLogin() {
+      sessionStorage.clear()
+      // window.location.reload()
+      this.$router.push({        name: "login", query: {
+          from: "onecard"
+        }      })
+    },
     getData(groupBy) {
       console.log(groupBy)
       let req = {
@@ -400,7 +409,6 @@ export default {
             let hours = ["0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
             let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
             let rows = []
-            // debugger
             for (var key in hours) {
               let dataMap = {}
               rows.push(dataMap)
@@ -408,15 +416,17 @@ export default {
               for (var i in hos) {
                 for (var item of data) {
                   // console.log(item.hospital, hos[i], hours[key], dateHour)
-                  let dateHour = item.count_hour.slice(11) // YYYY-MM-DD hh:mm:ss 截取从h开始后面所有字符（时分秒）
-                  if (item.hospital === 'rmyy' && hours[key] === dateHour) {
-                    dataMap.市人民医院 = item.amount // 市人民医院:amount
-                  } else if (item.hospital === 'zyyy' && hours[key] === dateHour) {
-                    dataMap.市中医医院 = item.amount // 市中医医院:amount
-                  } else if (item.hospital === 'bayy' && hours[key] === dateHour) {
-                    dataMap.博爱医院 = item.amount // 市中医医院:amount
-                  } else if (item.hospital === 'fyyy' && hours[key] === dateHour) {
-                    dataMap.市妇幼医院 = item.amount // 市妇幼医院:amount
+                  if (item.count_hour) {
+                    let dateHour = item.count_hour.slice(11) // YYYY-MM-DD hh:mm:ss 截取从h开始后面所有字符（时分秒）
+                    if (item.hospital === 'rmyy' && hours[key] === dateHour) {
+                      dataMap.市人民医院 = item.amount // 市人民医院:amount
+                    } else if (item.hospital === 'zyyy' && hours[key] === dateHour) {
+                      dataMap.市中医医院 = item.amount // 市中医医院:amount
+                    } else if (item.hospital === 'bayy' && hours[key] === dateHour) {
+                      dataMap.博爱医院 = item.amount // 市中医医院:amount
+                    } else if (item.hospital === 'fyyy' && hours[key] === dateHour) {
+                      dataMap.市妇幼医院 = item.amount // 市妇幼医院:amount
+                    }
                   }
                 }
               }
@@ -1185,13 +1195,19 @@ export default {
     // console.log(this.timeHorizon)
   },
   created() {
+    let user = sessionStorage.getItem('current_login_user')
+    top.user = JSON.parse(user)
     this.user = top.user
     console.log("user:", this.user)
   },
   mounted() {
+
     setInterval(() => {
-      this.date = moment().format('YYYY-MM-DD  hh:mm:ss');
+      this.date = moment().format('YYYY-MM-DD  HH:mm:ss');
     }, 1000);
+    console.log(
+      moment.locale()
+    )
     // console.log('this is current swiper instance object', this.swiperTop);
     // this.swiper.slideTo(1, 1000, false);
     this.getData("by_hour_of_date")
@@ -1330,6 +1346,9 @@ div /deep/ .swiper-pagination-bullets {
           display: inline-block;
           height: 50px;
           min-width: 150px;
+          span {
+            font-weight: 600;
+          }
         }
         .btn {
           cursor: pointer;

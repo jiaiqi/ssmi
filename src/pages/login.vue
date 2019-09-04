@@ -6,7 +6,14 @@
       <input name="action" value="login" type="hidden" />
       <input name="username" placeholder="用户名" required type="text" v-model="userName" />
       <hr class="hr15" />
-      <input name="password" placeholder="密码" required type="password" v-model="pwd" />
+      <input
+        name="password"
+        placeholder="密码"
+        required
+        type="password"
+        v-model="pwd"
+        @keyup.enter="toHome"
+      />
       <hr class="hr15" />
       <input value="登录" style="width:100%;" type="button" @click="toHome()" />
       <hr class="hr20" />
@@ -52,9 +59,9 @@ export default {
         console.log(jsonData)
         if (sessionStorage.getItem("need_login_flag") == "need_login") {
         } else {
-          let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
+          // let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
           axios({
-            headers: { "bx_auth_ticket": bx_auth_ticket },
+            // headers: { "bx_auth_ticket": bx_auth_ticket },
             url: url,
             method: method,
             data: jsonData,
@@ -71,7 +78,14 @@ export default {
               top.user = current_login_user;
               // window.user = current_login_user
               // self.$router.go(-1)
-              self.$router.push({ name: 'dzbl' })
+              console.log(self.$route)
+              if (self.$route.query.length > 0) {
+                let path = self.$route.query.from
+                console.log(path)
+                self.$router.push({ name: path })
+              } else {
+                self.$router.push({ name: 'dzbl' })
+              }
             }
             console.log(res)
           }).catch(err => {

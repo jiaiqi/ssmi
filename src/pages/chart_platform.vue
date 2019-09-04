@@ -400,12 +400,19 @@ export default {
   mounted() {
     this.init(),
       setInterval(() => {
-        this.date = moment().format('YYYY-MM-DD  hh:mm:ss');
+        this.date = moment().format('YYYY-MM-DD a hh:mm:ss');
       }, 1000);
   },
   methods: {
     init() {
 
+    },
+    toLogin() {
+      sessionStorage.clear()
+      // window.location.reload()
+      this.$router.push({        name: "login", query: {
+          from: "platform"
+        }      })
     },
     toManangerment() {
       let str = window.location.href

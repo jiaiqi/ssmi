@@ -3,16 +3,16 @@
         <div class="home_content">
             <div class="box_one">
                 <span>一 . 选择服务应用: </span>
-                <select v-model="data_change" @change="ad">
-                    <option v-for="item in app_name" :key=item.id  :value='item.app_name'>{{item.app_name}}</option>
+                <select v-model="data_change" @change="adm">
+                    <option v-for="(item,index) in app_name" :key="index" :value='item.app_name'>{{item.app_name}}</option>
                 </select>
             </div>
             <div class="box_two">
                 <span>二 . 选择接口列表: </span>
-                <el-select v-model="value8" filterable placeholder="请选择" style="width:500px;">
+                <el-select v-model="value8" filterable placeholder="请选择" @change="serviceChange">
                     <el-option
-                    v-for="item in app_no"
-                    :key="item.id"
+                    v-for="(item,index) in app_no"
+                    :key="index"
                     :label="item.service_view_name"
                     :value="item.service_view_name"
                     >
@@ -28,14 +28,14 @@
                 <div class="box_three_foot1">
                     <span class="box_three_foot_span">*</span>
                     <span>appid:</span>
-                    <input type="text">
+                    <input type="text" v-model="appId">
                     <p class="box_three_foot_p">填写appid</p>
                     <p class="box_three_foot_p2">校验通过</p>
                 </div>
                 <div class="box_three_foot2">
                     <span class="box_three_foot_span">*</span>
                     <span>secret:</span>
-                    <input type="text">
+                    <input type="text" v-model="appSecret">
                     <p class="box_three_foot_p">填写appsecret</p>
                     <p class="box_three_foot_p2">校验通过</p>
                 </div>
@@ -53,11 +53,11 @@
                 </div>
                 <div class="box_four_c">
                     <p>返回结果：</p>
-                    <textarea cols="100" rows="25"></textarea>                                    
+                    <textarea cols="100" rows="25" v-model="data_return"></textarea>                                    
                 </div>
                 <div class="box_four_d">
                     <span>提示 : </span>
-                    <span class="box_four_d_color">111</span>
+                    <span class="box_four_d_color">{{data_state}}</span>
                 </div>
             </div>
         </div>
@@ -73,10 +73,17 @@ export default {
             value8: '应用分类查询',
             app_no:[],
             app_name:[],
-            data_change:'配置中心',
+            data_change:'配置监控',
             api:'',
-            show:false,
-            data_one:''
+            show:true,
+            data_one:'',
+            serviceName:'',
+            serviceType:'',
+            data:[],
+            appSecret:"",
+            appId:"",
+            data_return: [],
+            data_state: ''           
         };
     },  
     methods: {       
@@ -94,6 +101,7 @@ export default {
                 { headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") } }
             ).then(res => {
                 this.app_name = res.data.data
+                // console.log(res.data.data)
                 this.data_change = this.app_name[4].app_name
                 this.api = this.app_name[4].app_no
                 // console.log('qwe',this.api)
@@ -102,6 +110,7 @@ export default {
             })
         },
         getData_sec(){
+            //选择接口列表
             let req2 = {
                 "serviceName": "srvsys_service_select",
                 "colNames": [
@@ -122,7 +131,7 @@ export default {
                 "page": {
                 },
                 "order": []
-            }        
+            }    
             axios.post(
                 'http://192.168.0.192:8101/'+ this.api +'/select/srvsys_service_select',req2, 
                 { headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") } }
@@ -131,22 +140,48 @@ export default {
                 this.value8 = res.data.data[0].service_view_name
                 // console.log(res.data.data)
             }).catch(err => {
-                // console.log(err)
+                // console.log(err)  
             })
-        },
-
+        },  
         getData_three() { 
-            let req3 = this.data_one   
+            let req3 = this.data_one
+            let appNo = this.api;
+            let service = this.serviceName;
+            let type = this.serviceType;              
+            let str = `{"serviceName": "${service}", ${req3}}`                    
+            str=JSON.parse(str.replace(/\s+/g,""))
+            this.data[0] = str 
+            // console.log('+++++++++', this.data)
+            let data1 = []
+            let data2 = []
+            let map = {
+                "serviceName": "srvonline_interface_deubg",
+                "data": data2
+            }
+            let map1 = {
+                "req_app": appNo,
+                "operate_type": type,
+                "app_Id":this.appId,
+                "app_secret": this.appSecret,
+                "param": str
+                }           
+            data1.push(map)
+            data2.push(map1)
+            // console.log('+++++++++', data1)
             axios.post(
-                'http://192.168.0.192:8101/zjr/operate/srvonline_interface_deubg',req3, 
+                'http://192.168.0.192:8101/apprc/operate/srvonline_interface_deubg',data1, 
                 { headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") } }
             ).then(res => {
-                console.log(res.data.data)
+                debugger;
+                // this.return=res.data.response;
+                this.data_return = JSON.stringify(res.data.response)
+                this.data_state = res.data.state
             }).catch(err => {
-                console.log(err)
+                // console.log(err)
             })
+            
         },
-        ad(){
+        adm(){
             // console.log(this.data_change)
             this.app_name.forEach(item=>{
                 if(this.data_change === item.app_name){
@@ -155,8 +190,17 @@ export default {
             })
             this.getData_sec()                     
         },
+        serviceChange(){
+            this.app_no.forEach(item=>{
+                if(this.value8 === item.service_view_name){
+                    this.serviceName = item.service_name
+                    this.serviceType = item.service_type
+                }
+            })                           
+        },
         debuggs(){
-            this.show = !this.show;
+            // console.log(this.data_one)
+            // this.show = !this.show;
             this.getData_three()
         }          
     },
@@ -165,12 +209,100 @@ export default {
         setTimeout(()=>{
         this.getData_sec()
         },1000)
-        // console.log('asd',this.data_change)
+        // console.log('asd',this.data_change)  
     }   
 }
 </script>
-<style scoped>
 
+<style scoped>
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+.home {
+    width: 100%;
+}
+.home_content {
+    width: 96%;
+    margin: 0 auto;
+}
+.box_one {
+    margin-top: 20px;
+}
+.box_one,.box_two {
+    width: 100%;
+    height: 100px;
+}
+
+.box_two_method {
+    margin-left: 20px;
+    opacity: 0.5; 
+}
+.box_three > textarea {
+    margin-left: 180px;
+}
+.box_pone {
+    margin-top: 10px;
+}
+.box_threep {
+    margin-left: 180px;
+    opacity: 0.5;
+}
+.box_three_foot_span {
+    color: red;
+}
+.box_three_foot2>input {
+    margin-left: 108px;
+}
+.box_three_foot1>input {
+    margin-left: 111px;
+}
+.box_three_foot1>p,.box_three_foot2>p {
+    margin-left: 173px;
+}
+.box_three_foot_p {
+    opacity: 0.5;
+    margin-top: 5px;
+}
+.box_three_foot_p2 {
+    color:darkgreen;
+    display: none;
+}
+.box_three_foot1 {
+    margin-top:20px;
+}
+.box_three>input {
+    margin-left: 173px;
+    margin-top: 30px;
+    background-color: lightgreen;
+    width: 120px;
+    height: 40px;
+    font-size: 20px;
+} 
+.box_three_foot2 {
+    margin-top: 30px;
+}
+.el-select {
+    width: 400px;
+    margin-left: 50px;
+}      
+el-select > el-option {
+    height: 20px;
+} 
+/* 在线调试按钮以下 */
+.box_one>select {
+    width: 200px;
+    height: 40px;
+    margin-left: 50px;
+    border-radius: 3px;
+    border: solid 1px #ccc;
+}
+input {
+    height: 40px;
+    width: 200px;
+}
 .box_four {
     width: 100%;
     margin-top: 50px;
@@ -207,89 +339,5 @@ export default {
     margin-bottom: 10px;
 }
 
-
-* {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    box-sizing: border-box;
-}
-.home {
-    width: 100%;
-}
-.home_content {
-    width: 96%;
-    margin: 0 auto;
-}
-.box_one {
-    margin-top: 20px;
-}
-.box_one,.box_two {
-    width: 100%;
-    height: 100px;
-}
-.box_one>select {
-    width: 150px;
-    height: 20px;
-    margin-left: 50px;
-}
-.box_two>select {
-    width: 300px;
-    margin-left: 50px;
-}
-.box_two_method {
-    margin-left: 20px;
-    opacity: 0.5; 
-}
-.box_three > textarea {
-    margin-left: 180px;
-}
-.box_pone {
-    margin-top: 10px;
-}
-.box_threep {
-    margin-left: 180px;
-    opacity: 0.5;
-}
-.box_three_foot_span {
-    color: red;
-}
-.box_three_foot2>input {
-    margin-left: 108px;
-}
-.box_three_foot1>input {
-    margin-left: 111px;
-}
-.box_three_foot1>p,.box_three_foot2>p {
-    margin-left: 173px;
-}
-.box_three_foot_p {
-    opacity: 0.5;
-    margin-top: 5px;
-}
-.box_three_foot_p2 {
-    color:darkgreen;
-}
-.box_three_foot1 {
-    margin-top:20px;
-}
-.box_three>input {
-    margin-left: 173px;
-    margin-top: 30px;
-    background-color: lightgreen;
-    width: 120px;
-    height: 30px;
-    font-size: 16px;
-} 
-.box_three_foot2 {
-    margin-top: 30px;
-}
-.el-select {
-    width: 400px;
-    margin-left: 50px;
-}      
-el-select>el-option {
-    height: 20px;
-} 
 
 </style>

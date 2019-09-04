@@ -11,6 +11,7 @@ import elementUI from 'element-ui';
 import VCharts from 'v-charts'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
+import axios from 'axios'
 
 Vue.use(VueAwesomeSwiper)
 Vue.use(VCharts)
@@ -19,7 +20,16 @@ Vue.use(elementUI)
 VueInit()
 VueUtil()
 Vue.config.productionTip = false
-// Vue.prototype.http = axios // 挂载axios到vue.proto对象上原型属性
+Vue.prototype.axios = axios 
+Vue.prototype.http = axios // 挂载axios到vue.proto对象上原型属性
+axios.interceptors.request.use(function (config) {
+  // 在发送请求之前做些什么
+  config.headers["bx_auth_ticket"] = sessionStorage.getItem("bx_auth_ticket");
+  return config;
+}, function (error) {
+  // 对请求错误做些什么
+  return Promise.reject(error);
+});
 // Vue.http.options.xhr = { withCredentials: true }// vueresource请求跨域
 // Vue.http.interceptors.push((request, next) => {
 //   request.credentials = true

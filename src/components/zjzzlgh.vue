@@ -23,7 +23,7 @@
             <td v-if="!item.AP09_00_024_00"></td>
             <td
               v-if="item.AP09_00_024_00"
-            >{{ item.AP09_00_024_00.slice(0,4)+"年"+item.AP09_00_024_00.slice(4,6)+"月"+item.AP09_00_024_00.slice(6,8)+"日" }}</td>
+            >{{ item.AP09_00_024_00.slice(0,4)+"-"+item.AP09_00_024_00.slice(4,6)+"-"+item.AP09_00_024_00.slice(6,8)}}</td>
           </tr>
           <tr>
             <td></td>

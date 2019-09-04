@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import dzbl from '@/pages/dzbl'
 import login from '@/pages/login'
-import medicalrecord from '@/pages/chart_dzbl'
+// import medicalrecord from '@/pages/chart_dzbl'
 import platform from '@/pages/chart_platform'
 import oneCard from '@/pages/chart_ykt'
 import secplat from '@/pages/chart_secplat'
@@ -13,23 +13,23 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/dzbl',
       name: 'dzbl',
       component: dzbl
     },
     {
-      path: '/login',
+      path: '/',
       name: 'login',
       component: login
     },
-    {
-      path: '/medicalrecord',
-      name: 'medicalrecord',
-      component: medicalrecord
-    },
+    // {
+    //   path: '/medicalrecord',
+    //   name: 'medicalrecord',
+    //   component: medicalrecord
+    // },
     {
       path: '/onecard',
-      name: 'oneCard',
+      name: 'onecard',
       component: oneCard
     },
     {

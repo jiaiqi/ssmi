@@ -296,6 +296,13 @@ export default {
       console.log(str)
       window.location.href = '../../main/index.html?' + str
     },
+    toLogin() {
+      sessionStorage.clear()
+      // window.location.reload()
+      this.$router.push({        name: "login", query: {
+          from: "onecard"
+        }      })
+    },
     getData() {
       let params = {
         "serviceName": "srvetl_job_history_select",

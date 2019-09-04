@@ -41,7 +41,6 @@
             <span style="font-weight:600;">{{userInfo.user_no}}</span>
           </p>
         </div>
-        <!-- <div class="header_btn" onclick="toManangerment"> -->
         <div class="header_btn" @click="exit_login">
           <p class="text">退出</p>
         </div>
@@ -119,12 +118,9 @@
           </el-timeline>
         </div>
       </div>
-      <div class="content_right">
+      <div class="content_right" v-loading="loading">
         <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
           <div class="close-all" @click="closeAll">关闭所有</div>
-          <!-- <el-tab-pane label="患者总览" name="患者总览"> -->
-          <!-- <PatientOverView :patientInfo="patientInfo" /> -->
-          <!-- </el-tab-pane> -->
           <el-tab-pane
             v-for="(item,index) in editableTabs"
             :key="index"
@@ -141,15 +137,19 @@
             ></component>
           </el-tab-pane>
         </el-tabs>
-        <el-dialog title :visible.sync="dialogVisible" width="500px" :before-close="handleClose">
-          <!-- <div class="read_card">
-            请输入身份证号
-            <div class="id_card">
-              <el-input v-model="id_card" style="width:200px;margin-top:50px;"></el-input>
-            </div>
-          </div>-->
+        <el-dialog
+          title
+          :visible.sync="dialogVisible"
+          width="500px"
+          :before-close="handleClose"
+          center
+        >
           <div class="read_card">
-            点击按钮读卡
+            在下方输入身份证号
+            <div class="id_card">
+              <el-input v-model="id_card" style="width:200px;margin:20px 0 30px 0;"></el-input>
+            </div>
+            {{dialogText}}
             <div class="id_card">
               <!-- <el-input v-model="id_card" style="width:200px;margin-top:50px;"></el-input> -->
             </div>
@@ -190,7 +190,7 @@ import zyzLzdjlxx from "../components/zyzlzdjlxx";
 import ryjl from '../components/ryjl'
 import hospitalindex from '../components/inHospitalIndex'
 import InspectionRecord from '../components/InspectionRecord'
-import axios from "axios";
+// import axios from "axios";
 import moment from 'moment'
 export default {
   name: "home",
@@ -199,12 +199,14 @@ export default {
     return {
       id_card: "612200194101051123",
       datePickVal: "",
+      loading: false,
       userName: '',
       detail: "",
       componentsKey: 0,
       userInfo: {},
       timeLineData: [],
       patientInfo: {},
+      dialogText: "点击确定按钮读卡",
       pickerOptions: {
         shortcuts: [
           {
@@ -269,7 +271,7 @@ export default {
     let user = sessionStorage.getItem("current_login_user")
     this.userInfo = JSON.parse(user)
     window.ReadCommCardRet = (para) => {
-      alert("收到读卡返回信息： " + para);
+      // alert("收到读卡返回信息： " + para);
       localStorage.setItem("CardInfo", para)
       let CardInfo = JSON.parse(para)
       window.CardInfo = CardInfo
@@ -307,7 +309,7 @@ export default {
           ]
         };
         let url = this.getServiceUrl("select", data.serviceName, "emr");
-        axios({
+        this.axios({
           method: "POST",
           url: url,
           data: req,
@@ -402,6 +404,7 @@ export default {
     },
     exit_login() {
       localStorage.setItem("current_login_user", "")
+      this.$router.push({ name: "login" })
     },
     closeAll() {
       this.editableTabsValue = '患者总览'
@@ -446,9 +449,8 @@ export default {
           req.condition[2].value = cod.department;
         }
       }
-      // let url = this.getServiceUrl("select", req.serviceName, "zjr");
       let url = this.getServiceUrl("select", req.serviceName, "emr");
-      axios({
+      this.axios({
         method: "POST",
         headers: {
           bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket")
@@ -458,7 +460,11 @@ export default {
       })
         .then(res => {
           let data = res.data.data;
+          if (!data.length > 0) {
+            this.loading = true
+          }
           if (data && data.length > 0) {
+            this.loading = false
             let arr = []
             data.map(item => {
               let timeLineData = {}
@@ -686,19 +692,34 @@ export default {
     },
     closeReadCard() {
       this.BtnReadCard();
-      if (this.userInfo.user_no) {
-        this.$message({
-          message: "当前展示的是身份证号为：" + this.id_card + "的患者的病历信息",
-          type: 'warning',
-          duration: '5000',
-          offset: '100',
-          showClose: 'true'
-        });
+      if (window.CardInfo) {
+        if (this.userInfo.user_no && window.CardInfo.id) {
+          this.dialogText = "当前读取到的身份证号为：\n" + window.CardInfo.id
+          setTimeout(() => {
+            this.dialogText = "点击确定按钮读卡"
+          }, 3000);
+        }
+        else {
+          this.dialogText = "没有读取到身份证信息"
+          setTimeout(() => {
+            this.dialogText = "点击确定按钮读卡"
+          }, 3000);
+          return
+        }
       }
+      // else {
+      //   this.dialogText = "没有读取到身份证信息"
+      //   setTimeout(() => {
+      //     this.dialogText = "点击确定按钮读卡"
+      //   }, 3000);
+      //   // return
+      // }
+      setTimeout(() => {
+        this.dialogVisible = false;
+        this.getData();
+        this.initData();
+      }, 2000);
       // alert("即将展示身份证号为：" + this.id_card + "的患者的病历信息")
-      this.getData();
-      this.initData();
-      this.dialogVisible = false;
     },
     getData() {
       this.patientInfo = {
@@ -723,7 +744,7 @@ export default {
         ]
       };
       let url = this.getServiceUrl("select", req.serviceName, "emr");
-      axios({
+      this.axios({
         method: "POST",
         headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") },
         url: url,
@@ -748,7 +769,7 @@ export default {
             ],
           };
           let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
-          axios({
+          this.axios({
             method: "POST",
             headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") },
             url: url2,
@@ -767,7 +788,32 @@ export default {
           }).catch(err => {
             console.log(err);
           });
+          // // 根据local_id 查找居住信息
+          // let req3 = {
+          //   hisVer: true,
+          //   "serviceName": "DI_MPI_ADDRESS_select",
+          //   "condition": [
+          //     {
+          //       "colName": "LOCAL_ID",
+          //       "ruleType": "eq",
+          //       "value": this.patientInfo.LOCAL_ID
+          //     }
+          //   ],
+          // };
+          // let url3 = this.getServiceUrl("select", req3.serviceName, "emr");
+          // this.axios({
+          //   method: "POST",
+          //   url: url3,
+          //   data: req3
+          // }).then(res3 => {
+          //   // console.log(res3)
+          //   let data = res.data.data[0]
+          //   this.patientInfo.detailAddress = data.DETAIL
+          // }).catch(err3 => {
+          //   console.log(err3)
+          // })
         }
+
       }).catch(err => {
         console.log(err);
       });
@@ -777,17 +823,20 @@ export default {
       window.location.reload();
     },
     ReadCommCardRet(para) {
-      alert("xxx")
       alert("收到读卡返回信息 " + para);
-
-      alert("")
     },
     BtnReadCard() {
+      this.dialogText = "读卡中..."
+      setTimeout(() => {
+        this.dialogText = "点击确定按钮读卡"
+      }, 3000);
       if (typeof jsObj == "undefined") {
-        alert("jsObj参数未初始化")
+        // alert("jsObj参数未初始化")
+        this.dialogText = "jsObj参数未初始化"
         return;
       }
       jsObj.ReadCommCard();
+      // this.dialogVisible = false;
     },
     BtnClickArgs() {
       if (typeof jsObj == "undefined") {
@@ -1115,6 +1164,7 @@ select {
 .read_card {
   min-height: 100px;
   text-align: center;
+  // line-height: 100px;
   font-weight: 600;
   font-size: 20px;
 }

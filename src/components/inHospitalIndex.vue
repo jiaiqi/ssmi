@@ -19,7 +19,7 @@
               <td>{{ item.ORGANIZATION_NAME }}</td>
               <td>{{ item.DE01_00_014_00 }}</td>
               <td>{{ item.AP06_00_369_00 }}</td>
-              <td v-if="item.DE06_00_092_00">{{ item.DE06_00_092_00.slice(0,4)+'年'+item.DE06_00_092_00.slice(4,6)+'月'+item.DE06_00_092_00.slice(6,8)+'日'}}</td>
+              <td v-if="item.DE06_00_092_00">{{ item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8)}}</td>
               <td v-if="!item.DE06_00_092_00"></td>
               <td>{{item.AP08_10_026_01}}</td>
               <td @click="changeDialogVisible(item)" class="handle">详情</td>
@@ -113,13 +113,15 @@
                         <li>治疗类别<span>{{detail.AP06_00_373_00}}</span>(1.中医 (1.1中医 1.2 民族医) 2.中西医 3.西医)</li>
                     </div>
                     <div class="first">
-                        <li>入院时间<span>{{detail.DE06_00_092_00}}</span></li>
+                        <li v-if="!detail.DE06_00_092_00"></li>
+                        <li v-if="detail.DE06_00_092_00">入院时间<span>{{detail.DE06_00_092_00.toString().slice(0,4)+"-"+detail.DE06_00_092_00.toString().slice(4,6)+"-"+detail.DE06_00_092_00.toString().slice(6,8)}}</span></li>
                         <li>入院科别<span>{{detail.AP08_10_026_01}}</span></li>
                         <li>病房<span>{{detail.AP08_10_026_02}}</span></li>
                         <li>转科科别<span>{{detail.AP08_10_026_06}}</span></li>
                     </div>
                     <div class="first">
-                        <li>出院时间<span>{{detail.DE06_00_016_00}}</span></li>
+                        <li v-if="!detail.DE06_00_016_00"></li>
+                        <li v-if="detail.DE06_00_016_00">出院时间<span>{{detail.DE06_00_016_00.toString().slice(0,4)+"-"+detail.DE06_00_016_00.toString().slice(4,6)+"-"+detail.DE06_00_016_00.toString().slice(6,8)}}</span></li>
                         <li>出院科别<span>{{detail.AP08_10_026_07}}</span></li>
                         <li>病房<span>{{detail.AP08_10_025_00}}</span></li>
                         <li>实际住院<span>{{detail.AP04_01_069_00}}</span>天</li>
@@ -143,9 +145,9 @@
                                 <p>{{item.AP05_01_185_00}}</p>
                             </li>
                             <li class="zd" >
-                                <p>主要诊断：<span></span></p>
-                                <p> </p>
-                                <p></p>
+                                <p>主要诊断：<span>-</span></p>
+                                <p>-</p>
+                                <p>-</p>
                             </li>
                         </ul>
                         <ul class="content_b_title_bot_ul" v-for="(item,index) in zdjl" :key="index">
@@ -195,26 +197,54 @@
                                 <p>质控日期<span>{{item.DE05_01_058_00}}</span></p>
                             </li>
                         </ul>
+                         <ul class="content_b_title_bot_ul" v-if="!zdjl.length>0">
+                            <li>
+                                <p>入院病情：- 1.有 2.临床未确定 3.情况不明 4.无</p>
+                            </li>
+                            <li>
+                                <p>损伤、中毒外部原因</p>
+                                <p> - </p>
+                                <p>疾病编码</p>
+                                <p>-</p>
+                            </li>
+                            <li>
+                                <p>病理诊断</p>
+                                <p>-</p>
+                                <p>疾病编码</p>
+                                <p>-</p>
+                            </li>
+                            <li>
+                                <p>病理号<span>-</span></p>
+                            </li>
+                            <li class="chose">
+                                <p>药物过敏<span>-</span> 1.无 2.有</p>
+                                <p>过敏药物：<span>-</span></p>
+                                <p>死亡患者尸检<span> - </span>1.是 2.否</p>
+                            </li>
+                            <li class="blood">
+                                <p>血 型<span> - </span>1.A 2.B 3.O 4.AB 5.不详 6.未查</p>
+                                <p>Rh<span> - </span>1.阴 2.阳 3.不详 4.未查</p>
+                            </li>
+                            <li class="people">
+                                <p>科主任<span>  -   </span></p>
+                                <p>副主任医师<span>  -   </span></p>
+                                <p>主治医师<span>  -   </span></p>
+                                <p>住院医师<span>  -   </span></p>
+                            </li>-
+                            <li class="people">
+                                <p>责任护士<span> -    </span></p>
+                                <p>进修医师<span> -    </span></p>
+                                <p>实习医师<span> -    </span></p>
+                                <p>编码员<span>  -   </span></p>
+                            </li>
+                            <li class="people">
+                                <p>病案质量<span>-   </span>1.甲 2.乙 3.丙</p>
+                                <p>质控医师<span> -    </span></p>
+                                <p>质控护士<span> -    </span></p>
+                                <p>质控日期<span> - </span></p>
+                            </li>
+                        </ul>
                         <ul class="content_page2_ul_one">
-                            <!-- <li class="content_page2-ul_li">
-                                <p class="content_page2_list1">手术及操作编码</p>
-                                <p class="content_page2_list2">手术及操作日期</p>
-                                <p class="content_page2_list2">手术级别</p>
-                                <p class="content_page2_list3">手术及操作名称</p>                   
-                                <ul class="content_page2_list4">
-                                    <li>
-                                        <p>手术.操作医师</p>
-                                    </li>
-                                    <li>
-                                        <p>术者</p>
-                                        <p>Ⅰ助</p>
-                                        <p>Ⅱ助</p>
-                                    </li>
-                                </ul>
-                                <p class="content_page2_list5">切口愈合等级</p>
-                                <p class="content_page2_list6">麻醉方式</p>
-                                <p class="content_page2_list7">麻醉医师</p>
-                            </li> -->
                             <li class="content_list_one">                           
                                 <!-- 空 -->
                                 <div class="operation_note" v-for="(item,index) in ssjl" :key="index">
@@ -273,24 +303,24 @@
                                     <div class="td">麻醉医师</div>
                                   </div>
                                   <div class="tr">
-                                    <div class="td"></div>
-                                    <div class="td"></div>
-                                    <div class="td"></div>
-                                    <div class="td"></div>
+                                    <div class="td"> - </div>
+                                    <div class="td"> - </div>
+                                    <div class="td"> - </div>
+                                    <div class="td"> - </div>
                                     <div  class="td" style="display:flex;">
-                                      <div class="td td_little"></div>
-                                      <div class="td td_little"></div>
-                                      <div class="td td_little"></div>
+                                      <div class="td td_little"> - </div>
+                                      <div class="td td_little"> - </div>
+                                      <div class="td td_little"> - </div>
                                     </div>
-                                    <div class="td"></div>
-                                    <div class="td"></div>
-                                    <div class="td"></div>
+                                    <div class="td"> - </div>
+                                    <div class="td"> - </div>
+                                    <div class="td"> - </div>
                                   </div>
                                 </div>                               
 
-                                <P>离院方式<span>     </span>1.医嘱离院 2.医嘱转院，拟接收医疗机构名称：<input type="text"></P>  
-                                <p>3.医嘱转社区卫生服务机构/乡镇卫生院，拟接收医疗机构名称：<input type="text">4.非医嘱离院 5.死亡 6.其他</p>
-                                <p>是否有出院31天内在住院计划 <span>   </span>  1.无 2.有    目的<input type="text"></p>
+                                <P>离院方式<span>  -  </span>1.医嘱离院 2.医嘱转院，拟接收医疗机构名称：<input type="text" value="-"></P>  
+                                <p>3.医嘱转社区卫生服务机构/乡镇卫生院，拟接收医疗机构名称：<input type="text" value="-">4.非医嘱离院 5.死亡 6.其他</p>
+                                <p>是否有出院31天内在住院计划 <span> - </span>  1.无 2.有    目的<input type="text" value="-"></p>
                                 <p id="content_list_one_pp">颅脑损伤患者昏迷时间：入院前<input type="text">天<input type="text">小时<input type="text">分钟  入院后<input type="text">天<input type="text">小时<input type="text">分钟</p>                            
                             </li>
                         </ul>

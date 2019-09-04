@@ -588,6 +588,13 @@ export default {
     init() {
 
     },
+    toLogin() {
+      sessionStorage.clear()
+      // window.location.reload()
+      this.$router.push({        name: "login", query: {
+          from: "secplat"
+        }      })
+    },
     callback() { },
     toManangerment() {
       let str = window.location.href

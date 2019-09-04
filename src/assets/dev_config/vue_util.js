@@ -1025,6 +1025,8 @@ function init_util() {
     };
     return service_api;
   }
+
+  // Vue.prototype.service
 }
 
 export default init_util;
