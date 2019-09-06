@@ -5,29 +5,32 @@
       <table>
         <tbody>
           <tr>
-            <td>序号</td>
+            <td>医院</td>
+            <td>住院号</td>
             <td>住院科室</td>
             <td>诊断类型</td>
             <td>诊断名称</td>
             <td>诊断日期</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>1</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.AP08_10_026_11}}</td>
             <td>{{ item.AP05_01_007_00 }}</td>
             <td>{{ item.DE05_01_025_00 }}</td>
-            <td
-              v-if="item.DE05_01_058_00"
-            >{{ item.DE05_01_058_00.slice(0,4)+'-'+item.DE05_01_058_00.slice(4,6)+'-'+item.DE05_01_058_00.slice(6,8)}}</td>
+            <td v-if="item.DE05_01_058_00">{{format_date(item.DE05_01_058_00)}}</td>
             <td v-else-if="!item.DE05_01_058_00"></td>
             <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -43,11 +46,11 @@
             <div class="dialog_hzjl">
               <div class="dialog_title">会诊记录</div>
               <div class="head">
-                <div>科室：{{ detail.AP08_10_026_11 }}</div>
+                <div>科室:{{ detail.AP08_10_026_11 }}</div>
                 <div>住院号:{{detail.DE01_00_014_00}}</div>
               </div>
               <div class="top">
-                会诊类型：
+                会诊类型:
                 <div class="check_box">
                   <input disabled type="checkbox" value id="jhz" />
                   <label for="jhz">急会诊</label>
@@ -73,41 +76,41 @@
                 <div class="content_title">
                   <div>姓名:{{detail.DE02_01_039_00}}</div>
                   <div>病室:消化内科病区</div>
-                  <div>床号：17</div>
-                  <div>申请时间： 2019-08-01 08：55</div>
+                  <div>床号:17</div>
+                  <div>申请时间: 2019-08-01 08:55</div>
                 </div>
                 <div class="content_main">
-                  <p>患者病情及诊疗经过、申请会诊的理由及目的：</p>
+                  <p>患者病情及诊疗经过、申请会诊的理由及目的:</p>
                   <p>患者因“反复胃胀胃痛30余年，加重10余天”入院。年前胃痛胃胀，当地医院诊断溃疡，给予药物治疗，症状好转。但易反复。</p>
                 </div>
                 <div class="content_title">
-                  <div class="content_title_item">被邀会诊科室：{{ detail.AP08_10_026_11 }}</div>
+                  <div class="content_title_item">被邀会诊科室:{{ detail.AP08_10_026_11 }}</div>
                   <div
                     class="content_title_item content_title_item_one"
-                  >被邀请医师：{{detail.AP02_01_039_29}}</div>
+                  >被邀请医师:{{detail.AP02_01_039_29}}</div>
                 </div>
                 <div class="content_title">
-                  <div class="content_title_item content_title_item_two">申请科室：消化内科</div>
-                  <div class="content_title_item">申请医师： 刘澜</div>
+                  <div class="content_title_item content_title_item_two">申请科室:消化内科</div>
+                  <div class="content_title_item">申请医师: 刘澜</div>
                 </div>
                 <div class="content_title">
-                  <div class="content_title_item">会诊意见：</div>
+                  <div class="content_title_item">会诊意见:</div>
                   <div
                     v-if="detail.DE05_01_058_00"
                     class="content_title_item content_title_item_three"
-                  >会诊时间：{{detail.DE05_01_058_00.slice(0,4)+'-'+detail.DE05_01_058_00.slice(4,6)+'-'+detail.DE05_01_058_00.slice(6,8)}}</div>
+                  >会诊时间:{{format_date(detail.DE05_01_058_00)}}</div>
                 </div>
                 <div class="content_main">
-                  <p>病史敬阅：</p>
-                  <p>专科检查：</p>
-                  <p>治疗意见：</p>
+                  <p>病史敬阅:</p>
+                  <p>专科检查:</p>
+                  <p>治疗意见:</p>
                   <p>治疗原发病，暂无特殊处理</p>
                 </div>
                 <div class="content_title">
-                  <div class="content_title_item content_title_item_rom">会诊科室：</div>
-                  <div class="content_title_item">会诊医师：</div>
+                  <div class="content_title_item content_title_item_rom">会诊科室:</div>
+                  <div class="content_title_item">会诊医师:</div>
                 </div>
-                <div class="content_title content_title_foot">外院会诊医师所在医疗机构名称：</div>
+                <div class="content_title content_title_foot">外院会诊医师所在医疗机构名称:</div>
               </div>
             </div>
           </el-dialog>
@@ -191,7 +194,7 @@ table td {
 
 td.handle {
   cursor: pointer;
-  color: blue;
+  color: #409eff;
 }
 
 .text {

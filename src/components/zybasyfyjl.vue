@@ -5,22 +5,27 @@
       <table>
         <tbody>
           <tr>
+            <td>住院号</td>
+            <td>医院</td>
             <td>姓名</td>
             <td>住院科室</td>
             <td>支付日期</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.DE01_00_014_00}}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.AP08_10_026_11}}</td>
-            <td
-              v-if="item.AP07_00_027_00"
-            >{{item.AP07_00_027_00.slice(0,4)+'-'+item.AP07_00_027_00.slice(4,6)+'-'+item.AP07_00_027_00.slice(6,8)+' '+item.AP07_00_027_00.slice(9,11)+':'+item.AP07_00_027_00.slice(11,13)+':'+item.AP07_00_027_00.slice(13,15)}}</td>
+            <td v-if="item.AP07_00_027_00">{{format_date(item.AP07_00_027_00,1)}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -38,26 +43,26 @@
                   <ul>
                     <li>
                       <p>
-                        姓名：
+                        姓名:
                         <span>{{detail.DE02_01_039_00}}</span>
                       </p>
                       <p>
-                        性别：
+                        性别:
                         <span>{{detail.AP02_01_102_01}}</span>
                       </p>
                       <p>
-                        年龄：
+                        年龄:
                         <span>{{detail.DE02_01_032_00}}</span>岁
                       </p>
                     </li>
                     <li>
                       <p>
-                        住院号：
+                        住院号:
                         <span>{{detail.DE01_00_014_00}}</span>
                       </p>
 
                       <p>
-                        病案号：
+                        病案号:
                         <span>{{detail.DE01_00_004_00}}</span>
                       </p>
                     </li>
@@ -159,7 +164,7 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }

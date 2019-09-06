@@ -5,20 +5,28 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>检验项目</td>
             <td>申请单号</td>
             <td>报告单号</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{item.DE04_30_020_00}}</td>
             <td>{{item.AP01_00_024_00}}</td>
             <td>{{item.AP04_50_057_00}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <tr v-for="(item, index) in tabData" :key="index">
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

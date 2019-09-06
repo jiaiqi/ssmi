@@ -4,11 +4,11 @@
     <div class="header">
       <div class="header_left">
         <p>
-          当前用户数：
+          当前用户数:
           <span>2536</span>
         </p>
         <p>
-          注册用户数：
+          注册用户数:
           <span>12368</span>
         </p>
       </div>
@@ -30,11 +30,11 @@
         <div class="main_top_p">
           <p>API网关</p>
           <p>
-            运行时长：
+            运行时长:
             <span>3.25h</span>
           </p>
           <p>
-            请求次数：
+            请求次数:
             <span>325</span>
           </p>
         </div>
@@ -45,22 +45,22 @@
             <li>
               <p>用户中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>3.28h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>20</span>
               </p>
             </li>
             <li>
               <p>鉴权中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>4.28h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>25</span>
               </p>
             </li>
@@ -68,11 +68,11 @@
             <li>
               <p>注册中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>6.28h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>29</span>
               </p>
             </li>
@@ -80,11 +80,11 @@
             <li>
               <p>配置中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>7.28h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>2</span>
               </p>
             </li>
@@ -111,22 +111,22 @@
               <li>
                 <p>任务管理</p>
                 <p>
-                  运行时长：
+                  运行时长:
                   <span>2.28h</span>
                 </p>
                 <p>
-                  实例个数：
+                  实例个数:
                   <span>25</span>
                 </p>
               </li>
               <li>
                 <p>事件管理</p>
                 <p>
-                  运行时长：
+                  运行时长:
                   <span>4.28h</span>
                 </p>
                 <p>
-                  实例个数：
+                  实例个数:
                   <span>24</span>
                 </p>
               </li>
@@ -134,11 +134,11 @@
               <li>
                 <p>日志管理</p>
                 <p>
-                  运行时长：
+                  运行时长:
                   <span>3.68h</span>
                 </p>
                 <p>
-                  实例个数：
+                  实例个数:
                   <span>15</span>
                 </p>
               </li>
@@ -146,11 +146,11 @@
               <li>
                 <p>缓存管理</p>
                 <p>
-                  运行时长：
+                  运行时长:
                   <span>3.8h</span>
                 </p>
                 <p>
-                  实例个数：
+                  实例个数:
                   <span>5</span>
                 </p>
               </li>
@@ -162,22 +162,22 @@
             <li>
               <p>监控中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>2.28h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>25</span>
               </p>
             </li>
             <li>
               <p>开发中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>4.28h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>24</span>
               </p>
             </li>
@@ -185,11 +185,11 @@
             <li>
               <p>测试中心</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>3.68h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>15</span>
               </p>
             </li>
@@ -197,11 +197,11 @@
             <li>
               <p>上线管理</p>
               <p>
-                运行时长：
+                运行时长:
                 <span>3.8h</span>
               </p>
               <p>
-                实例个数：
+                实例个数:
                 <span>5</span>
               </p>
             </li>
@@ -216,11 +216,11 @@
       </div>
       <div class="content_cen">
         <p>
-          服务器数量：
+          服务器数量:
           <span>12</span>
         </p>
         <p>
-          平均资源占用率（CPU/内存/硬盘）：
+          平均资源占用率（CPU/内存/硬盘）:
           <span>16%</span> |
           <span>23%</span> |
           <span>26%</span>
@@ -230,31 +230,31 @@
         <ul>
           <li v-for="(item,index) in SerEsources" :key="index">
             <p>
-              服务器类型：
+              服务器类型:
               <span>{{item.type}}</span>
             </p>
             <p>
-              服务器名称：
+              服务器名称:
               <span>{{item.addre}}</span>
             </p>
             <p>
-              服务器CPU占用率：
+              服务器CPU占用率:
               <span>{{item.cpu}}</span>
             </p>
             <p>
-              服务器内存占用率：
+              服务器内存占用率:
               <span>{{ item.internal }}</span>
             </p>
             <p>
-              服务器硬盘占用率：
+              服务器硬盘占用率:
               <span>{{item.disk}}</span>
             </p>
             <p>
-              服务实例个数：
+              服务实例个数:
               <span>{{item.serverNum}}</span>
             </p>
             <p>
-              数据库个数：
+              数据库个数:
               <span>{{item.dataBaseNum}}</span>
             </p>
           </li>
@@ -272,7 +272,7 @@ export default {
     return {
       date: null,
       microSer: [
-        { staLabel: '实例状态：', begLabel: '请求：', name: '一卡通就诊', status: '6/5', beg: '23586' },
+        { staLabel: '实例状态:', begLabel: '请求:', name: '一卡通就诊', status: '6/5', beg: '23586' },
         { staLabel: '', begLabel: '', name: '电子病历', status: '', beg: '' },
         { staLabel: '', begLabel: '', name: '微服务1', status: '', beg: '' },
         { staLabel: '', begLabel: '', name: '微服务2', status: '', beg: '' },

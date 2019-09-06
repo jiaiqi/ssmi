@@ -5,22 +5,29 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>姓名</td>
             <td>缴费科室</td>
             <td>缴费项目</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.DE02_01_039_00}}</td>
             <td>{{ item.AP08_10_055_02 }}</td>
             <td>{{ item.AP07_00_018_00 }}</td>
             <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -40,53 +47,53 @@
                   <ul>
                     <li>
                       <p>
-                        住院号：
+                        住院号:
                         <span>{{ detail.DE01_00_014_00 }}</span>
                       </p>
                       <p>
-                        姓名：
+                        姓名:
                         <span>{{detail.DE02_01_039_00}}</span>
                       </p>
                       <p>
-                        性别：
+                        性别:
                         <span>{{detail.AP02_01_102_01}}</span>
                       </p>
                       <p>
-                        年龄：
+                        年龄:
                         <span>{{detail.DE02_01_032_00}}</span>岁
                       </p>
                     </li>
                     <li>
                       <p>
-                        家庭地址：
+                        家庭地址:
                         <span>延安市安塞区化子坪镇洞姚村</span>
                       </p>
                       <p>
-                        家庭电话：
+                        家庭电话:
                         <span>123345689</span>
                       </p>
                     </li>
                     <li>
                       <p>
-                        联系人姓名：
+                        联系人姓名:
                         <span>郭四毛</span>
                       </p>
                       <p>
-                        联系人关系：
+                        联系人关系:
                         <span>父母</span>
                       </p>
                       <p>
-                        联系人电话：
+                        联系人电话:
                         <span>1235464646</span>
                       </p>
                     </li>
                     <li>
                       <p>
-                        入院日期：
+                        入院日期:
                         <span>2019-07-12</span>
                       </p>
                       <p>
-                        出院日期：
+                        出院日期:
                         <span>2019-07-22</span>
                       </p>
                     </li>
@@ -108,9 +115,7 @@
                         <td>金额</td>
                       </tr>
                       <tr>
-                        <td
-                          v-if="detail.AP07_00_027_00"
-                        >{{detail.AP07_00_027_00.slice(0,4)+'-'+detail.AP07_00_027_00.slice(4,6)+'-'+detail.AP07_00_027_00.slice(6,8)}}</td>
+                        <td v-if="detail.AP07_00_027_00">{{format_date(detail.AP07_00_027_00)}}</td>
                         <td>{{detail.AP08_10_055_02}}</td>
                         <td>{{detail.AP07_00_018_00}}</td>
                         <td>{{detail.AP07_00_021_00}}</td>

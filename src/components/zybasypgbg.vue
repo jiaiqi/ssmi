@@ -5,24 +5,29 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>姓名</td>
             <td>性别</td>
             <td>年龄</td>
             <td>入院日期</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.AP02_01_102_01}}</td>
             <td>{{item.DE02_01_032_00}}</td>
-            <td
-              v-if="item.DE06_00_092_00"
-            >{{item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8)}}</td>
+            <td v-if="item.DE06_00_092_00">{{format_date(item.DE06_00_092_00)}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -37,44 +42,44 @@
               <div class="dialog_title">住院病案首页评估</div>
               <div class="dialog_head">
                 <div class="dialog_head_items">
-                  <div class="dialog_head_item">入院科室：{{detail.AP08_10_026_01}}</div>
-                  <div class="dialog_head_item">住院号：{{detail.DE01_00_014_00}}</div>
-                  <div class="dialog_head_item">姓名：{{detail.DE02_01_039_00}}</div>
-                  <div class="dialog_head_item">年龄：{{detail.DE02_01_032_00}}岁</div>
-                  <div class="dialog_head_item">病案号：{{detail.DE01_00_004_00}}</div>
+                  <div class="dialog_head_item">入院科室:{{detail.AP08_10_026_01}}</div>
+                  <div class="dialog_head_item">住院号:{{detail.DE01_00_014_00}}</div>
+                  <div class="dialog_head_item">姓名:{{detail.DE02_01_039_00}}</div>
+                  <div class="dialog_head_item">年龄:{{detail.DE02_01_032_00}}岁</div>
+                  <div class="dialog_head_item">病案号:{{detail.DE01_00_004_00}}</div>
                 </div>
                 <div class="dialog_head_items">
-                  <div class="dialog_head_item">职业：{{detail.AP02_01_125_02}}</div>
-                  <div class="dialog_head_item">民族：{{detail.AP02_01_025_03}}</div>
-                  <div class="dialog_head_item">籍贯：{{detail.AP02_01_099_00}}</div>
+                  <div class="dialog_head_item">职业:{{detail.AP02_01_125_02}}</div>
+                  <div class="dialog_head_item">民族:{{detail.AP02_01_025_03}}</div>
+                  <div class="dialog_head_item">籍贯:{{detail.AP02_01_099_00}}</div>
                 </div>
                 <div class="dialog_head_items">
                   <div
                     v-if="detail.DE06_00_092_00"
                     class="dialog_head_item"
-                  >入院日期：{{detail.DE06_00_092_00.slice(0,4)+'-'+detail.DE06_00_092_00.slice(4,6)+'-'+detail.DE06_00_092_00.slice(6,8)}}</div>
-                  <div class="dialog_head_item">联系电话：{{detail.DE02_01_010_00}}</div>
+                  >入院日期:{{format_date(detail.DE06_00_092_00)}}</div>
+                  <div class="dialog_head_item">联系电话:{{detail.DE02_01_010_00}}</div>
                 </div>
                 <div class="dialog_head_items">
-                  <div class="dialog_head_item">现住址：{{detail.AP02_01_009_00}}</div>
+                  <div class="dialog_head_item">现住址:{{detail.AP02_01_009_00}}</div>
                 </div>
                 <div class="dialog_head_items">
-                  <div class="dialog_head_item">入院途径：{{detail.AP06_00_369_00}}</div>
+                  <div class="dialog_head_item">入院途径:{{detail.AP06_00_369_00}}</div>
                 </div>
               </div>
               <div class="dialog_content">
                 <div class="content">
-                  <div class="content_item">1.入院体重：{{detail.AP04_10_188_00}}</div>
-                  <div class="content_item">2.ABO血型：{{detail.AP04_50_022_00}}</div>
-                  <div class="content_item">3.RH血型：{{detail.AP04_50_023_00}}</div>
-                  <div class="content_item">4.住院患者过敏源名称：{{detail.AP05_01_174_00}}</div>
-                  <div class="content_item">5.住院患者过敏源名称：{{detail.AP05_01_175_00}}</div>
-                  <div class="content_item">6.住院患者诊断符合情况：{{detail.AP05_10_006_00}}</div>
-                  <div class="content_item">7.住院患者出院方式：{{detail.AP06_00_375_00}}</div>
-                  <div class="content_item">8.治疗类别：{{detail.AP06_00_373_00}}</div>
-                  <div class="content_item">9.医疗费用支付方式：{{detail.AP07_00_011_01}}</div>
-                  <div class="content_item">10.住院机构名称：{{detail.AP08_10_013_06}}</div>
-                  <div class="content_item">11.住院患者住院次数：{{detail.DE02_10_090_00}}</div>
+                  <div class="content_item">1.入院体重:{{detail.AP04_10_188_00}}</div>
+                  <div class="content_item">2.ABO血型:{{detail.AP04_50_022_00}}</div>
+                  <div class="content_item">3.RH血型:{{detail.AP04_50_023_00}}</div>
+                  <div class="content_item">4.住院患者过敏源名称:{{detail.AP05_01_174_00}}</div>
+                  <div class="content_item">5.住院患者过敏源名称:{{detail.AP05_01_175_00}}</div>
+                  <div class="content_item">6.住院患者诊断符合情况:{{detail.AP05_10_006_00}}</div>
+                  <div class="content_item">7.住院患者出院方式:{{detail.AP06_00_375_00}}</div>
+                  <div class="content_item">8.治疗类别:{{detail.AP06_00_373_00}}</div>
+                  <div class="content_item">9.医疗费用支付方式:{{detail.AP07_00_011_01}}</div>
+                  <div class="content_item">10.住院机构名称:{{detail.AP08_10_013_06}}</div>
+                  <div class="content_item">11.住院患者住院次数:{{detail.DE02_10_090_00}}</div>
                 </div>
               </div>
             </div>
@@ -164,7 +169,7 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }

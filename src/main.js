@@ -24,12 +24,44 @@ Vue.prototype.axios = axios
 Vue.prototype.http = axios // 挂载axios到vue.proto对象上原型属性
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  config.headers["bx_auth_ticket"] = sessionStorage.getItem("bx_auth_ticket");
+  let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
+  if(bx_auth_ticket){
+    config.headers["bx_auth_ticket"] = bx_auth_ticket;
+  }
   return config;
 }, function (error) {
   // 对请求错误做些什么
   return Promise.reject(error);
 });
+axios.interceptors.response.use(response=>{
+  if (response.data.state == "FAILURE") {
+    if (response.data.resultCode == '0011') {
+      if (sessionStorage.getItem("need_login_flag") != "need_login") {
+        sessionStorage.setItem("need_login_flag", "need_login");
+        sessionStorage.setItem("isLogin","false")
+      }
+    } else if (response.data.resultCode == '0000') {
+      if (sessionStorage.getItem("need_login_flag") != "need_login") {
+        alert(response.data.resultMessage);
+      }
+    } else {
+      if (sessionStorage.getItem("need_login_flag") != "need_login") {
+        alert(response.data.resultMessage);
+      }
+    }
+  }else if(response.data.state == "SUCCESS"){
+    sessionStorage.setItem("isLogin","true")
+    if(response.data.response){
+      let resp = response.data.response[0]
+      let bx_auth_ticket = response.data.response[0].response.bx_auth_ticket
+      sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
+      let current_login_user = resp.response.login_user_info;
+      sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+      top.user = current_login_user; 
+    }
+  }
+  return response; 
+})
 // Vue.http.options.xhr = { withCredentials: true }// vueresource请求跨域
 // Vue.http.interceptors.push((request, next) => {
 //   request.credentials = true

@@ -5,27 +5,34 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>手术申请单号</td>
             <td>手术时间</td>
             <td>手术级别</td>
             <td>愈合等级</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.AP01_00_024_00}}</td>
-            <td
-              v-if="item.DE06_00_095_00"
-            >{{ item.DE06_00_095_00.slice(0,4)+'-'+item.DE06_00_095_00.slice(4,6)+'-'+item.DE06_00_095_00.slice(6,8)}}</td>
+            <td v-if="item.DE06_00_095_00">{{format_date(item.DE06_00_095_00)}}</td>
             <td v-else-if="!item.DE06_00_095_00"></td>
             <td>{{ item.AP06_00_367_00 }}</td>
             <td>{{ item.AP05_01_054_00 }}</td>
             <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -41,15 +48,15 @@
               <div class="title">住院诊疗手术记录</div>
               <div class="detail_title_header">
                 <div class="detail_title_headerone">
-                  <span>科别：</span>
-                  <span>姓名：{{detail.DE02_01_039_00}}</span>
-                  <span>性别：{{detail.AP02_01_102_01}}</span>
-                  <span>年龄：{{detail.DE02_01_032_00}}</span>
+                  <span>科别:</span>
+                  <span>姓名:{{detail.DE02_01_039_00}}</span>
+                  <span>性别:{{detail.AP02_01_102_01}}</span>
+                  <span>年龄:{{detail.DE02_01_032_00}}</span>
                 </div>
                 <div class="detail_title_headertwo">
-                  <!-- <span class="span11">床号：</span> -->
-                  <!-- <span class="span22">门诊号：</span> -->
-                  <!-- <span class="span33">住院号：</span> -->
+                  <!-- <span class="span11">床号:</span> -->
+                  <!-- <span class="span22">门诊号:</span> -->
+                  <!-- <span class="span33">住院号:</span> -->
                 </div>
               </div>
               <p>手术前诊断:</p>
@@ -66,37 +73,37 @@
               </div>
               <p>麻醉者:</p>
               <p>体位:</p>
-              <p>手术经过：{{detail.AP06_00_302_00}}</p>
+              <p>手术经过:{{detail.AP06_00_302_00}}</p>
             </div>
             <!-- <div class="tab_detail">
               <div class="detail_title">
-                <span>住院病区：{{ detail.AP08_10_002_00 }}</span>
-                <span>住院科室：{{ detail.AP08_10_026_11 }}</span>
-                <span>住院床号：{{ detail.AP08_10_026_11 }}</span>
+                <span>住院病区:{{ detail.AP08_10_002_00 }}</span>
+                <span>住院科室:{{ detail.AP08_10_026_11 }}</span>
+                <span>住院床号:{{ detail.AP08_10_026_11 }}</span>
                 <span
                   v-if="detail.AP06_00_189_00"
                 >手术操作时间: {{ detail.AP06_00_189_00.slice(0,4)+'-'+detail.AP06_00_189_00.slice(4,6)+'-'+detail.AP06_00_189_00.slice(6,8) }}</span>
-                <span>病案号：{{ detail.AP08_10_001_00 }}</span>
+                <span>病案号:{{ detail.AP08_10_001_00 }}</span>
               </div>
               <div class="detail">
                 <div class="detail_left">
                   <p
                     v-if="detail.AP06_00_393_00"
-                  >手术开始时间：{{ detail.AP06_00_393_00.slice(0,4)+'-'+detail.AP06_00_393_00.slice(4,6)+'-'+detail.AP06_00_393_00.slice(6,8) }}</p>
+                  >手术开始时间:{{ detail.AP06_00_393_00.slice(0,4)+'-'+detail.AP06_00_393_00.slice(4,6)+'-'+detail.AP06_00_393_00.slice(6,8) }}</p>
                   <p
                     v-if="detail.AP06_00_394_00"
-                  >手术结束时间：{{ detail.AP06_00_394_00.slice(0,4)+'-'+detail.AP06_00_394_00.slice(4,6)+'-'+detail.AP06_00_394_00.slice(6,8) }}</p>
-                  <p>麻醉执行科室：{{ detail.AP08_10_054_02 }}</p>
-                  <p>麻醉医师：{{ detail.AP02_01_039_76 }}</p>
-                  <p>助手1：{{ detail.AP02_01_039_75 }}</p>
-                  <p>助手2：{{ detail.AP02_01_039_78 }}</p>
+                  >手术结束时间:{{ detail.AP06_00_394_00.slice(0,4)+'-'+detail.AP06_00_394_00.slice(4,6)+'-'+detail.AP06_00_394_00.slice(6,8) }}</p>
+                  <p>麻醉执行科室:{{ detail.AP08_10_054_02 }}</p>
+                  <p>麻醉医师:{{ detail.AP02_01_039_76 }}</p>
+                  <p>助手1:{{ detail.AP02_01_039_75 }}</p>
+                  <p>助手2:{{ detail.AP02_01_039_78 }}</p>
                 </div>
                 <div class="detail_rig">
-                  <p>手术/操作-名称：{{ detail.DE06_00_094_00 }}</p>
-                  <p>手术操作部位：{{ detail.AP06_00_006_01 }}</p>
-                  <p>麻醉-方法：{{ detail.DE06_00_074_00 }}</p>
-                  <p>手术后情况：{{ detail.AP05_10_071_00 }}</p>
-                  <p>手术经过：{{ detail.AP06_00_302_00 }}</p>
+                  <p>手术/操作-名称:{{ detail.DE06_00_094_00 }}</p>
+                  <p>手术操作部位:{{ detail.AP06_00_006_01 }}</p>
+                  <p>麻醉-方法:{{ detail.DE06_00_074_00 }}</p>
+                  <p>手术后情况:{{ detail.AP05_10_071_00 }}</p>
+                  <p>手术经过:{{ detail.AP06_00_302_00 }}</p>
                 </div>
               </div>
             </div>-->
@@ -265,7 +272,7 @@ table td {
 
 td.handle {
   cursor: pointer;
-  color: blue;
+  color: #409eff;
 }
 
 .text {

@@ -5,26 +5,35 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>姓名</td>
             <td>职业类别</td>
             <td>籍贯</td>
             <td>住院入住科室</td>
             <td>住院症状</td>
             <td>住院医师</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.AP02_01_103_00 }}</td>
             <td>{{ item.AP02_01_099_00 }}</td>
             <td>{{ item.AP08_10_026_01 }}</td>
             <td>{{ item.AP04_01_008_00 }}</td>
             <td>{{ item.AP02_01_039_50 }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -43,7 +52,7 @@
       <div class="table_content">
         <div class="main_title"></div>
         <div class="header">
-          <div class="header_item">住院科室：{{detail.AP08_10_026_01}}</div>
+          <div class="header_item">住院科室:{{detail.AP08_10_026_01}}</div>
           <div class="header_item">
             <div class="header_item_top">入院记录</div>
             <div class="header_item_bottom"></div>
@@ -86,21 +95,15 @@
             <tr>
               <td colspan="2">住院日期:</td>
               <td colspan="4" v-if="!detail.DE06_00_092_00"></td>
-              <td
-                colspan="4"
-                v-if="detail.DE06_00_092_00"
-              >{{detail.DE06_00_092_00.slice(0,4)+'-'+detail.DE06_00_092_00.slice(4,6)+'-'+detail.DE06_00_092_00.slice(6,8)}}</td>
+              <td colspan="4" v-if="detail.DE06_00_092_00">{{format_date(detail.DE06_00_092_00)}}</td>
               <td>出院:</td>
-              <td
-                colspan="2"
-                v-if="detail.AP04_01_011_00"
-              >{{detail.AP04_01_011_00.slice(0,4)+'-'+detail.AP04_01_011_00.slice(4,6)+'-'+detail.AP04_01_011_00.slice(6,8)}}</td>
+              <td colspan="2" v-if="detail.AP04_01_011_00">{{format_date(detail.AP04_01_011_00)}}</td>
               <td colspan="2" v-if="!detail.AP04_01_011_00"></td>
               <td colspan="2">住院天数 天</td>
             </tr>
           </table>
           <div class="content">
-            <div class="content_top">病史叙述者：{{detail.AP02_01_039_15}}</div>
+            <div class="content_top">病史叙述者:{{detail.AP02_01_039_15}}</div>
             <div class="nth_record">
               <div class="nth_record_title">第 次入院记录</div>
               <div class="nth_record_content">
@@ -179,6 +182,10 @@ export default {
         font-size: 12px;
         border: 1px solid rgba(0, 0, 0, 0.5);
         color: #7f7f7f;
+        &.handle {
+          cursor: pointer;
+          color: #409eff;
+        }
       }
     }
   }

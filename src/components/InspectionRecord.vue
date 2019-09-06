@@ -3,32 +3,36 @@
     <div class="tab_content">
       <div class="tab_content_title">住院检验记录</div>
       <div class="tab_content_main">
-        <table>
+        <!-- <el-table :data="tabsData" border style="width: 100%">
+          <el-table-column prop="ORGANIZATION_NAME" label="医院"></el-table-column>
+          <el-table-column prop="DE01_00_014_00" label="住院号" width="180"></el-table-column>
+          <el-table-column prop="AP06_00_048_02" label="检验时间"></el-table-column>
+          <el-table-column prop="AP04_50_057_00" label="检验报告单号"></el-table-column>
+          <el-table-column prop="DATAGENERATE_DATE" label="数据产生时间"></el-table-column>
+          <el-table-column prop="handle" label="操作"></el-table-column>
+        </el-table>-->
+        <table v-if="tabsData&&tabsData.length>0">
           <tbody>
             <tr>
-              <td>序号</td>
+              <td>医院</td>
+              <td>住院号</td>
               <td>检验时间</td>
               <td>检验报告单号</td>
+              <td>数据产生时间</td>
               <td>操作</td>
             </tr>
             <tr v-for="(item, index) in tabsData" :key="index">
-              <td>{{index}}</td>
-              <td v-if="!item.AP09_00_074_00"></td>
-              <td
-                v-if="item.AP09_00_074_00"
-              >{{item.AP09_00_074_00.toString().slice(0,4)+"-"+item.AP09_00_074_00.toString().slice(4,6)+"-"+item.AP09_00_074_00.toString().slice(6,8)}}</td>
+              <td>{{item.ORGANIZATION_NAME}}</td>
+              <td>{{item.DE01_00_014_00}}</td>
+              <td v-if="!item.AP06_00_048_02"></td>
+              <td v-if="item.AP06_00_048_02">{{format_date(item.AP06_00_048_02)}}</td>
               <td>{{item.AP04_50_057_00}}</td>
+              <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
               <td class="handle" @click="changeDialogVisible(item)">详情</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <!-- <td class="handle" @click="changeDialogVisible()">详情</td> -->
             </tr>
           </tbody>
         </table>
+        <div class="nodata" v-else>暂无数据。。。</div>
       </div>
     </div>
     <el-dialog :visible.sync="dialogVisible" width="1000px">
@@ -40,19 +44,19 @@
             <span>年龄:{{detail.DE02_01_032_00}}</span>
           </div>
           <div class="detail_title_block">
-            <span>病人ID：</span>
-            <span>科室：{{detail.AP08_10_059_02}}</span>
-            <span>床号：{{detail.AP08_10_001_00}}</span>
+            <span>病人ID:</span>
+            <span>科室:{{detail.AP08_10_059_02}}</span>
+            <span>床号:{{detail.AP08_10_001_00}}</span>
           </div>
           <div class="detail_title_block">
-            <span>标本种类：{{detail.AP04_50_054_00}}</span>
-            <span>核收日期：{{detail.AP09_00_074_00}}</span>
-            <span>诊断：{{detail.DE05_01_025_00}}</span>
+            <span>标本种类:{{detail.AP04_50_054_00}}</span>
+            <span>核收日期:{{format_date(detail.AP09_00_074_00)}}</span>
+            <span>诊断:{{detail.DE05_01_025_00}}</span>
           </div>
           <div class="detail_title_block">
-            <span>样本号：</span>
-            <span>送检医生：{{detail.AP02_01_122_00}}</span>
-            <span>备注：</span>
+            <span>样本号:</span>
+            <span>送检医生:{{detail.AP02_01_122_00}}</span>
+            <span>备注:</span>
           </div>
         </div>
         <div class="detail_content">
@@ -61,7 +65,6 @@
               <span>序号</span>
               <span>项目名称</span>
               <span>结果</span>
-              <span>单位</span>
               <span>参考范围</span>
             </div>
             <!-- <div class="title_right">
@@ -78,7 +81,6 @@
                 <div class>{{item.AP01_00_102_00}}</div>
                 <div class>{{item.DE04_30_020_00}}</div>
                 <div class>{{item.AP04_30_003_00}}</div>
-                <div class></div>
                 <div class>{{item.AP05_10_042_00}}</div>
               </div>
             </div>
@@ -184,11 +186,18 @@ export default {
         color: #7f7f7f;
         &.handle {
           cursor: pointer;
-          color: blue;
+          color: #409eff;
         }
       }
     }
   }
+}
+.nodata {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* 详情 */
 .tab_detail {
@@ -215,10 +224,23 @@ export default {
       flex: 1;
       border-right: 1px #333 solid;
       border-left: 1px #333 solid;
-      border-top: 1px #333 solid;
+      // border-top: 1px #333 solid;
       border-bottom: 1px #333 solid;
       display: flex;
       justify-content: space-around;
+      span {
+        flex: 0.8;
+        text-align: left;
+        text-indent: 20px;
+        &:first-child {
+          text-align: left;
+          flex: 0.3;
+        }
+        &:nth-child(2) {
+          text-align: left;
+          flex: 1.5;
+        }
+      }
     }
     .title_right {
       border-top: 1px #333 solid;
@@ -241,10 +263,21 @@ export default {
         display: flex;
         border-bottom: 1px solid #333;
         div {
-          flex: 1;
-          text-align: center;
+          flex: 0.8;
+          text-align: left;
+          text-indent: 20px;
           min-height: 35px;
           line-height: 35px;
+          &:first-child {
+            text-indent: 30px;
+            text-align: left;
+            flex: 0.3;
+          }
+          &:nth-child(2) {
+            text-indent: 20px;
+            text-align: left;
+            flex: 1.5;
+          }
         }
       }
     }

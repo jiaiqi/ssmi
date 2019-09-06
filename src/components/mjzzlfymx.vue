@@ -5,20 +5,29 @@
       <table>
         <tbody>
           <tr>
+            <td>就诊流水号</td>
+            <td>医院</td>
             <td>姓名</td>
             <td>缴费科室</td>
             <td>费用支付方式</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item,index) in tabsData" :key="index">
+            <td>{{item.DE01_00_010_00}}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.DE08_10_026_00}}</td>
             <td>{{item.AP07_00_011_01}}</td>
             <td>{{item.AP08_10_013_04}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -34,27 +43,27 @@
                 </div>
                 <div class="header_cen">
                   <div>
-                    <span>姓名：{{detail.DE02_01_039_00}}</span>
-                    <span>性别：{{detail.AP02_01_102_01}}</span>
-                    <span>年龄：{{detail.DE02_01_032_00}}岁</span>
+                    <span>姓名:{{detail.DE02_01_039_00}}</span>
+                    <span>性别:{{detail.AP02_01_102_01}}</span>
+                    <span>年龄:{{detail.DE02_01_032_00}}岁</span>
                   </div>
                   <div>
-                    <span>就诊卡号：</span>
-                    <span>职业：</span>
-                    <span>工作单位：</span>
+                    <span>就诊卡号:</span>
+                    <span>职业:</span>
+                    <span>工作单位:</span>
                   </div>
                   <div>
                     <span>家庭地址</span>
-                    <span>家庭电话：</span>
+                    <span>家庭电话:</span>
                   </div>
                   <div>
-                    <span>联系人姓名：</span>
-                    <span>联系人关系：</span>
-                    <span>联系人电话：</span>
+                    <span>联系人姓名:</span>
+                    <span>联系人关系:</span>
+                    <span>联系人电话:</span>
                   </div>
                   <div>
-                    <span>入院日期：</span>
-                    <span>出院日期：</span>
+                    <span>入院日期:</span>
+                    <span>出院日期:</span>
                   </div>
                 </div>
               </div>
@@ -74,9 +83,7 @@
                       </tr>
                       <tr v-for="(item,index) in data" :key="index">
                         <td v-if="!item.AP07_00_026_00"></td>
-                        <td
-                          v-if="item.AP07_00_026_00"
-                        >{{item.AP07_00_026_00.slice(0,4)+'-'+item.AP07_00_026_00.slice(4,6)+'-'+item.AP07_00_026_00.slice(6,8)}}</td>
+                        <td v-if="item.AP07_00_026_00">{{format_date(item.AP07_00_026_00)}}</td>
                         <td>{{item.AP07_00_018_00}}</td>
                         <td>{{item.AP07_00_022_00}}</td>
                         <td>{{item.AP07_00_022_00}}</td>
@@ -172,7 +179,7 @@ export default {
       color: #7f7f7f;
       &.handle {
         cursor: pointer;
-        color: blue;
+        color: #409eff;
       }
     }
   }

@@ -13,20 +13,35 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/dzbl',
-      name: 'dzbl',
-      component: dzbl
+      path: '/',
+      redirect:'/login'
     },
     {
-      path: '/',
-      name: 'login',
-      component: login
+      path: '/dzbl',
+      name: 'dzbl',
+      component: dzbl,
+      beforeEnter: (to, from, next) => {
+        // ...
+        let isLogin = sessionStorage.getItem("isLogin")
+        if(isLogin){
+          next()
+        }else{
+          next({
+            path: '/login',
+            query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+          })
+        }
+      }
     },
-    // {
-    //   path: '/medicalrecord',
-    //   name: 'medicalrecord',
-    //   component: medicalrecord
-    // },
+    {
+      path: '/login',
+      name: 'login',
+      component: login,
+      beforeEnter:(to, from, next) => {
+        sessionStorage.clear()
+        next()
+      }
+    },
     {
       path: '/onecard',
       name: 'onecard',

@@ -5,22 +5,31 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>姓名</td>
             <td>年龄</td>
             <td>诊断疾病名称</td>
             <td>科室</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.DE02_01_032_00 }}</td>
             <td>{{ item.AP05_01_025_01 }}</td>
             <td>{{ item.AP08_10_026_11 }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -45,7 +54,7 @@
                 <div class="content_item_detail">疾病状态为: {{detail.AP05_01_114_00}}</div>
                 <div class="content_item_detail">疾病诊断名称: {{detail.AP05_01_025_01}}</div>
                 <div class="content_item_detail">诊断依据:{{detail.AP05_01_010_00}}</div>
-                <div class="content_item_detail">建议：</div>
+                <div class="content_item_detail">建议:</div>
               </div>
             </div>
           </el-dialog>
@@ -219,7 +228,7 @@ table td {
 
 td.handle {
   cursor: pointer;
-  color: blue;
+  color: #409eff;
 }
 
 .text {
@@ -228,7 +237,7 @@ td.handle {
 }
 
 .table_mabl_content {
-  width: 1000px;
+  // width: 1000px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;

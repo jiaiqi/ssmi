@@ -18,11 +18,11 @@
                     >
                     </el-option>
                 </el-select>
-                <span class="box_two_method">方法：GET</span>
+                <span class="box_two_method">方法:GET</span>
             </div>
             <div class="box_three">
                 <p>三. 参数列表</p>
-                <p class="box_pone">接口参数：</p>
+                <p class="box_pone">接口参数:</p>
                 <textarea cols="130" rows="25" v-model="data_one"></textarea>
                 <p class="box_threep">调用接口的数据json包</p>
                 <div class="box_three_foot1">
@@ -48,11 +48,11 @@
                     <span>{{this.value8}}</span>
                 </div>
                 <div class="box_four_b">
-                    <span>请求地址：</span>
+                    <span>请求地址:</span>
                     <span>'http://192.168.0.192:8101/{{this.api}}/select/srvsys_service_select'</span>
                 </div>
                 <div class="box_four_c">
-                    <p>返回结果：</p>
+                    <p>返回结果:</p>
                     <textarea cols="100" rows="25" v-model="data_return"></textarea>                                    
                 </div>
                 <div class="box_four_d">
@@ -172,14 +172,14 @@ export default {
                 'http://192.168.0.192:8101/apprc/operate/srvonline_interface_deubg',data1, 
                 { headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") } }
             ).then(res => {
-                debugger;
+                // debugger;
                 // this.return=res.data.response;
                 this.data_return = JSON.stringify(res.data.response)
                 this.data_state = res.data.state
+        
             }).catch(err => {
                 // console.log(err)
-            })
-            
+            })        
         },
         adm(){
             // console.log(this.data_change)

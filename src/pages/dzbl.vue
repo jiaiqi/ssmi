@@ -5,19 +5,19 @@
         <div class="header_img"></div>
         <div class="header_user_info">
           <div class="header_user_info_item">
-            患者姓名：
+            患者姓名:
             <span v-if="patientInfo.name">{{ patientInfo.name }}</span>
           </div>
           <div class="header_user_info_item">
-            性别：
+            性别:
             <span v-if="patientInfo.gender">{{ patientInfo.gender }}</span>
           </div>
           <div class="header_user_info_item">
-            年龄：
+            年龄:
             <span v-if="patientInfo.age">{{ patientInfo.age }}</span>
           </div>
           <div class="header_user_info_item">
-            身份证号：
+            身份证号:
             <span v-if="patientInfo.identityCard">{{ patientInfo.identityCard }}</span>
           </div>
         </div>
@@ -35,12 +35,12 @@
           <p class="text">医生</p>
           <p class="text">服务</p>
         </div>-->
-        <div class="header_btn" v-if="userInfo.user_no">
+        <!-- <div class="header_btn" v-if="userInfo.user_no">
           <p class="text">
             账号:
             <span style="font-weight:600;">{{userInfo.user_no}}</span>
           </p>
-        </div>
+        </div>-->
         <div class="header_btn" @click="exit_login">
           <p class="text">退出</p>
         </div>
@@ -102,7 +102,7 @@
           </div>
         </div>
         <div class="content_left_bottom">
-          <el-timeline style="padding-inline-start: 10px;padding-top:10px;padding-left:10px;">
+          <!-- <el-timeline style="padding-inline-start: 10px;padding-top:10px;padding-left:10px;">
             <el-timeline-item
               v-for="(item, index) in timeLineData"
               :key="index"
@@ -115,12 +115,176 @@
             >
               <el-tree :data="item.data" :props="defaultProps" @node-click="addTab"></el-tree>
             </el-timeline-item>
-          </el-timeline>
+          </el-timeline>-->
+          <div class="tabs">
+            <div class="label">
+              <div class="tab-pane-label" :class="{active: tabsActive == true}" @click="checkTabs">
+                <span>门急诊诊疗</span>
+              </div>
+              <div class="tab-pane-label" :class="{active: tabsActive == false}" @click="checkTabs">
+                <span>住院诊疗</span>
+              </div>
+            </div>
+            <div class="content">
+              <div class="tab-pane-title">
+                <div>记录类型</div>
+                <div>数量</div>
+              </div>
+              <div class="tab-pane" v-if="tabsActive">
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 1}"
+                  @click="clickListItem(1,0)"
+                >
+                  <div class>挂号记录</div>
+                  <div class>{{record_count.ghjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 2}"
+                  @click="clickListItem(2,0)"
+                >
+                  <div>病历记录</div>
+                  <div class>{{record_count.bljl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 3}"
+                  @click="clickListItem(3,0)"
+                >
+                  <div>诊断记录</div>
+                  <div class>{{record_count.zdjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 4}"
+                  @click="clickListItem(4,0)"
+                >
+                  <div>医嘱记录</div>
+                  <div class>{{record_count.yzjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 5}"
+                  @click="clickListItem(5,0)"
+                >
+                  <div>检查报告</div>
+                  <div class>{{record_count.jcbg}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 6}"
+                  @click="clickListItem(6,0)"
+                >
+                  <div>检验报告</div>
+                  <div class>{{record_count.jybg}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 7}"
+                  @click="clickListItem(7,0)"
+                >
+                  <div>手术记录</div>
+                  <div class>{{record_count.ssjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 8}"
+                  @click="clickListItem(8,0)"
+                >
+                  <div>费用记录</div>
+                  <div class>{{record_count.fyjl}}</div>
+                </div>
+              </div>
+              <div class="tab-pane" v-if="!tabsActive">
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 1}"
+                  @click="clickListItem(1,1)"
+                >
+                  <div>住院病案首页</div>
+                  <div class>{{record_count.zybasy}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 2}"
+                  @click="clickListItem(2,1)"
+                >
+                  <div>入院记录</div>
+                  <div class>{{record_count.zyryjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 3}"
+                  @click="clickListItem(3,1)"
+                >
+                  <div>诊断记录</div>
+                  <div class>{{record_count.zyzdjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 4}"
+                  @click="clickListItem(4,1)"
+                >
+                  <div>医嘱信息</div>
+                  <div class>{{record_count.zyyzxx}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 5}"
+                  @click="clickListItem(5,1)"
+                >
+                  <div>临床路径记录</div>
+                  <div class>{{record_count.zylcljjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 6}"
+                  @click="clickListItem(6,1)"
+                >
+                  <div>检查报告</div>
+                  <div class>{{record_count.zyjcbg}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 7}"
+                  @click="clickListItem(7,1)"
+                >
+                  <div>检验报告</div>
+                  <div class>{{record_count.zyjybg}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 8}"
+                  @click="clickListItem(8,1)"
+                >
+                  <div>手术记录</div>
+                  <div class>{{record_count.zyssjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 9}"
+                  @click="clickListItem(9,1)"
+                >
+                  <div>出院记录</div>
+                  <div class>{{record_count.zycyjl}}</div>
+                </div>
+                <div
+                  class="tab-pane-item"
+                  :class="{itemsActive: itemsActive == 10}"
+                  @click="clickListItem(10,1)"
+                >
+                  <div>费用结算</div>
+                  <div class>{{record_count.zyfyjs}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="content_right" v-loading="loading">
         <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
-          <div class="close-all" @click="closeAll">关闭所有</div>
+          <div class="close-all" @click="closeAll" v-if="editableTabs.length>0">关闭所有</div>
           <el-tab-pane
             v-for="(item,index) in editableTabs"
             :key="index"
@@ -203,9 +367,14 @@ export default {
       userName: '',
       detail: "",
       componentsKey: 0,
-      userInfo: {},
+      tabsActive: true,
+      itemsActive: 1,
+      userInfo: {
+        user_no: ""
+      },
       timeLineData: [],
       patientInfo: {},
+      record_count: {},
       dialogText: "点击确定按钮读卡",
       pickerOptions: {
         shortcuts: [
@@ -254,41 +423,143 @@ export default {
       },
       RigData: [],
       elTabsData: {},
-      editableTabs: [{
-        title: "患者总览",
-        name: "患者总览",
-        content: PatientOverView
-      }],
-      editableTabsValue: "患者总览",
+      // editableTabs: [{
+      //   title: "患者总览",
+      //   name: "患者总览",
+      //   content: PatientOverView
+      // }],
+      editableTabs: [],
+      editableTabsValue: "",
       tabIndex: 1,
       testData: [],
       showContent: false,
       needData: [],
       tabData: [],
+      CardInfo: {}
     };
   },
   mounted() {
     let user = sessionStorage.getItem("current_login_user")
     this.userInfo = JSON.parse(user)
-    window.ReadCommCardRet = (para) => {
-      // alert("收到读卡返回信息： " + para);
-      localStorage.setItem("CardInfo", para)
-      let CardInfo = JSON.parse(para)
-      window.CardInfo = CardInfo
-      // alert("当前身份证号：" + CardInfo.id)
+    // alert(this.CardInfo)
 
-    }
-    // let userInfo = sessionStorage.getItem("current_login_user")
-    // userInfo = localStorage.getItem("current_login_user")
-    // if (userInfo) {
-    //   this.userInfo = JSON.parse(userInfo)
-    // }
+  },
+  updated() {
+    // alert(this.CardInfo)
   },
   methods: {
-    alertCardInfo() {
-      // let CardInfo = JSON.stringify(window.CardInfo)
-      let CardInfo = localStorage.getItem("CardInfo")
-      alert(CardInfo)
+    checkTabs() {
+      this.tabsActive = !this.tabsActive
+      if (this.tabsActive) {
+        this.editableTabsValue = "挂号记录"
+        let exists = this.editableTabs.filter(tab => tab.name === "挂号记录").length > 0; // 过滤已存在tab
+        if (!exists) {
+          this.editableTabs.push({
+            title: "挂号记录",
+            name: "挂号记录",
+            content: "zjzZlgh"
+          });
+        }
+      } else {
+        this.editableTabsValue = "住院病案首页"
+        let exists = this.editableTabs.filter(tab => tab.name === "住院病案首页").length > 0; // 过滤已存在tab
+        if (!exists) {
+          this.editableTabs.push({
+            title: "住院病案首页",
+            name: "住院病案首页",
+            content: "hospitalindex"
+          });
+        }
+      }
+    },
+    clickListItem(num, type) {
+      this.itemsActive = num
+      let serviceName = ""
+      let tab = ""
+      let component = ""
+      if (type === 0) { // 门急诊
+        if (num === 1) {
+          tab = "挂号记录"
+          serviceName = "DI_ADI_REGISTER_INFO_select"
+          component = "zjzZlgh"
+        } else if (num === 2) {
+          tab = "病历记录"
+          serviceName = "DI_ADI_RECORD_INFO_select"
+          component = "mjzZlbl"
+        } else if (num === 3) {
+          tab = "诊断记录"
+          serviceName = "DI_ADI_DIAREC_INFO_select"
+          component = "zjzZlzdjl"
+        } else if (num === 4) {
+          tab = "医嘱记录"
+          serviceName = "DI_ADI_DRUREC_INFO_select"
+          component = "mjzZlyz"
+        } else if (num === 5) {
+          tab = "检查报告"
+          serviceName = "DI_ADI_CLIEXA_INFO_select"
+          component = "mjzzljcbg"
+        } else if (num === 6) {
+          tab = "检验报告"
+          serviceName = "DI_ADI_LAREXA_INFO_select"
+          component = "zjzZljymxjl"
+        } else if (num === 7) {
+          tab = "手术记录"
+          serviceName = "DI_ADI_OPEREC_INFO_select"
+          component = "mzsHjl"
+        } else if (num === 8) {
+          tab = "费用记录"
+          serviceName = "DI_ADI_EXPSET_INFO_select"
+          component = "mjzZlfymx"
+        }
+      } else if (type === 1) { // 住院
+        if (num === 1) {
+          tab = "住院病案首页"
+          serviceName = "DI_HAI_APRNOT_INFO_MR_select"
+          component = "hospitalindex"
+        } else if (num === 2) {
+          tab = "入院记录"
+          serviceName = "DI_HDI_INRECORD_INFO_select"
+          component = "ryjl"
+        } else if (num === 3) {
+          tab = "住院诊断记录"
+          serviceName = "DI_HDI_DIAREC_INFO_select"
+          component = "zyzLzdjlxx"
+        } else if (num === 4) {
+          tab = "住院医嘱信息"
+          serviceName = "DI_HDI_DRUREC_INFO_select"
+          component = "zyzlyz"
+        } else if (num === 5) {
+          tab = "临床路径记录"
+          serviceName = "DI_HDI_CPATH_INFO_select"
+          component = "zyzLlcljjl"
+        } else if (num === 6) {
+          tab = "住院检查报告"
+          serviceName = "DI_HDI_CLIEXA_INFO_select"
+          component = "zyzLjcbg"
+        } else if (num === 7) {
+          tab = "住院检验报告"
+          serviceName = "DI_HDI_LAREXA_INFO_select"
+          component = "InspectionRecord"
+        } else if (num === 8) {
+          tab = "住院手术记录"
+          serviceName = "DI_HDI_OPEREC_INFO_select"
+          component = "zyzLssjl"
+        } else if (num === 9) {
+          tab = "出院记录"
+          serviceName = "DI_HDI_OUTRECORD_INFO_select"
+          component = "zyzLcy"
+        } else if (num === 10) {
+          tab = "费用结算"
+          serviceName = "DI_HDI_EXPSET_INFO_select"
+          component = "zyzLfyjs"
+        }
+      }
+      let datas = {
+        tab: tab,
+        serviceName: serviceName,
+        component: component
+      }
+      this.addTab(datas)
     },
     addTab(data) {
       console.log(data)
@@ -312,9 +583,106 @@ export default {
         this.axios({
           method: "POST",
           url: url,
-          data: req,
-          headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") }
+          data: req
         }).then(res => {
+          let ser = req.serviceName
+          // if (ser === "DI_ADI_REGISTER_INFO_select") {
+          //   ser = "mzghjl"
+          //   this.record_count.ghjl = res.data.data.length
+          // } else if (ser === "DI_ADI_RECORD_INFO_select") {
+          //   ser = "mzbl"
+          //   this.record_count.bljl = res.data.data.length
+          // } else if (ser === "DI_ADI_DIAREC_INFO_select") {
+          //   ser = "mzzdjl"
+          //   this.record_count.zdjl = res.data.data.length
+          // } else if (ser === "DI_ADI_DRUREC_INFO_select") {
+          //   ser = "mzyz"
+          //   this.record_count.yzjl = res.data.data.length
+          // } else if (ser === "DI_ADI_CLIEXA_INFO_select") {
+          //   ser = "mzjcbg"
+          //   this.record_count.jcbg = res.data.data.length
+          // } else if (ser === "DI_ADI_LAREXA_INFO_select") {
+          //   ser = "mzjybg"
+          //   this.record_count.jybg = res.data.data.length
+          // } else if (ser === "DI_ADI_OPEREC_INFO_select") {
+          //   ser = "mzssjl"
+          //   this.record_count.ssjl = res.data.data.length
+          // } else if (ser === "DI_ADI_EXPSET_INFO_select") {
+          //   ser = "mzfyjl"
+          //   this.record_count.fyjl = res.data.data.length
+          // } else if (ser === "DI_HAI_APRNOT_INFO_MR_select") {
+          //   ser = "zybasy"
+          //   this.record_count.zybasy = res.data.data.length
+          // } else if (ser === "DI_HDI_INRECORD_INFO_select") {
+          //   ser = "zyryjl"
+          //   this.record_count.zyryjl = res.data.data.length
+          // } else if (ser === "DI_HDI_DIAREC_INFO_select") {
+          //   ser = "zyzdjl"
+          //   this.record_count.zyzdjl = res.data.data.length
+          // } else if (ser === "DI_HDI_DRUREC_INFO_select") {
+          //   ser = "zyyzxx"
+          //   this.record_count.zyyzjl = res.data.data.length
+          // } else if (ser === "DI_HDI_CPATH_INFO_select") {
+          //   ser = "zylcljjl"
+          //   this.record_count.zylclj = res.data.data.length
+          // } else if (ser === "DI_HDI_CLIEXA_INFO_select") {
+          //   ser = "zyjcbg"
+          //   this.record_count.zyjcbg = res.data.data.length
+          // } else if (ser === "DI_HDI_LAREXA_INFO_select") {
+          //   ser = "zyjybg"
+          //   this.record_count.zyjybg = res.data.data.length
+          // } else if (ser === "DI_HDI_OPEREC_INFO_select") {
+          //   ser = "zyssjl"
+          //   this.record_count.zyssjl = res.data.data.length
+          // } else if (ser === "DI_HDI_OUTRECORD_INFO_select") {
+          //   ser = "zycyjl"
+          //   this.record_count.bljl = res.data.data.length
+          // } else if (ser === "DI_HDI_EXPSET_INFO_select") {
+          //   ser = "zyfyjl"
+          //   this.record_count.zyfyjl = res.data.data.length
+          // }
+          this.elTabsData[ser] = res.data.data
+          this.RigData = res.data.data;
+          // console.log("selectedtabData", this.elTabsData);
+        }).catch(err => {
+          console.log(err);
+        });
+        let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab
+        if (!exists) {
+          this.editableTabs.push({
+            title: data.tab,
+            name: data.tab,
+            content: data.component
+          });
+        }
+        this.editableTabsValue = data.tab;
+        this.dataState = !this.dataState
+
+      }
+      //  else if (data.tab == "入院记录") {
+      //   let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab,
+      //   if (!exists) { // 若当前点击item对应的tab页不存在，则创建（push）对应的tab页
+      //     this.editableTabs.push({
+      //       title: data.tab,
+      //       name: data.tab,
+      //       content: data.component,
+      //       serviceName: data.serviceName
+      //     });
+      //   }
+      //   this.editableTabsValue = data.tab;
+      //   this.dataState = !this.dataState
+      // } 
+      else if (data) {
+        let req = {
+          serviceName: data.serviceName
+        };
+        let url = this.getServiceUrl("select", data.serviceName, "emr");
+        this.axios({
+          method: "POST",
+          url: url,
+          data: req
+        }).then(res => {
+          console.log(res.data.data)
           let ser = req.serviceName
           if (ser === "DI_ADI_REGISTER_INFO_select") {
             ser = "mzghjl"
@@ -354,11 +722,9 @@ export default {
             ser = "zyfyjl"
           }
           this.elTabsData[ser] = res.data.data
-          this.RigData = res.data.data;
-          // console.log("selectedtabData", this.elTabsData);
         }).catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
         let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab
         if (!exists) {
           this.editableTabs.push({
@@ -366,20 +732,6 @@ export default {
             name: data.tab,
             content: data.component
           });
-        }
-        this.editableTabsValue = data.tab;
-        this.dataState = !this.dataState
-
-      } else if (data.tab == "入院记录") {
-        let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab,
-        if (!exists) { // 若当前点击item对应的tab页不存在，则创建（push）对应的tab页
-          this.editableTabs.push({
-            title: data.tab,
-            name: data.tab,
-            content: data.component,
-            serviceName: data.serviceName
-          });
-
         }
         this.editableTabsValue = data.tab;
         this.dataState = !this.dataState
@@ -692,34 +1044,41 @@ export default {
     },
     closeReadCard() {
       this.BtnReadCard();
-      if (window.CardInfo) {
-        if (this.userInfo.user_no && window.CardInfo.id) {
-          this.dialogText = "当前读取到的身份证号为：\n" + window.CardInfo.id
-          setTimeout(() => {
-            this.dialogText = "点击确定按钮读卡"
-          }, 3000);
-        }
-        else {
-          this.dialogText = "没有读取到身份证信息"
-          setTimeout(() => {
-            this.dialogText = "点击确定按钮读卡"
-          }, 3000);
-          return
-        }
-      }
-      // else {
-      //   this.dialogText = "没有读取到身份证信息"
-      //   setTimeout(() => {
-      //     this.dialogText = "点击确定按钮读卡"
-      //   }, 3000);
-      //   // return
-      // }
+      // let CardInfo = localStorage.getItem("CardInfo")
       setTimeout(() => {
+        let CardInfo = window.CardInfo
+        if (CardInfo) {
+          this.CardInfo = CardInfo
+          // CardInfo = JSON.parse(CardInfo)
+          // if (this.userInfo) {
+          //   if (this.userInfo.user_no != "" && CardInfo.id != null) {
+          //     this.dialogText = "当前读取到的身份证号为:\n" + CardInfo.id
+          //     setTimeout(() => {
+          //       this.dialogVisible = false;
+          //       this.getData();
+          //       // this.initData();
+          //     }, 3000);
+          //     setTimeout(() => {
+          //       this.dialogText = "点击确定按钮读卡"
+          //     }, 3000);
+          //   }
+          //   else {
+          //     localStorage.removeItem("CardInfo")
+          //     this.dialogText = "没有读取到身份证信息"
+          //     setTimeout(() => {
+          //       this.dialogText = "点击确定按钮读卡"
+          //     }, 3000);
+          //     return
+          //   }
+          // }
+        }
         this.dialogVisible = false;
         this.getData();
-        this.initData();
-      }, 2000);
-      // alert("即将展示身份证号为：" + this.id_card + "的患者的病历信息")
+        // this.initData();
+      });
+
+
+
     },
     getData() {
       this.patientInfo = {
@@ -750,6 +1109,7 @@ export default {
         url: url,
         data: req
       }).then(res => {
+        console.log(res)
         if (res.data.resultCode === "0011") {
           this.$router.push({ name: "login" });
           console.log(res.data.resultCode);
@@ -776,7 +1136,7 @@ export default {
             data: req2
           }).then(res => {
             let data = res.data.data[0]
-            console.log("基本信息：", data);
+            console.log("基本信息:", data);
             this.patientInfo.name = data.NAME
             this.patientInfo.gender = data.SEX_NAME
             let birth = data.BIRTHDAY.toString().slice(0, 4)
@@ -788,32 +1148,7 @@ export default {
           }).catch(err => {
             console.log(err);
           });
-          // // 根据local_id 查找居住信息
-          // let req3 = {
-          //   hisVer: true,
-          //   "serviceName": "DI_MPI_ADDRESS_select",
-          //   "condition": [
-          //     {
-          //       "colName": "LOCAL_ID",
-          //       "ruleType": "eq",
-          //       "value": this.patientInfo.LOCAL_ID
-          //     }
-          //   ],
-          // };
-          // let url3 = this.getServiceUrl("select", req3.serviceName, "emr");
-          // this.axios({
-          //   method: "POST",
-          //   url: url3,
-          //   data: req3
-          // }).then(res3 => {
-          //   // console.log(res3)
-          //   let data = res.data.data[0]
-          //   this.patientInfo.detailAddress = data.DETAIL
-          // }).catch(err3 => {
-          //   console.log(err3)
-          // })
         }
-
       }).catch(err => {
         console.log(err);
       });
@@ -822,17 +1157,11 @@ export default {
       console.log("返回首页");
       window.location.reload();
     },
-    ReadCommCardRet(para) {
-      alert("收到读卡返回信息 " + para);
-    },
     BtnReadCard() {
-      this.dialogText = "读卡中..."
-      setTimeout(() => {
-        this.dialogText = "点击确定按钮读卡"
-      }, 3000);
+      // this.dialogText = "读卡中..."
       if (typeof jsObj == "undefined") {
-        // alert("jsObj参数未初始化")
-        this.dialogText = "jsObj参数未初始化"
+        alert("jsObj参数未初始化")
+        // this.dialogText = "jsObj参数未初始化"
         return;
       }
       jsObj.ReadCommCard();
@@ -901,7 +1230,7 @@ body {
   position: relative;
   left: 0;
   width: 100%;
-  min-width: 1361px;
+  // min-width: 1361px;
   margin-left: auto;
   margin-right: auto;
   text-align: left;
@@ -954,7 +1283,11 @@ body {
 }
 
 .el-tabs--border-card /deep/ .el-tabs__content {
+  height: 100%;
   overflow: visible;
+  .el-tab-pane {
+    height: 100%;
+  }
 }
 
 .el-timeline-item__wrapper .el-timeline-item__timestamp {
@@ -979,8 +1312,17 @@ body {
   display: none !important;
 }
 .home {
-  width: 1500px;
+  max-width: 95vw;
+  min-width: 950px;
+  max-width: 1500px;
   margin: 0 auto;
+}
+.nodata {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* header */
 .heade {
@@ -1011,7 +1353,7 @@ body {
 }
 
 .header_user_info {
-  width: 500px;
+  max-width: 500px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -1062,46 +1404,140 @@ body {
 
 .content {
   /* height: 550px; */
+  display: flex;
   height: 700px;
   margin-top: 10px;
   box-sizing: border-box;
-}
-
-.content_left {
-  box-sizing: border-box;
-  width: 325px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-right: 20px;
-  float: left;
-}
-
-.content_left_top {
-  margin: 0 auto;
-  box-sizing: border-box;
+  .content_left {
+    box-sizing: border-box;
+    width: 325px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 20px;
+    float: left;
+    .content_left_top {
+      margin: 0 auto;
+      box-sizing: border-box;
+      .content_left_top_item {
+        width: 325px;
+        margin-bottom: 10px;
+        &:first-child {
+          background-color: transparent;
+          display: flex;
+          box-sizing: border-box;
+          border: none;
+          align-items: center;
+          font-size: 12px;
+        }
+      }
+    }
+    .content_left_bottom {
+      margin: 0 auto;
+      box-sizing: border-box;
+      background-color: #fff;
+      width: 325px;
+      border: 1px solid rgba(228, 228, 228, 1);
+      height: 500px;
+      .tabs {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        .label {
+          text-align: center;
+          display: flex;
+          .tab-pane-label {
+            flex: 1;
+            height: 40px;
+            color: #409eff;
+            line-height: 40px;
+            font-size: 16px;
+            border-bottom: 1px solid #e4e4e4;
+            &:hover {
+              cursor: pointer;
+            }
+            &:last-child {
+              border-left: 1px solid #e4e4e4;
+            }
+          }
+          .active {
+            background-color: #409eff;
+            color: #fff;
+          }
+        }
+        .content {
+          display: block;
+          .tab-pane-title {
+            display: flex;
+            div {
+              height: 25px;
+              line-height: 25px;
+              text-align: center;
+              font-size: 12px;
+              font-weight: 600;
+              &:first-child {
+                flex: 2;
+                text-indent: 20px;
+                text-align: left;
+              }
+              &:last-child {
+                flex: 1;
+              }
+            }
+          }
+          .tab-pane {
+            display: flex;
+            flex-direction: column;
+            .tab-pane-item {
+              height: 30px;
+              text-indent: 20px;
+              line-height: 30px;
+              cursor: pointer;
+              font-size: 14px;
+              display: flex;
+              &:hover {
+                color: #409eff;
+              }
+              div {
+                &:first-child {
+                  flex: 2;
+                }
+                &:last-child {
+                  flex: 1;
+                  text-align: center;
+                  text-indent: 0;
+                }
+              }
+            }
+            .itemsActive {
+              color: #fff;
+              background-color: #409eff;
+              &:hover {
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .content_right {
+    box-sizing: border-box;
+    display: flex;
+    // max-width: 1000px;
+    // min-width: 800px;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
 select {
   border: none;
 }
 
-.content_left_top_item {
-  width: 325px;
-  margin-bottom: 10px;
-}
-
-.content_left_top_item:first-child {
-  background-color: transparent;
-  display: flex;
-  box-sizing: border-box;
-  border: none;
-  align-items: center;
-  font-size: 12px;
-}
-
-.content_left_top_item:first-child .text {
+.text {
   padding: 5px;
   box-sizing: border-box;
 }
@@ -1144,23 +1580,6 @@ select {
   border-color: transparent;
 }
 
-.content_left_bottom {
-  margin: 0 auto;
-  box-sizing: border-box;
-  background-color: #fff;
-  width: 325px;
-  border: 1px solid rgba(228, 228, 228, 1);
-  height: 500px;
-  overflow-y: auto;
-}
-
-.content_right {
-  box-sizing: border-box;
-  width: 1155px;
-  float: left;
-  height: 100%;
-}
-
 .read_card {
   min-height: 100px;
   text-align: center;
@@ -1168,9 +1587,7 @@ select {
   font-weight: 600;
   font-size: 20px;
 }
-// .close {
-//   display: none;
-// }
+
 .close-all {
   position: absolute;
   top: -40px;
@@ -1204,18 +1621,13 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }
 .text {
   margin: 0;
   padding: 0;
-}
-html {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(238, 238, 238, 1);
 }
 .title {
   text-align: center;

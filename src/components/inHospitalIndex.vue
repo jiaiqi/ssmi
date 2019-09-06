@@ -19,19 +19,10 @@
               <td>{{ item.ORGANIZATION_NAME }}</td>
               <td>{{ item.DE01_00_014_00 }}</td>
               <td>{{ item.AP06_00_369_00 }}</td>
-              <td v-if="item.DE06_00_092_00">{{ item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8)}}</td>
+              <td>{{format_date(item.DE06_00_092_00)}}</td>
               <td v-if="!item.DE06_00_092_00"></td>
               <td>{{item.AP08_10_026_01}}</td>
               <td @click="changeDialogVisible(item)" class="handle">详情</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td @click="changeDialogVisible">详情</td>
             </tr>
           </tbody>
         </table>
@@ -42,16 +33,10 @@
         <div class="header">
             <div class="header_top">
                 <p>医疗机构<span>{{detail.AP08_10_013_06}}</span></p>
-                <p>组织机构代码：<span>{{detail.AP08_10_052_03}}</span></p>
-                <div class="code">
-                    <div class="code_top">
-                        <span>条形码</span>
-                    </div>
-                    <p></p>
-                </div>
+                <p>（组织机构代码：<span>{{detail.AP08_10_052_03}}</span>）</p>                
             </div>
             <div class="header_title">
-                <p><span>医疗付款方式：</span><span> </span></p>
+                <p><span>医疗付款方式：</span><span>2</span></p>
                 <p>住  院  病  案  首  页</p>
             </div>
         </div>
@@ -63,72 +48,185 @@
             </div>
             <div class="content_center">
                 <ul class="content_ul">
-                    <div class="first first_title">
-                        <li>姓名<span>{{detail.DE02_01_039_00}}</span></li>
-                        <li>性别<span>{{detail.DE02_01_040_00}}</span>1. 男 2.女 </li>
-                        <li>出生日期<span>{{detail.DE02_01_005_01}}</span></li>
-                        <li>年龄<span>{{detail.DE02_01_032_00}}</span>岁</li>
-                        <li>国籍<span>{{detail.AP02_01_015_00}}</span></li>
+                    <div class="first first_title first_5">
+                        <li class="row_1">
+                            <div class="label_text">姓名</div>
+                            <span class="text_line">{{detail.DE02_01_039_00}}</span>
+                        </li>
+                        <li class="row_1_5">
+                            <div class="label_text">性别</div>
+                            <span class="text_line">{{detail.DE02_01_040_00}}</span>
+                            <div class="append_text">1. 男 2.女</div> 
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">出生日期</div>
+                            <span>{{detail.DE02_01_005_01}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">年龄</div> 
+                            <span class="text_line">{{detail.DE02_01_032_00}}</span>
+                           <div class="append_text">岁</div> 
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">国籍</div> 
+                            <span class="text_line">{{detail.AP02_01_015_00}}</span>
+                        </li>
                     </div>
-                    <div class="first">
-                        <li>(年龄不足1周岁得) 年龄<span> </span>月</li>
-                        <li>新生儿出生体重<span> {{detail.DE04_10_019_00}}</span>克</li>
-                        <li>新生儿入院体重<span> {{detail.AP04_10_188_00}}</span>克</li>
+                    <div class="first first_line first_t_3">
+                        <li class="row_1">
+                            <div class="label_text">(年龄不足1周岁得) 年龄</div>
+                            <span class="text_line"></span>
+                            <div class="append_text">月</div>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">新生儿出生体重</div>
+                            <span class="text_line"> {{detail.DE04_10_019_00}}</span>
+                            <div>克</div>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">新生儿入院体重</div>
+                            <span class="text_line">{{detail.AP04_10_188_00}} </span>
+                            <div>克</div>
+                        </li>
                     </div>
-                    <div class="first">
-                        <li>出生地<span>{{detail.AP02_01_061_00}} </span></li>
-                        <li>籍贯<span> {{detail.AP02_01_099_00}}</span></li>
-                        <li>民族<span>{{detail.AP02_01_025_03}} </span></li>
+                    <div class="first first_df_3">
+                        <li class="row">
+                           <div class="label_text">出生地</div> 
+                            <span class="text_line">{{detail.AP02_01_061_00}} </span>
+                        </li>
+                        <li class="row">
+                           <div class="label_text">籍贯</div> 
+                            <span class="text_line"> {{detail.AP02_01_099_00}}</span>
+                        </li>
+                        <li class="row">
+                           <div class="label_text">民族</div> 
+                            <span class="text_line">{{detail.AP02_01_025_03}} </span>
+                        </li>
+                    </div>                    
+                    <div class="first first_3">
+                        <li class="row_3">
+                            <div class="label_text">身份证</div>
+                            <span class="text_line"> {{detail.AP02_01_029_00}}</span>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">职业</div>
+                            <span class="text_line">{{detail.AP02_01_125_02}} </span>
+                        </li>
+                        <li class="row_2">
+                            <div class="label_text">婚姻</div>
+                            <span class="text_line">{{detail.AP02_01_006_00}} </span>
+                            <div class="append_text">1.未婚 2.已婚 3.丧偶 4.离婚 5.其他</div>
+                        </li>
                     </div>
-                    <div class="first">
-                        <li>身份证<span> {{detail.AP02_01_029_00}}</span></li>
-                        <li>职业<span>{{detail.AP02_01_125_02}} </span></li>
-                        <li>婚姻<span>{{detail.AP02_01_006_00}} </span>1.未婚 2.已婚 3.丧偶 4.离婚 5.其他</li>
+                    <div class="first first_3">
+                        <li class="row_3 row_last_3">
+                            <div class="label_text">现住址</div>
+                            <span class="text_line"> {{detail.AP02_01_009_00}}</span>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">电话</div>
+                            <span class="text_line">{{detail.DE02_01_010_00}}</span>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">邮编</div>
+                            <span class="text_line">{{detail.AP02_01_047_01}}</span>
+                        </li>
+                    </div>
+                    <div class="first first_df_2">
+                        <li class="row_3">
+                           <div class="label_text">户口地址</div> 
+                            <span class="text_line">{{detail.AP02_01_008_00}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">邮编</div> 
+                            <span class="text_line">{{detail.DE02_01_047_00}}</span>
+                            </li>
                     </div>
                     
-                    <div class="first">
-                        <li>现住址<span>{{detail.AP02_01_009_00}}</span></li>
-                        <li>电话<span>{{detail.DE02_01_010_00}}</span></li>
-                        <li>邮编<span>{{detail.AP02_01_047_01}}</span></li>
+                    <div class="first first_3">
+                        <li class="row_3 row_seven">
+                           <div class="label_text">工作单位及地址</div> 
+                            <span class="text_line">{{detail.AP08_10_007_01}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">单位电话</div> 
+                            <span class="text_line">{{detail.AP02_01_011_10}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">邮编</div> 
+                            <span class="text_line">{{detail.AP02_01_047_03}}</span>
+                        </li>
                     </div>
-                    <div class="first">
-                        <li>户口地址<span>{{detail.AP02_01_008_00}}</span></li>
-                        <li>邮编<span>{{detail.DE02_01_047_00}}</span></li>
-                    </div>
-                    
-                    <div class="first">
-                        <li>工作单位及地址<span>{{detail.AP08_10_007_01}}</span></li>
-                        <li>单位电话<span>{{detail.AP02_01_011_10}}</span></li>
-                        <li>邮编<span>{{detail.AP02_01_047_03}}</span></li>
-                    </div>
-                    <div class="first">
-                        <li>联系人姓名<span>{{detail.AP02_01_039_15}}</span></li>
-                        <li>关系<span>{{detail.AP02_01_098_00}}</span></li>
-                        <li>地址<span>{{detail.AP02_01_060_08}}</span></li>
-                        <li>电话<span>{{detail.AP02_01_011_01}}</span></li>
+                    <div class="first first_4">
+                        <li class="row_1">
+                            <div class="label_text">联系人姓名</div>    
+                            <span class="text_line">{{detail.AP02_01_039_15}}</span>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">关系</div>    
+                        <span class="text_line">{{detail.AP02_01_098_00}}</span></li>
+                        <li class="row_2">
+                            <div class="label_text">地址</div>    
+                            <span class="text_line">{{detail.AP02_01_060_08}}</span>
+                        </li>
+                        <li class="row_1 phone">
+                            <div class="label_text">电话</div>    
+                            <span class="text_line">{{detail.AP02_01_011_01}}</span>
+                        </li>
                     </div>
 
                     <div class="end">
                         <li>入院途径<span>{{detail.AP06_00_369_00}}</span>1.门诊 2.急诊 3.其他医疗机构转入 4.其他</li>
                         <li>治疗类别<span>{{detail.AP06_00_373_00}}</span>(1.中医 (1.1中医 1.2 民族医) 2.中西医 3.西医)</li>
                     </div>
-                    <div class="first">
+                    <div class="first first_4">
                         <li v-if="!detail.DE06_00_092_00"></li>
-                        <li v-if="detail.DE06_00_092_00">入院时间<span>{{detail.DE06_00_092_00.toString().slice(0,4)+"-"+detail.DE06_00_092_00.toString().slice(4,6)+"-"+detail.DE06_00_092_00.toString().slice(6,8)}}</span></li>
-                        <li>入院科别<span>{{detail.AP08_10_026_01}}</span></li>
-                        <li>病房<span>{{detail.AP08_10_026_02}}</span></li>
-                        <li>转科科别<span>{{detail.AP08_10_026_06}}</span></li>
+                        <li class="row_1" v-if="detail.DE06_00_092_00">
+                           <div class="label_text">入院时间</div> 
+                            <span class="text_line">{{format_date(detail.DE06_00_092_00)}}</span>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">入院科别</div>    
+                            <span class="text_line">{{detail.AP08_10_026_01}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">病房</div> 
+                            <span class="text_line">{{detail.AP08_10_026_02}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">转科科别</div> 
+                            <span class="text_line">{{detail.AP08_10_026_06}}</span>
+                        </li>
                     </div>
-                    <div class="first">
+                    <div class="first first_4">
                         <li v-if="!detail.DE06_00_016_00"></li>
-                        <li v-if="detail.DE06_00_016_00">出院时间<span>{{detail.DE06_00_016_00.toString().slice(0,4)+"-"+detail.DE06_00_016_00.toString().slice(4,6)+"-"+detail.DE06_00_016_00.toString().slice(6,8)}}</span></li>
-                        <li>出院科别<span>{{detail.AP08_10_026_07}}</span></li>
-                        <li>病房<span>{{detail.AP08_10_025_00}}</span></li>
-                        <li>实际住院<span>{{detail.AP04_01_069_00}}</span>天</li>
+                        <li class="row_1" v-if="detail.DE06_00_016_00">
+                           <div class="label_text">出院时间</div> 
+                            <span class="text_line">{{format_date(detail.DE06_00_016_00)}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">出院科别</div> 
+                            <span class="text_line">{{detail.AP08_10_026_07}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">病房</div> 
+                            <span class="text_line">{{detail.AP08_10_025_00}}</span>
+                        </li>
+                        <li class="row_1">
+                           <div class="label_text">实际住院</div> 
+                            <span class="text_line">{{detail.AP04_01_069_00}}</span>
+                           <div class="text_line">天</div> 
+                        </li>
                     </div>
-                    <div class="first">
-                        <li>门(急)诊诊断<span>   </span></li>
-                        <li>疾病编码<span>  </span></li>
+                    <div class="first first_end_2">
+                        <li class="row_3">
+                           <div class="label_text">门(急)诊诊断</div> 
+                            <span class="text_line">   </span>
+                        </li>
+                        <li class="row_1">
+                            <div class="label_text">疾病编码</div>    
+                            <span class="text_line">  </span>
+                        </li>
                     </div>                   
                 </ul>
                 <div class="content_bot">
@@ -230,7 +328,7 @@
                                 <p>副主任医师<span>  -   </span></p>
                                 <p>主治医师<span>  -   </span></p>
                                 <p>住院医师<span>  -   </span></p>
-                            </li>-
+                            </li>
                             <li class="people">
                                 <p>责任护士<span> -    </span></p>
                                 <p>进修医师<span> -    </span></p>
@@ -257,7 +355,7 @@
                                       <div class="td" style="border-right:none;">
                                         手术、操作医师
                                       </div>
-                                      <div class="td" style="display:flex;">
+                                      <div class="td" style="border-bottom:none;">
                                         <div class="td td_little">术者</div>
                                         <div class="td td_little">I助</div>
                                         <div class="td td_little">Ⅱ助</div>
@@ -292,7 +390,7 @@
                                       <div class="td" style="border-right:none;">
                                         手术、操作医师
                                       </div>
-                                      <div class="td" style="display:flex;">
+                                      <div class="td" style="border-bottom:none;display:flex;">
                                         <div class="td td_little">术者</div>
                                         <div class="td td_little">I助</div>
                                         <div class="td td_little">Ⅱ助</div>
@@ -508,7 +606,7 @@ ul, ol { list-style: none; }
 }
 .zybasy_wrap{
   margin:0 auto;
-  border:1px solid #333;
+//   border:1px solid #333;
 .header{
     // width: 80%;
     border-bottom: none;
@@ -522,11 +620,13 @@ ul, ol { list-style: none; }
     display: flex;
     .td{
       flex:1;
+      border-bottom: none;
       border: 1px solid #333;
       min-height: 30px;
       line-height: 30px;
       border-top: none;
       border-left: none;
+      text-align: center;
       &:last-child{
         border-right: none;
       }
@@ -537,14 +637,14 @@ ul, ol { list-style: none; }
   }
 }
 .header_top{
+    width: 60%;
     overflow: hidden;
     margin:0 auto;
     line-height: 50px;
+    display: flex;
+
 }
-.header_top p{
-    margin:0 auto;
-    float: left;
-}
+
 .header_top span{
     display: inline-block;
     line-height: 20px;
@@ -564,7 +664,7 @@ ul, ol { list-style: none; }
 .code span{
     width: 100px;
     height: 50px;
-
+    line-height: 50px;
     border: 1px solid black;
 }
 .header_title{
@@ -583,14 +683,17 @@ ul, ol { list-style: none; }
     border: 1px solid black;
     padding: 0px 5px;
 }
+
 .content{
     // width: 80%;
     margin: 0 auto;
     padding-bottom: 20px;
 }
 .content_top{
+    display: flex;
+    justify-content: space-between;
     overflow: hidden;
-    margin-top: 15px;
+    margin: 15px 0 10px 0;
 }
 .content_top p{
     float: left;
@@ -600,6 +703,7 @@ ul, ol { list-style: none; }
     margin: 0;
 }
 .content_center{
+    border: 1px solid black;
     width: 100%;
     font-size: 14px;
 }
@@ -607,10 +711,10 @@ ul, ol { list-style: none; }
     overflow: hidden;
     list-style: none;
     // margin-top: 15px;
-    // border: 1px solid black;
+    border: 1px solid black;
 }
 .content_ul li{
-    margin: 5px 10px;
+    margin: 5px 0 5px 5px;
     float: left;
 }
 .content_ul li span{
@@ -632,91 +736,322 @@ ul, ol { list-style: none; }
     overflow: hidden;
     display: flex;
     justify-content: space-between;
+    &.first_line {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        li{
+                width: 11rem;
+                display: flex;
+                flex-direction: row;
+            span{
+
+            }
+        }
+    }
+    &.first_3{
+        .row_2{
+            width:40%;
+            display: flex;
+            .label_text{
+                
+                min-width:4rem; 
+            }
+            span.text_line{
+                min-width: 3rem;
+                max-width: 16rem
+            }
+            .append_text{
+                
+            }
+        }
+        .row_3{
+            width:40%;
+            display: flex;
+            .label_text{
+                min-width:4rem; 
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+            }
+            span.text_line{
+                min-width: 3rem;
+                max-width: 16rem;
+                width: calc(100% - 3rem);
+
+            }            
+        }
+        .row_seven{
+            .label_text{
+                min-width: 7rem;
+            }
+        }
+        .row_last_3{
+            width:40%;
+            display: flex;
+            .label_text{
+                min-width:4rem; 
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+            }
+            span.text_line{
+                min-width: 3rem;
+                max-width: 18rem;
+                width: calc(100% - 3rem);
+
+            }            
+        }
+        .row_1{
+            display: flex;
+            width:20%;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:3rem; 
+            }
+            span.text_line{
+                min-width: 4rem;
+                width: calc(100% - 4em);
+                max-width: 6rem
+            }
+        }
+        span{
+            min-width:3rem;
+        }
+    }
+    &.first_df_3{
+        .row{
+            width: 32%;
+            display: flex;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width: 4rem;
+            }
+            .text_line{
+                
+                min-width: 4rem;
+                width: calc(100% - 6rem);
+                max-width: 12rem;
+            }
+        }
+    }
+    &.first_df_2{
+        .row_3{
+            width: 80%;
+            display: flex;
+        .label_text{
+            text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+            min-width: 3rem;
+        }
+        .text_line{
+            min-width: 4rem;
+            width: calc(100% - 6rem);
+            max-width: 40rem;
+        }
+    }
+    .row_1{
+        width: 20%;
+        display: flex;
+        .label_text{
+            text-align: justify;
+            text-justify:distribute-all-lines;
+            text-align-last:justify;
+            min-width: 3rem;
+        }
+        .text_line{
+            min-width: 4rem;
+            width: calc(100% - 6rem);
+            max-width: 6rem;
+        }
+    }
+    }
+    &.first_end_2{
+        .row_3{
+            width: 75%;
+            display: flex;
+            .label_text{
+            text-align: justify;
+            text-justify:distribute-all-lines;
+            text-align-last:justify;
+            min-width: 5rem;
+        }
+        .text_line{
+            min-width: 4rem;
+            width: calc(100% - 6rem);
+            max-width: 40rem;
+        }
+        }
+        .row_1{
+            width: 25%;
+            display: flex;
+            .label_text{
+            text-align: justify;
+            text-justify:distribute-all-lines;
+            text-align-last:justify;
+            min-width: 3rem;
+        }
+        .text_line{
+            min-width: 4rem;
+            width: calc(100% - 6rem);
+            max-width: 10rem;
+        }
+        }
+        
+    }
+    &.first_5{
+        .row_1{
+            display: flex;
+            width: 18%;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:3rem; 
+
+            }
+            span.text_line{
+                min-width: 4rem;
+                max-width: 6rem;
+            }
+        }
+        .row_1_5{
+            width: 28%;
+            display: flex;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:2rem; 
+                max-width:4rem; 
+
+
+            }
+            span.text_line{
+                min-width: 6rem;
+                max-width: 6rem;
+            }
+        }
+        
+    }
+    &.first_t_3{
+        .row_1{
+            width: 33%;
+            display: flex;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:2rem; 
+            }
+            span.text_line{
+                flex:2;
+                min-width: 2rem;
+                width: calc(100% - 4rem);
+                max-width: 9.5rem;
+            }
+        }
+    }
+    &.first_4{
+        .row_1{
+            width: 25%;
+            display: flex;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:5rem; 
+            }
+            
+            span.text_line{
+                
+                min-width: 2rem;
+                width: calc(100% - 8rem);
+                max-width: 6rem;
+            }
+        }
+        .phone{
+            width: 25%;
+            display: flex;
+                .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:3rem; 
+            }
+            span.text_line{
+                
+                min-width: 6rem;
+                width: calc(100% - 8rem);
+                max-width: 6rem;
+            }
+            }
+        .row_2{
+            width: 50%;
+            display: flex;
+            .label_text{
+                text-align: justify;
+                text-justify:distribute-all-lines;
+                text-align-last:justify;
+                min-width:4rem; 
+                text-align: center;
+
+            }
+            span.text_line{
+                min-width: 2rem;
+                width: calc(100% - 4rem);
+                max-width: 17rem;
+            }
+        }
+
+    }
 }
-.first:nth-child(4) li:nth-child(1){
-    width: 45%;
-} 
-.first:nth-child(4) li:nth-child(1) span{
-    width: 75%;
-} 
-.first:nth-child(5) li:nth-child(1){
-    width: 60%;
-} 
-.first:nth-child(5) li:nth-child(2){
-    margin-left: -10%;
-}
-.first:nth-child(5) li:nth-child(1) span{
-    width: 75%;
-} 
-.first:nth-child(6) li:nth-child(1){
-    width: 70%;
-} 
-.first:nth-child(6) li:nth-child(2){
-    margin-right: 10%;
-}
-.first:nth-child(6) li:nth-child(1) span{
-    width: 80%;
-} 
-.first:nth-child(7) li:nth-child(1){
-    width: 50%;
-} 
-.first:nth-child(7) li:nth-child(1) span{
-    width: 67%;
-} 
-.first:nth-child(8) li:nth-child(2){
-    margin-left: -12%;
-}
-.first:nth-child(8) li:nth-child(3){
-    width: 28%;
-    margin-left: -10%;
-}
-.first:nth-child(8) li:nth-child(3) span{
-    width: 74%;
-}
-/*
-.first:nth-child(1) li:nth-child(3){
-    margin-left: 4%;
-}
-.first:nth-child(1) li:nth-child(4){
-    margin-left: 4%;
-}
-.first_title li:nth-child(2) span:nth-of-type(1){
-    padding: 0 5px;
-    border: 1px solid black;
-    margin: 0 10px;
-}
-.first:nth-child(2) li:nth-child(3){
-    margin-left: 8%;
-}
-.first:nth-child(4) li:nth-child(3) span:nth-of-type(1){
-    padding: 0 5px;
-    border: 1px solid black;
-    margin: 0 10px;
-}
-.first:nth-child(5) li:nth-child(1) {
-    width: 45%;
-}
-.first:nth-child(5) li:nth-child(1) span{
-    width: 75%;
-}
-.first:nth-child(6) li:nth-child(1) {
-    width: 64%;
-}
-.first:nth-child(6) li:nth-child(1) span{
-    width: 85%;
-}
-.first:nth-child(7) li:nth-child(1) {
-    width: 42%;
-}
-.first:nth-child(7) li:nth-child(1) span{
-    width: 65%;
-}
-.first:nth-child(8) li:nth-child(3) {
-    width: 30%;
-}
-.first:nth-child(8) li:nth-child(3) span{
-    width: 75%;
-} */
+// .first:nth-child(4) li:nth-child(1){
+//     width: 45%;
+// } 
+// .first:nth-child(4) li:nth-child(1) span{
+//     width: 75%;
+// } 
+// .first:nth-child(5) li:nth-child(1){
+//     width: 60%;
+// } 
+// .first:nth-child(5) li:nth-child(2){
+//     margin-left: -10%;
+// }
+// .first:nth-child(5) li:nth-child(1) span{
+//     width: 75%;
+// } 
+// .first:nth-child(6) li:nth-child(1){
+//     width: 70%;
+// } 
+// .first:nth-child(6) li:nth-child(2){
+//     margin-right: 10%;
+// }
+// .first:nth-child(6) li:nth-child(1) span{
+//     width: 80%;
+// } 
+// .first:nth-child(7) li:nth-child(1){
+//     width: 50%;
+// } 
+// .first:nth-child(7) li:nth-child(1) span{
+//     width: 67%;
+// } 
+// .first:nth-child(8) li:nth-child(2){
+//     margin-left: -12%;
+// }
+// .first:nth-child(8) li:nth-child(3){
+//     width: 28%;
+//     margin-left: -10%;
+// }
+// .first:nth-child(8) li:nth-child(3) span{
+//     width: 74%;
+// }
+
 .end li{
     float: none;
 }
@@ -737,13 +1072,12 @@ ul, ol { list-style: none; }
     overflow: hidden;
 }
 .content_b_title_ul li p{
-    border-top: 1px solid black;
     float: left;
 }
 
 .content_b_title_ul li:nth-child(1) p{
-    // border-bottom: 1px solid black;
-    // border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
     /* padding: 0 5px; */
     width: 10%;
     box-sizing: border-box;
@@ -752,20 +1086,20 @@ ul, ol { list-style: none; }
 
 .content_b_title_ul li:nth-child(1) p:nth-child(1){
     width: 80%;
-    // border-bottom: 1px solid black;
-    // border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
     box-sizing: border-box;
     /* border-left: none; */
 }
 .content_b_title_ul li:nth-child(1) p:last-child{
     border-right: none;
 }
-
 .zd p{
     border-bottom: 1px solid black;
     width: 10%;
     box-sizing: border-box;
     text-align: center;
+    border-right: 1px solid black;
     min-height: 20px;
 }
 .zd p:nth-child(1){
@@ -777,7 +1111,7 @@ ul, ol { list-style: none; }
     border-right: none;
 }
 .zd:last-child p{
-    // border-bottom: none;
+    border-bottom: none;
 }
 .content_b_title_bot_ul,.content_b_title_ul{
     margin-top: 0!important;
@@ -785,6 +1119,8 @@ ul, ol { list-style: none; }
 }
 .content_b_title_bot_ul li{
     display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
     border-bottom: 1px solid black;
 }
 .content_b_title_bot_ul li p{
@@ -863,9 +1199,6 @@ ul, ol { list-style: none; }
 .content_b_title_bot_ul li p:nth-child(1){
     margin-left: 5px;
 }
-.content_b_title_ul li p:nth-child(1){
-    /* margin-left: 5px; */
-}
 /* page2 */
 .content_page2_ul {
     margin-top: 0!important;
@@ -895,6 +1228,7 @@ ul, ol { list-style: none; }
     height: auto;
 }
 .content_page2_ul_two>li>p>input {
+    outline: none;
     width: 95px;
     border-top: none;
     border-left: none;

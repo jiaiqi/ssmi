@@ -3,7 +3,7 @@
   <div class="wrap_t">
     <div class="header">
       <p>
-        累计运行次数：
+        累计运行次数:
         <span>2536</span>
       </p>
       <p>业务协同标准化服务平台</p>
@@ -17,11 +17,11 @@
         </div>
         <div class="content_cen">
           <p>
-            累计运行时间：
+            累计运行时间:
             <span>30天5小时26分</span>
           </p>
           <p>
-            累计就诊次数：
+            累计就诊次数:
             <span>256553</span>
           </p>
         </div>
@@ -65,11 +65,11 @@
           <div class="main_right_cen_b">
             <div class="main_right_b_left">
               <p>
-                累计服务请求次数：
+                累计服务请求次数:
                 <span>256553</span>
               </p>
               <p>
-                累计运行时间：
+                累计运行时间:
                 <span>30天5小时26分</span>
               </p>
             </div>

@@ -5,26 +5,32 @@
       <table>
         <tbody>
           <tr>
-            <td>流水号</td>
+            <td>就诊流水号</td>
+            <td>医院</td>
             <td>姓名</td>
             <td>年龄</td>
             <td>诊断疾病名称</td>
             <td>医师</td>
             <td>科室</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{ item.BASIC_ACTIVE_ID }}</td>
+            <td>{{ item.DE01_00_010_00 }}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.DE02_01_032_00 }}</td>
             <td>{{ item.DE05_01_025_00 }}</td>
             <td>{{ item.AP02_01_039_29 }}</td>
             <td>{{ item.DE08_10_026_00 }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -50,13 +56,11 @@
                 <div class="content_item_detail">诊疗号:{{detail.DE01_00_010_00}}</div>
                 <div class="content_item_detail">临床诊断为: {{detail.DE05_01_025_00}}</div>
                 <div class="content_item_detail">曾作处理:</div>
-                <!-- <div class="content_item_detail">建议：1.禁烟酒。2避免劳累。3.动态监测相关指标变化。</div> -->
+                <!-- <div class="content_item_detail">建议:1.禁烟酒。2避免劳累。3.动态监测相关指标变化。</div> -->
               </div>
               <div class="content_bottom">
-                <div class>医师：{{detail.AP02_01_039_29}}</div>
-                <div
-                  v-if="detail.DE05_01_058_00"
-                >确诊日期：{{detail.DE05_01_058_00.slice(0,4)+'-'+detail.DE05_01_058_00.slice(4,6)+'-'+detail.DE05_01_058_00.slice(6)}}</div>
+                <div class>医师:{{detail.AP02_01_039_29}}</div>
+                <div v-if="detail.DE05_01_058_00">确诊日期:{{format_date(detail.DE05_01_058_00)}}</div>
                 <div v-else-if="!detail.DE05_01_058_00"></div>
               </div>
             </div>
@@ -126,7 +130,7 @@ export default {
       color: #333;
       &.handle {
         cursor: pointer;
-        color: blue;
+        color: #409eff;
       }
     }
   }
@@ -284,7 +288,7 @@ export default {
   justify-content: space-around;
 }
 .table_mabl_content {
-  width: 1000px;
+  // width: 1000px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;

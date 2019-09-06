@@ -5,27 +5,32 @@
       <table>
         <tbody>
           <tr>
+            <td>住院号</td>
+            <td>医院</td>
             <td>手术编号</td>
             <td>手术操作时间</td>
             <td>手术级别</td>
             <td>愈合等级</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.DE01_00_014_00}}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{ item.AP01_00_004_00}}</td>
-            <td
-              v-if="item.AP06_00_189_00"
-            >{{ item.AP06_00_189_00.slice(0,4)+'-'+item.AP06_00_189_00.slice(4,6)+'-'+item.AP06_00_189_00.slice(6,8)}}</td>
+            <td v-if="item.AP06_00_189_00">{{format_date(item.AP06_00_189_00)}}</td>
             <td v-else-if="!item.AP06_00_189_00"></td>
             <td>{{ item.AP06_00_367_00 }}</td>
             <td>{{ item.AP05_01_054_00 }}</td>
             <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -39,23 +44,21 @@
           <el-dialog :visible.sync="dialogVisible" width="1000px">
             <div class="tab_detail">
               <div class="detail_title">
-                <span>住院病区：{{ detail.AP08_10_002_00 }}</span>
-                <span>住院科室：{{ detail.AP08_10_026_11 }}</span>
-                <span>住院床号：{{ detail.AP08_10_026_11 }}</span>
-                <span
-                  v-if="detail.AP06_00_189_00"
-                >手术操作时间: {{ detail.AP06_00_189_00.slice(0,4)+'-'+detail.AP06_00_189_00.slice(4,6)+'-'+detail.AP06_00_189_00.slice(6,8) }}</span>
-                <span>病案号：{{ detail.AP08_10_001_00 }}</span>
+                <span>住院病区:{{ detail.AP08_10_002_00 }}</span>
+                <span>住院科室:{{ detail.AP08_10_026_11 }}</span>
+                <span>住院床号:{{ detail.AP08_10_026_11 }}</span>
+                <span v-if="detail.AP06_00_189_00">手术操作时间: {{foramt_date(detail.AP06_00_189_00)}}</span>
+                <span>病案号:{{ detail.AP08_10_001_00 }}</span>
               </div>
               <div class="detail">
                 <div class="detail_left">
-                  <p>麻醉医师：{{ detail.AP02_01_039_79 }}</p>
-                  <p>助手1：{{ detail.AP02_01_039_75 }}</p>
-                  <p>助手2：{{ detail.AP02_01_039_78 }}</p>
+                  <p>麻醉医师:{{ detail.AP02_01_039_79 }}</p>
+                  <p>助手1:{{ detail.AP02_01_039_75 }}</p>
+                  <p>助手2:{{ detail.AP02_01_039_78 }}</p>
                 </div>
                 <div class="detail_rig">
-                  <p>手术/操作-名称：{{ detail.DE06_00_094_00 }}</p>
-                  <p>麻醉-方法：{{ detail.DE06_00_074_00 }}</p>
+                  <p>手术/操作-名称:{{ detail.DE06_00_094_00 }}</p>
+                  <p>麻醉-方法:{{ detail.DE06_00_074_00 }}</p>
                 </div>
               </div>
             </div>
@@ -464,7 +467,7 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }

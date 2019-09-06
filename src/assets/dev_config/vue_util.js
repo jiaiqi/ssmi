@@ -499,7 +499,7 @@ function init_util() {
 
   /**
    * 返回常用的页面路径
-   * @param type：页面类型
+   * @param type:页面类型
    * @returns {*}
    */
   Vue.prototype.getCommonPagePath = function (type) {
@@ -1026,7 +1026,41 @@ function init_util() {
     return service_api;
   }
 
-  // Vue.prototype.service
+   /**
+     *  格式化日期
+     *  @params date: 时间字符串或数字  仅支持String和Number类型
+     *  @params type: return的时间格式，默认为0 输出 "YYYY-MM-DD" ，1 输出 "YYYY-MM-DD hh:mm:ss"，2 输出 "hh:mm:ss"
+     *  @params operator: 年月日间隔符 默认"YYYY-MM-DD"
+     */
+  Vue.prototype.format_date = function(date,type,operator) {  // 20180808T082630
+   
+    if(date){
+      if(!type){
+        type = 0
+      }
+      if(!operator){
+        operator = "-"
+      }
+      if(typeof date == "string"&&type==0){
+        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)
+      }else if(typeof date == "string" && type == 1 &&date.length==15){ // 2019-09-04 12:22:22
+        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(9,11)+":"+date.slice(11,13)+":"+date.slice(13,15)
+      }else if(typeof date == "number" && type == 0 &&date.length==14){ // 2019-09-04 12:22:22
+        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)
+      }else if(typeof date == "number" && type == 1 &&date.length==14){ // 2019-09-04 12:22:22
+        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14)
+      }else if(typeof date == "string" && type == 2 &&date.length==15){ // 2019-09-04 12:22:22
+        date.slice(9,11)+":"+date.slice(11,13)+":"+date.slice(13,15)
+      }else if(typeof date == "number"){
+        let dateTime = date.toString()
+        dateTime = dateTime.slice(0,4)+operator+dateTime.slice(4,6)+operator+dateTime.slice(6,8)
+        return dateTime
+      }else{
+        return "数据不规范,无法转化成标准时间"
+      }
+      return date      
+    }
+  }
 }
 
 export default init_util;

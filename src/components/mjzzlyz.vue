@@ -5,24 +5,31 @@
       <table>
         <tbody>
           <tr>
+            <td>就诊流水号</td>
+            <td>医院</td>
             <td>医嘱项目类别</td>
             <td>医嘱项目</td>
             <td>药物剂型</td>
             <td>使用方法</td>
             <td>开具时间</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.DE01_00_010_00}}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.AP06_00_276_00}}</td>
             <td>{{item.AP06_00_278_00}}</td>
             <td>{{item.AP06_00_313_00}}</td>
             <td>{{item.AP06_00_265_00}}</td>
-            <td
-              v-if="item.AP06_00_195_00"
-            >{{item.AP06_00_195_00.slice(0,4)+'-'+item.AP06_00_195_00.slice(4,6)+'-'+item.AP06_00_195_00.slice(6,8)}}</td>
+            <td v-if="item.AP06_00_195_00">{{format_date(item.AP06_00_195_00)}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -40,23 +47,23 @@
                 <div class="header_bot">
                   <ul>
                     <li>
-                      姓名：
+                      姓名:
                       <span>{{detail.DE02_01_039_00}}</span>
                     </li>
                     <li>
-                      性别：
+                      性别:
                       <span>{{detail.AP02_01_102_01}}</span>
                     </li>
                     <li>
-                      年龄：
+                      年龄:
                       <span>{{detail.DE02_01_032_00}}</span>岁
                     </li>
                     <li>
-                      科室：
+                      科室:
                       <span>{{detail.DE08_10_026_00}}</span>
                     </li>
                     <li>
-                      留观号：
+                      留观号:
                       <span></span>
                     </li>
                   </ul>
@@ -103,11 +110,11 @@
               </div>
               <div class="bottom">
                 <p>
-                  医师签名：
+                  医师签名:
                   <span>{{detail.AP02_01_039_72}}</span>
                 </p>
                 <p>
-                  护士签名：
+                  护士签名:
                   <span></span>
                 </p>
               </div>
@@ -215,7 +222,7 @@ table td {
 
 td.handle {
   cursor: pointer;
-  color: blue;
+  color: #409eff;
 }
 
 .text {

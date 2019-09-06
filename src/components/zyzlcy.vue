@@ -5,17 +5,20 @@
       <table>
         <tbody>
           <tr>
-            <td>姓名</td>
+            <td>医院</td>
             <td>住院号</td>
+            <td>姓名</td>
             <td>入院日期</td>
             <td>出院日期</td>
             <td>住院患者入院科室</td>
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{ item.DE02_01_039_00 }}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{ item.DE01_00_014_00 }}</td>
+            <td>{{ item.DE02_01_039_00 }}</td>
             <td
               v-if="item.DE06_00_092_00"
             >{{ item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8) }}</td>
@@ -24,11 +27,14 @@
             >{{ item.DE06_00_016_00.slice(0,4)+'-'+item.DE06_00_016_00.slice(4,6)+'-'+item.DE06_00_016_00.slice(6,8) }}</td>
             <td>{{ item.AP08_10_026_01 }}</td>
             <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -45,10 +51,10 @@
               <div class="table_cy_content">
                 <div class="main_title">{{ detail.AP08_10_013_06 }}</div>
                 <div class="header">
-                  <div class="header_item">住院科室：{{ detail.AP08_10_026_01 }}</div>
+                  <div class="header_item">住院科室:{{ detail.AP08_10_026_01 }}</div>
                   <div class="header_item">
                     <div class="header_item_top">出院记录</div>
-                    <div class="header_item_bottom">姓名：{{ detail.DE02_01_039_00 }}</div>
+                    <div class="header_item_bottom">姓名:{{ detail.DE02_01_039_00 }}</div>
                   </div>
                   <div class="header_item">
                     <div class="header_item_item">
@@ -227,7 +233,7 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }

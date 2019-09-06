@@ -21,12 +21,12 @@
               当前帐号:
               <span>{{user.user_no}}</span>
             </div>
-            <span class="btn" @click="toLogin">注销账号</span>
+            <span class="btn_logout" @click="toLogin">注销</span>
           </div>
         </div>
         <div class="top_header">
-          <div class="top_header_item">累计运行时间：</div>
-          <div class="top_header_item">累计就诊次数：</div>
+          <div class="top_header_item">累计运行时间:</div>
+          <div class="top_header_item">累计就诊次数:</div>
         </div>
         <div class="time_horizon">
           <div
@@ -130,8 +130,8 @@
           </div>
           <div class="content_right_bottom">
             <div class="content_right_bottom_item panel-r-t">
-              <span>累计就诊次数：56565次</span>
-              <span>累计运行时间：3天12小时56分钟</span>
+              <span>累计就诊次数:56565次</span>
+              <span>累计运行时间:3天12小时56分钟</span>
             </div>
             <div class="content_right_bottom_item">
               <div class="content_left_right_item xpanel-l-t" style="height: 260px;">
@@ -150,7 +150,7 @@
       <div class="content">
         <div class="content_left col-65">
           <div class="content_left_left xpanel-l-t">
-            <div class="item_title_long">各医院电子病历查询次数柱状图（多级） X轴：天对应小时，周和月对应天，年对应月</div>
+            <div class="item_title_long">各医院电子病历查询次数柱状图（多级） X轴:天对应小时，周和月对应天，年对应月</div>
             <ve-histogram
               height="700px"
               :data="chartData01"
@@ -215,8 +215,8 @@
           </div>
           <div class="content_right_bottom">
             <div class="content_right_bottom_item xpanel-l-b">
-              <span>累计就诊次数：56565次</span>
-              <span>累计运行时间：3天12小时56分钟</span>
+              <span>累计就诊次数:56565次</span>
+              <span>累计运行时间:3天12小时56分钟</span>
             </div>
             <div class="content_right_bottom_item">
               <div class="content_left_right_item xpanel-l-b" style="height: 260px;">
@@ -276,8 +276,8 @@
           </div>
           <div class="content_right_bottom">
             <div class="content_right_bottom_item xpanel-l-b">
-              <span>累计采集数量：56565次</span>
-              <span>累计运行时间：3天12小时56分钟</span>
+              <span>累计采集数量:56565次</span>
+              <span>累计运行时间:3天12小时56分钟</span>
             </div>
             <div class="content_right_bottom_item">
               <div class="content_left_right_item xpanel-l-b" style="height: 260px;">
@@ -406,6 +406,66 @@ export default {
           let data = res.data.data
 
           if (groupBy === "by_hour_of_date") {
+            let req = {
+              "serviceName": "srvcvs_medical_records_select",
+              "colNames": ["*"],
+              "condition": [
+                {
+                  "colName": "ywfssj",
+                  "value": this.timeHorizon.today,
+                  "ruleType": "[like]"
+                }
+              ],
+              "order": []
+            }
+            let url = this.getServiceUrl("select", req.serviceName, "cvs")
+            this.axios.post(url, req)
+              .then(res => {
+                console.log(res.data.data)
+                let timeData = res.data.data
+                let hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+                let hos = ["妇幼医院", "博爱医院", "市人民医院", "中医医院"]
+                let rows1 = []
+                let rows2 = []
+                hours.map(hour => {
+                  let dataMap = {}
+                  rows1.push(dataMap)
+                  if (hour < 10) {
+                    dataMap.时间 = hour.slice(1, 2) + "点"
+                  } else {
+                    dataMap.时间 = hour + "点"
+
+                  }
+                  // let count = 0
+                  hos.map(ho => {
+                    let count = 0
+                    for (let i in timeData) {
+                      let dateHour = timeData[i].ywfssj.slice(11, 13)
+                      if (dateHour == hour && timeData[i].yljgmc == ho) {
+                        count++
+                      }
+                      dataMap[ho] = count
+                    }
+                  })
+                })
+
+                let lineData = {
+                  columns: ['时间', '市人民医院', '中医医院', '博爱医院', '妇幼医院'],
+                  rows: rows1
+                }
+                let lineData2 = {
+                  columns: ['时间', '访问用户'],
+                  rows: rows2
+                }
+
+                this.chartData01 = lineData
+                this.distribute = lineData2
+                console.log(lineData2)
+                // console.log(this.chartData01)
+              })
+              .catch(err => {
+                console.log(err)
+              })
             let hours = ["0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
             let hos = ["rmyy", "zyyy", "fyyy", "bayy"]
             let rows = []
@@ -418,6 +478,7 @@ export default {
                   // console.log(item.hospital, hos[i], hours[key], dateHour)
                   if (item.count_hour) {
                     let dateHour = item.count_hour.slice(11) // YYYY-MM-DD hh:mm:ss 截取从h开始后面所有字符（时分秒）
+                    console.log('dateHour', dateHour)
                     if (item.hospital === 'rmyy' && hours[key] === dateHour) {
                       dataMap.市人民医院 = item.amount // 市人民医院:amount
                     } else if (item.hospital === 'zyyy' && hours[key] === dateHour) {
@@ -432,10 +493,10 @@ export default {
               }
             }
             let lineData = {
-              columns: ['时间', '市人民医院', '市中医医院', '博爱医院', '市妇幼医院'],
+              columns: ['时间', '市人民医院', '中医医院', '博爱医院', '妇幼医院'],
               rows: rows
             }
-            this.chartData01 = lineData
+            // this.chartData01 = lineData
             // console.log(this.chartData01)
           } else if (groupBy === "by_month_of_year") {
             let month = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
@@ -588,7 +649,8 @@ export default {
     return {
       user: '',
       date: null,
-      timeHorizon: '',
+      timeHorizon: {},
+      today: '',
       checkDataType: 'day',
       legend: {
         textStyle: {
@@ -1192,16 +1254,14 @@ export default {
       month_start: month_start,
       month_end: month_end
     }
-    // console.log(this.timeHorizon)
-  },
-  created() {
+    this.today = today
     let user = sessionStorage.getItem('current_login_user')
     top.user = JSON.parse(user)
     this.user = top.user
     console.log("user:", this.user)
+    // console.log(this.timeHorizon)
   },
   mounted() {
-
     setInterval(() => {
       this.date = moment().format('YYYY-MM-DD  HH:mm:ss');
     }, 1000);
@@ -1345,7 +1405,7 @@ div /deep/ .swiper-pagination-bullets {
         .accountInfo {
           display: inline-block;
           height: 50px;
-          min-width: 150px;
+          min-width: 130px;
           span {
             font-weight: 600;
           }
@@ -1355,7 +1415,7 @@ div /deep/ .swiper-pagination-bullets {
           text-align: center;
           display: inline-block;
           height: 30px;
-          min-width: 100px;
+          min-width: 80px;
           line-height: 30px;
           margin-right: 20px;
           &:nth-child(2) {
@@ -1364,6 +1424,16 @@ div /deep/ .swiper-pagination-bullets {
               background-color: transparent;
             }
           }
+          &:hover {
+            background-color: rgba(255, 0, 0, 0.5);
+          }
+        }
+        .btn_logout {
+          cursor: pointer;
+          line-height: 30px;
+          height: 30px;
+          text-align: center;
+          min-width: 50px;
           &:hover {
             background-color: rgba(255, 0, 0, 0.5);
           }

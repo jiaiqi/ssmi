@@ -6,22 +6,28 @@
         <table>
           <tbody>
             <tr>
+              <td>就诊流水号</td>
+              <td>医院</td>
               <td>姓名</td>
               <td>结算日期</td>
               <td>缴费科室</td>
               <td>机构名称</td>
+              <td>数据产生时间</td>
               <td>操作</td>
             </tr>
             <tr v-for="(item, index) in tabsData" :key="index">
+              <td>{{item.ORGANIZATION_NAME}}</td>
+              <td>{{item.DE01_00_010_00}}</td>
               <td>{{item.DE02_01_039_00}}</td>
-              <td
-                v-if="item.AP07_00_026_00"
-              >{{item.AP07_00_026_00.slice(0,4)+'-'+item.AP07_00_026_00.slice(4,6)+'-'+item.AP07_00_026_00.slice(6,8)}}</td>
+              <td v-if="item.AP07_00_026_00">{{fromat_date(item.AP07_00_026_00)}}</td>
               <td>{{item.DE08_10_026_00}}</td>
               <td>{{item.ORGANIZATION_NAME}}</td>
+              <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
               <td class="handle" @click="changeDialogVisible(item)">详情</td>
             </tr>
             <tr>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -39,49 +45,49 @@
                     <ul>
                       <li>
                         <p>
-                          姓名：
+                          姓名:
                           <span>{{detail.DE02_01_039_00}}</span>
                         </p>
                         <p>
-                          性别：
+                          性别:
                           <span>{{detail.AP02_01_102_01}}</span>
                         </p>
                         <p>
-                          年龄：
+                          年龄:
                           <span>{{detail.DE02_01_032_00}}</span>岁
                         </p>
                       </li>
                       <li>
                         <p>
-                          职业：
+                          职业:
                           <span>其他</span>
                         </p>
                         <p>
-                          工作单位：
+                          工作单位:
                           <span></span>
                         </p>
                       </li>
                       <li>
                         <p>
-                          家庭地址：
+                          家庭地址:
                           <span></span>
                         </p>
                         <p>
-                          家庭电话：
+                          家庭电话:
                           <span></span>
                         </p>
                       </li>
                       <li>
                         <p>
-                          联系人姓名：
+                          联系人姓名:
                           <span></span>
                         </p>
                         <p>
-                          联系人关系：
+                          联系人关系:
                           <span></span>
                         </p>
                         <p>
-                          联系人电话：
+                          联系人电话:
                           <span></span>
                         </p>
                       </li>
@@ -190,7 +196,7 @@ table td {
 
 td.handle {
   cursor: pointer;
-  color: blue;
+  color: #409eff;
 }
 
 .text {

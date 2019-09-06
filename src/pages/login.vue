@@ -15,6 +15,8 @@
         @keyup.enter="toHome"
       />
       <hr class="hr15" />
+      <el-checkbox v-model="saveAccount">记住密码</el-checkbox>
+      <hr class="hr15" />
       <input value="登录" style="width:100%;" type="button" @click="toHome()" />
       <hr class="hr20" />
     </form>
@@ -27,10 +29,20 @@ export default {
   data() {
     return {
       userName: '',
-      pwd: ''
+      pwd: '',
+      saveAccount: false
     };
   },
   mounted() {
+    let account = localStorage.getItem("account")
+    if (account) {
+      account = JSON.parse(account)
+      console.log(account)
+      if (account.userName && account.pwd) {
+        this.userName = account.userName
+        this.pwd = account.pwd
+      }
+    }
   },
   methods: {
     toHome() {
@@ -69,32 +81,46 @@ export default {
               withCredentials: true
             },
           }).then(res => {
-            if (res.data.resultCode === "SUCCESS") {
-              let resp = res.data.response[0]
-              let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
-              sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
-              let current_login_user = resp.response.login_user_info;
-              sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
-              top.user = current_login_user;
-              // window.user = current_login_user
-              // self.$router.go(-1)
-              console.log(self.$route)
-              if (self.$route.query.length > 0) {
-                let path = self.$route.query.from
-                console.log(path)
-                self.$router.push({ name: path })
-              } else {
-                self.$router.push({ name: 'dzbl' })
-              }
-            }
             console.log(res)
+            // if (res.data.resultCode === "SUCCESS") {
+            //   // let resp = res.data.response[0]
+            //   // let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
+            //   // sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
+            //   // let current_login_user = resp.response.login_user_info;
+            //   // sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
+            //   // top.user = current_login_user;
+            //   // window.user = current_login_user
+            //   // self.$router.go(-1)
+            console.log(self.$route)
+            if (self.$route.query.length > 0) {
+              let path = self.$route.query.from
+              console.log(path)
+              self.$router.push({ name: path })
+            } else {
+              self.$router.push({ name: 'dzbl' })
+            }
+            // }
           }).catch(err => {
             console.log(err)
           });
         }
       }
       crosAjax(path, "POST", bxReqs, callBack);
+      if (this.saveAccount == true) {
+        let account = {
+          userName: this.userName,
+          pwd: this.pwd
+        }
+        account = JSON.stringify(account)
+        localStorage.setItem("account", account)
+      } else {
+        let account = localStorage.getItem("account")
+        if (account) {
+          localStorage.removeItem("account")
+        }
+      }
     }
+
   }
 };
 </script>

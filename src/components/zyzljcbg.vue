@@ -5,26 +5,30 @@
       <table>
         <tbody>
           <tr>
-            <td>姓名</td>
-            <td>性别</td>
+            <td>医院</td>
+            <td>住院号</td>
+            <td>检查项目</td>
             <td>检查日期</td>
             <td>科室</td>
-            <td>机构名称</td>
+            <td>检查结论</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{ item.DE02_01_039_00 }}</td>
-            <td>{{ item.AP02_01_102_01 }}</td>
-            <td
-              v-if="item.AP06_00_048_03"
-            >{{ item.AP06_00_048_03.slice(0,4)+'-'+item.AP06_00_048_03.slice(4,6)+'-'+item.AP06_00_048_03.slice(6,8)}}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_014_00}}</td>
+            <td>{{ item.DE04_30_020_00 }}</td>
+            <td v-if="item.AP06_00_048_03">{{format_date(item.AP06_00_048_03)}}</td>
             <td>{{ item.AP04_30_060_00 }}</td>
-            <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td class="ellipsis">{{item.AP04_30_046_00}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -44,7 +48,7 @@
                 </div>
                 <div class="header_cen">
                   <p>
-                    <span>影像号：</span>
+                    <span>影像号:</span>
                     <span></span>
                   </p>
                 </div>
@@ -52,31 +56,31 @@
                   <ul>
                     <li>
                       <p>
-                        <span>姓名：</span>
+                        <span>姓名:</span>
                         <span>{{ detail.DE02_01_039_00 }}</span>
                       </p>
                     </li>
                     <li>
                       <p>
-                        <span>性别：</span>
+                        <span>性别:</span>
                         <span>{{ detail.AP02_01_102_01 }}</span>
                       </p>
                     </li>
                     <li>
                       <p>
-                        <span>年龄：</span>
+                        <span>年龄:</span>
                         <span>{{ detail.DE02_01_032_00 }}岁</span>
                       </p>
                     </li>
                     <li>
                       <p>
-                        <span>检查号：</span>
+                        <span>检查号:</span>
                         <span>{{ detail.AP04_50_057_00 }}</span>
                       </p>
                     </li>
                     <li>
                       <p>
-                        <span>科室：</span>
+                        <span>科室:</span>
                         <span>{{ detail.AP04_30_060_00 }}</span>
                       </p>
                     </li>
@@ -85,14 +89,14 @@
                       <p>
                         <span
                           v-if="detail.AP06_00_048_03"
-                        >检查时间：{{detail.AP06_00_048_03.slice(0,4)+'-'+detail.AP06_00_048_03.slice(4,6)+'-'+detail.AP06_00_048_03.slice(6,8)}}</span>
+                        >检查时间:{{format_date(detail.AP06_00_048_03)}}</span>
                       </p>
                     </li>
                     <li>
                       <!-- <p>
                         <span
                           v-if="detail.UPLOAD_TIME"
-                        >报告时间：{{detail.UPLOAD_TIME.slice(0,4)+'-'+detail.UPLOAD_TIME.slice(4,6)+'-'+detail.UPLOAD_TIME.slice(6,8)}}</span>
+                        >报告时间:{{detail.UPLOAD_TIME.slice(0,4)+'-'+detail.UPLOAD_TIME.slice(4,6)+'-'+detail.UPLOAD_TIME.slice(6,8)}}</span>
                       </p>-->
                       <p></p>
                     </li>
@@ -102,23 +106,22 @@
               <div class="content">
                 <div class="content_top">
                   <div class="inspect">
-                    <p>检查项目：</p>
+                    <p>检查项目:</p>
                     <p>{{ detail.DE04_30_020_00 }}</p>
                   </div>
                   <div class="inspect">
-                    <p>检查方法：</p>
+                    <p>检查方法:</p>
                     <p>{{ detail.AP04_30_061_00 }}</p>
                   </div>
                   <div class="inspect">
-                    <p>影像表现：</p>
+                    <p>检查结论:</p>
                     <p>{{ detail.AP04_30_046_00 }}</p>
                     <p></p>
                   </div>
-                  <div class="opinion">
-                    <p>诊断意见：</p>
-                    <ul>
-                      <li>{{detail.AP04_30_046_00}}</li>
-                    </ul>
+                  <!-- <div class="opinion"> -->
+                  <div class="inspect">
+                    <p>疾病诊断名称:</p>
+                    <p>{{detail.DE05_01_025_00}}</p>
                   </div>
                 </div>
               </div>
@@ -126,15 +129,15 @@
               <div class="foot">
                 <div class="foot_top">
                   <p>
-                    <span>诊断医师：</span>
+                    <span>诊断医师:</span>
                     <span>{{ detail.AP02_01_039_19 }}</span>
                   </p>
                   <p>
-                    <span>审核医师：</span>
+                    <span>审核医师:</span>
                     <span>{{ detail.AP02_01_039_19 }}</span>
                   </p>
                   <p>
-                    <span>审核时间：</span>
+                    <span>审核时间:</span>
                     <span></span>
                   </p>
                 </div>
@@ -209,13 +212,18 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }
 p {
   padding: 0;
   margin: 0;
+}
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .text {
   margin: 0;
@@ -298,7 +306,7 @@ p {
     margin-top: 0;
   }
   .inspect:nth-child(3) {
-    min-height: 200px;
+    min-height: 100px;
   }
   .opinion {
     margin-top: 30px;

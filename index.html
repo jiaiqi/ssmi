@@ -6,18 +6,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>bxfront_unique</title>
 </head>
+<script>
+  function ReadCommCardRet(para) {
+    // alert("收到读卡返回信息 " + para);
+    localStorage.setItem("CardInfo", para)
+    let CardInfo = JSON.parse(para)
+    window.CardInfo = CardInfo
+  }
+
+</script>
 
 <body>
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
-<script>
-  function ReadCommCardRet(para) {
-    alert("收到读卡返回信息 " + para);
-    localStorage.setItem("userInfo", para)
-    // let userInfo = JSON.parse(para)
-  }
 
-</script>
 
 </html>

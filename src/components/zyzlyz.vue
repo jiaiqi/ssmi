@@ -5,26 +5,33 @@
       <table>
         <tbody>
           <tr>
+            <td>医院</td>
+            <td>住院号</td>
             <td>医嘱号</td>
             <td>医嘱分类</td>
             <td>医嘱下达时间</td>
             <!-- <td>医嘱内容</td> -->
             <td>机构名称</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-if="datas">
+            <td>{{datas.ORGANIZATION_NAME}}</td>
+            <td>{{datas.DE01_00_014_00}}</td>
             <td>{{ datas.AP01_00_024_00 }}</td>
             <td>{{ datas.AP06_00_287_00 }}</td>
-            <td
-              v-if="datas.AP06_00_207_00"
-            >{{ datas.AP06_00_207_00.slice(0,4)+'-'+datas.AP06_00_207_00.slice(4,6)+'-'+datas.AP06_00_207_00.slice(6,8)+" "+datas.AP06_00_207_00.slice(9,11)+':'+datas.AP06_00_207_00.slice(11,13)+':'+datas.AP06_00_207_00.slice(13,15) }}</td>
+            <td v-if="datas.AP06_00_207_00">{{format_date(datas.AP06_00_207_00,1)}}</td>
             <td v-if="!datas.AP06_00_207_00"></td>
             <td>{{ datas.ORGANIZATION_NAME }}</td>
+            <td>{{format_date(datas.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(tabsData)">
               <span>详情</span>
             </td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -42,23 +49,23 @@
                 </div>
                 <div class="header_bot" v-if="tabData[0]">
                   <p>
-                    <span>姓名：</span>
+                    <span>姓名:</span>
                     <span>{{ tabData[0].DE02_01_039_00 }}</span>
                   </p>
                   <p>
-                    <span>性别：</span>
+                    <span>性别:</span>
                     <span>{{ tabData[0].AP02_01_102_01 }}</span>
                   </p>
                   <p>
-                    <span>年龄：</span>
+                    <span>年龄:</span>
                     <span>{{ tabData[0].DE02_01_032_00 }}</span>岁
                   </p>
                   <p>
-                    <span>住院号：</span>
+                    <span>住院号:</span>
                     <span>{{ tabData[0].DE01_00_014_00 }}</span>
                   </p>
                   <p>
-                    <span>住院科室：</span>
+                    <span>住院科室:</span>
                     <span>{{ tabData[0].AP08_10_026_11 }}</span>
                   </p>
                 </div>
@@ -86,17 +93,11 @@
                     <td>护士</td>
                   </tr>
                   <tr v-for="(item,index) in detail" :key="index">
-                    <td
-                      v-if="item.AP06_00_200_00"
-                    >{{item.AP06_00_200_00.slice(0,4)+'-'+item.AP06_00_200_00.slice(4,6)+'-'+item.AP06_00_200_00.slice(6,8)}}</td>
+                    <td v-if="item.AP06_00_200_00">{{format_date(item.AP06_00_200_00)}}</td>
                     <td v-else-if="!item.AP06_00_200_00"></td>
-                    <td
-                      v-if="item.AP06_00_200_00"
-                    >{{item.AP06_00_200_00.slice(9,11)+':'+item.AP06_00_200_00.slice(11,13)+':'+item.AP06_00_200_00.slice(13,15)}}</td>
+                    <td v-if="item.AP06_00_200_00">{{format_date(item.AP06_00_200_00)}}</td>
                     <td v-else-if="!item.AP06_00_200_00"></td>
-                    <td
-                      v-if="item.AP06_00_201_00"
-                    >{{item.AP06_00_201_00.slice(0,4)+'-'+item.AP06_00_201_00.slice(4,6)+'-'+item.AP06_00_201_00.slice(6,8)+' '+item.AP06_00_201_00.slice(9,11)+':'+item.AP06_00_201_00.slice(11,13)+':'+item.AP06_00_201_00.slice(13,15)}}</td>
+                    <td v-if="item.AP06_00_201_00">{{format_date(item.AP06_00_201_00,1)}}</td>
                     <td v-else-if="!item.AP06_00_201_00"></td>
                     <td>{{ item.AP06_00_283_00 }}</td>
                     <td></td>
@@ -106,9 +107,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td
-                      v-if="item.DE06_00_148_00"
-                    >{{item.DE06_00_148_00.slice(0,4)+'-'+item.DE06_00_148_00.slice(4,6)+'-'+item.DE06_00_148_00.slice(6,8)+' '+item.DE06_00_148_00.slice(9,11)+':'+item.DE06_00_148_00.slice(11,13)+':'+item.DE06_00_148_00.slice(13,15)}}</td>
+                    <td v-if="item.DE06_00_148_00">{{format_date(item.DE06_00_148_00,1)}}</td>
                     <td v-else-if="!item.DE06_00_148_00"></td>
                   </tr>
                 </table>
@@ -137,11 +136,13 @@ export default {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyyzxx
       let data = this.tabsData
-      data.map((item, index) => {
-        if (index == 1) {
-          this.datas = item
-        }
-      })
+      if (data && data.length > 0) {
+        data.map((item, index) => {
+          if (index == 1) {
+            this.datas = item
+          }
+        })
+      }
     }, 300);
 
   },
@@ -194,7 +195,7 @@ table td {
 
 td.handle {
   cursor: pointer;
-  color: blue;
+  color: #409eff;
 }
 
 .text {

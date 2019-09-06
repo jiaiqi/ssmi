@@ -22,12 +22,12 @@
         </div>
         <div class="top_header">
           <div class="top_header_left">
-            <div class="top_header_item">累计运行时间：</div>
-            <div class="top_header_item">累计就诊次数：</div>
+            <div class="top_header_item">累计运行时间:</div>
+            <div class="top_header_item">累计就诊次数:</div>
           </div>
           <div class="top_header_right">
-            <div class="top_header_item">电子病历累计数据量：6558455/28</div>
-            <div class="top_header_item">电子病历采集最新时间：2019-08-15</div>
+            <div class="top_header_item">电子病历累计数据量:6558455/28</div>
+            <div class="top_header_item">电子病历采集最新时间:2019-08-15</div>
           </div>
         </div>
         <div class="time_horizon">
@@ -57,7 +57,7 @@
       <div class="content">
         <div class="content_left col-65">
           <div class="content_left_left xpanel-l-t">
-            <div class="item_title_long">各医院电子病历查询次数柱状图（多级） X轴：天对应小时，周和月对应天，年对应月</div>
+            <div class="item_title_long">各医院电子病历查询次数柱状图（多级） X轴:天对应小时，周和月对应天，年对应月</div>
             <ve-histogram
               height="700px"
               :data="chartData01"
@@ -122,8 +122,8 @@
           </div>
           <div class="content_right_bottom">
             <div class="content_right_bottom_item xpanel-l-b">
-              <span>累计就诊次数：56565次</span>
-              <span>累计运行时间：3天12小时56分钟</span>
+              <span>累计就诊次数:56565次</span>
+              <span>累计运行时间:3天12小时56分钟</span>
             </div>
             <div class="content_right_bottom_item">
               <div class="content_left_right_item xpanel-l-b" style="height: 260px;">
@@ -183,8 +183,8 @@
           </div>
           <div class="content_right_bottom">
             <div class="content_right_bottom_item xpanel-l-b">
-              <span>累计采集数量：56565次</span>
-              <span>累计运行时间：3天12小时56分钟</span>
+              <span>累计采集数量:56565次</span>
+              <span>累计运行时间:3天12小时56分钟</span>
             </div>
             <div class="content_right_bottom_item">
               <div class="content_left_right_item xpanel-l-b" style="height: 260px;">

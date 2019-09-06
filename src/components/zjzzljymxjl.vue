@@ -5,21 +5,28 @@
       <table>
         <tbody>
           <tr>
+            <td>就诊流水号</td>
+            <td>医院</td>
             <td>检验申请单号</td>
             <td>检验时间</td>
             <td>检验报告单号</td>
+            <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
+            <td>{{item.DE01_00_010_00}}</td>
+            <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.AP01_00_022_00}}</td>
-            <td
-              v-if="item.DATAGENERATE_DATE"
-            >{{item.DATAGENERATE_DATE.toString().slice(0,4)+'-'+item.DATAGENERATE_DATE.toString().slice(4,6)+'-'+item.DATAGENERATE_DATE.toString().slice(6,8)}}</td>
+            <td v-if="item.DATAGENERATE_DATE">{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td v-if="!item.DATAGENERATE_DATE"></td>
             <td>{{item.AP04_50_057_00}}</td>
+            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -35,8 +42,8 @@
                   <span>年龄:{{detail.DE02_01_032_00}}</span>
                 </div>
                 <div class="detail_title_block">
-                  <span>样本号：</span>
-                  <span>送检医生：{{detail.AP02_01_122_00}}</span>
+                  <span>样本号:</span>
+                  <span>送检医生:{{detail.AP02_01_122_00}}</span>
                   <span>备注:</span>
                 </div>
               </div>
@@ -201,7 +208,7 @@ table {
     color: #7f7f7f;
     &.handle {
       cursor: pointer;
-      color: blue;
+      color: #409eff;
     }
   }
 }
