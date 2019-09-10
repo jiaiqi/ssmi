@@ -1225,7 +1225,6 @@ export default {
           // }
 
           if (this.oldId != this.id_card) {
-            // Object.assign(this.$data, this.$options.data())
             this.patientInfo = {}
             this.editableTabs.length = 0
             this.editableTabsValue = ""

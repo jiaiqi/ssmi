@@ -33,7 +33,7 @@
               <div class="header">
                 <div class="header_top">
                   <h1>{{detail.AP04_50_076_02}}</h1>
-                  <h3>门急诊诊疗检查报告单</h3>
+                  <h3>门急诊诊疗检查报告</h3>
                 </div>
                 <div class="header_cen">
                   <p>
