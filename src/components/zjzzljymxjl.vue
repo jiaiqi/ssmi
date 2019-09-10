@@ -2,11 +2,11 @@
   <div class="tab_content">
     <div class="tab_content_title">门诊诊疗检验记录明细</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
-            <td>就诊流水号</td>
             <td>医院</td>
+            <td>就诊流水号</td>
             <td>检验申请单号</td>
             <td>检验时间</td>
             <td>检验报告单号</td>
@@ -14,8 +14,8 @@
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.AP01_00_022_00}}</td>
             <td v-if="item.DATAGENERATE_DATE">{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td v-if="!item.DATAGENERATE_DATE"></td>
@@ -76,6 +76,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

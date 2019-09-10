@@ -137,7 +137,7 @@
                   @click="clickListItem(1,0)"
                 >
                   <div class>挂号记录</div>
-                  <div class>{{record_count.ghjl}}</div>
+                  <div class></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -145,7 +145,8 @@
                   @click="clickListItem(2,0)"
                 >
                   <div>病历记录</div>
-                  <div class>{{record_count.bljl}}</div>
+                  <div class v-if="ghjl&&ghjl.RECORD_INFO_COUNT">{{ghjl.RECORD_INFO_COUNT}}</div>
+                  <div class v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -153,7 +154,8 @@
                   @click="clickListItem(3,0)"
                 >
                   <div>诊断记录</div>
-                  <div class>{{record_count.zdjl}}</div>
+                  <div class v-if="ghjl&&ghjl.DIAREC_INFO_COUNT">{{ghjl.DIAREC_INFO_COUNT}}</div>
+                  <div class v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -161,7 +163,8 @@
                   @click="clickListItem(4,0)"
                 >
                   <div>医嘱记录</div>
-                  <div class>{{record_count.yzjl}}</div>
+                  <div class v-if="ghjl&&ghjl.DRUREC_INFO_COUNT">{{ghjl.DRUREC_INFO_COUNT}}</div>
+                  <div class v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -169,7 +172,8 @@
                   @click="clickListItem(5,0)"
                 >
                   <div>检查报告</div>
-                  <div class>{{record_count.jcbg}}</div>
+                  <div class v-if="ghjl&&ghjl.CLIEXA_INFO_COUNT">{{ghjl.CLIEXA_INFO_COUNT}}</div>
+                  <div class v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -177,7 +181,8 @@
                   @click="clickListItem(6,0)"
                 >
                   <div>检验报告</div>
-                  <div class>{{record_count.jybg}}</div>
+                  <div class v-if="ghjl&&ghjl.LAREXA_INFO_COUNT">{{ghjl.LAREXA_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -185,7 +190,8 @@
                   @click="clickListItem(7,0)"
                 >
                   <div>手术记录</div>
-                  <div class>{{record_count.ssjl}}</div>
+                  <div class v-if="ghjl&&ghjl.OPEREC_INFO_COUNT">{{ghjl.OPEREC_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -193,7 +199,8 @@
                   @click="clickListItem(8,0)"
                 >
                   <div>费用记录</div>
-                  <div class>{{record_count.fyjl}}</div>
+                  <div class v-if="ghjl&&ghjl.EXPSET_INFO_COUNT">{{ghjl.EXPSET_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
               </div>
               <div class="tab-pane" v-if="!tabsActive">
@@ -203,7 +210,8 @@
                   @click="clickListItem(1,1)"
                 >
                   <div>住院病案首页</div>
-                  <div class>{{record_count.zybasy}}</div>
+                  <div class v-if="ryjl&&ryjl.HAI_APRNOT_COUNT">{{ryjl.HAI_APRNOT_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -211,7 +219,7 @@
                   @click="clickListItem(2,1)"
                 >
                   <div>入院记录</div>
-                  <div class>{{record_count.zyryjl}}</div>
+                  <div class></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -219,7 +227,8 @@
                   @click="clickListItem(3,1)"
                 >
                   <div>诊断记录</div>
-                  <div class>{{record_count.zyzdjl}}</div>
+                  <div class v-if="ryjl&&ryjl.DIAREC_INFO_COUNT">{{ryjl.DIAREC_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -227,7 +236,8 @@
                   @click="clickListItem(4,1)"
                 >
                   <div>医嘱信息</div>
-                  <div class>{{record_count.zyyzxx}}</div>
+                  <div class v-if="ryjl&&ryjl.DRUREC_INFO_COUNT">{{ryjl.DRUREC_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -235,7 +245,8 @@
                   @click="clickListItem(5,1)"
                 >
                   <div>临床路径记录</div>
-                  <div class>{{record_count.zylcljjl}}</div>
+                  <div class v-if="ryjl&&ryjl.CPATH_INFO_COUNT">{{ryjl.CPATH_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -243,7 +254,8 @@
                   @click="clickListItem(6,1)"
                 >
                   <div>检查报告</div>
-                  <div class>{{record_count.zyjcbg}}</div>
+                  <div class v-if="ryjl&&ryjl.CLIEXA_INFO_COUNT">{{ryjl.CLIEXA_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -251,7 +263,8 @@
                   @click="clickListItem(7,1)"
                 >
                   <div>检验报告</div>
-                  <div class>{{record_count.zyjybg}}</div>
+                  <div class v-if="ryjl&&ryjl.LAREXA_INFO_COUNT">{{ryjl.LAREXA_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -259,7 +272,8 @@
                   @click="clickListItem(8,1)"
                 >
                   <div>手术记录</div>
-                  <div class>{{record_count.zyssjl}}</div>
+                  <div class v-if="ryjl&&ryjl.OPEREC_INFO_COUNT">{{ryjl.OPEREC_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -267,7 +281,8 @@
                   @click="clickListItem(9,1)"
                 >
                   <div>出院记录</div>
-                  <div class>{{record_count.zycyjl}}</div>
+                  <div class v-if="ryjl&&ryjl.OUTRECORD_INFO_COUNT">{{ryjl.OUTRECORD_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
                 <div
                   class="tab-pane-item"
@@ -275,7 +290,8 @@
                   @click="clickListItem(10,1)"
                 >
                   <div>费用结算</div>
-                  <div class>{{record_count.zyfyjs}}</div>
+                  <div class v-if="ryjl&&ryjl.EXPSET_INFO_COUNT">{{ryjl.EXPSET_INFO_COUNT}}</div>
+                  <div v-else></div>
                 </div>
               </div>
             </div>
@@ -309,17 +325,22 @@
           center
         >
           <div class="read_card">
-            在下方输入身份证号
+            当前读取到的身份账号为：
             <div class="id_card">
-              <el-input v-model="id_card" style="width:200px;margin:20px 0 30px 0;"></el-input>
+              <el-input
+                v-model="inputContext"
+                style="width:200px;margin:20px 0 30px 0;"
+                placeholder="点击修改身份证号"
+              ></el-input>
             </div>
-            {{dialogText}}
+            <!-- {{dialogText}} -->
             <div class="id_card">
               <!-- <el-input v-model="id_card" style="width:200px;margin-top:50px;"></el-input> -->
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button ref="sendMsg" @click="closeReadCard()">确定</el-button>
+            <!-- <el-button ref="sendMsg" @click="readIdCard">读卡</el-button> -->
+            <el-button ref="sendMsg" @click="selectCardData">确定</el-button>
           </span>
         </el-dialog>
       </div>
@@ -361,7 +382,12 @@ export default {
   components: { InspectionRecord, PatientOverView, hospitalindex, mjzZlbl, mjzZlfymx, mjzZlyz, mjzZlzfyxx, mzsHjl, zjzZlgh, mjzzljcbg, zjzZljymxjl, zjzZlzdjl, zybAsyfyjl, zybAsyjl, zybAsypgbg, zybAsyzd, zyzLcy, zyzLfyjs, zyzLfymxjl, zyzLjcbg, zyzLjymxjl, zyzLlcljjl, zyzLssjl, zyzlyz, zyzLzdjlxx, ryjl },
   data() {
     return {
-      id_card: "612200194101051123",
+      // id_card: "610627196001190000",
+      id_card: "",
+      inputContext: "",
+      oldId: "",
+      ghjl: {},
+      ryjl: {},
       datePickVal: "",
       loading: false,
       userName: '',
@@ -441,8 +467,7 @@ export default {
   mounted() {
     let user = sessionStorage.getItem("current_login_user")
     this.userInfo = JSON.parse(user)
-    // alert(this.CardInfo)
-
+    // alert(JSON.stringify(this.CardInfo))
   },
   updated() {
     // alert(this.CardInfo)
@@ -563,102 +588,152 @@ export default {
     },
     addTab(data) {
       console.log(data)
-      if (data.serviceName && data.BUSINESS_ID) {
-        let req = {
-          serviceName: data.serviceName,
-          condition: [
-            {
-              colName: "BUSINESS_ID",
-              ruleType: "eq",
-              value: data.BUSINESS_ID
-            },
-            {
-              colName: "HOSPITAL_NAME",
-              ruleType: "eq",
-              value: data.HOSPITAL_NAME
-            }
-          ]
-        };
-        let url = this.getServiceUrl("select", data.serviceName, "emr");
-        this.axios({
-          method: "POST",
-          url: url,
-          data: req
-        }).then(res => {
-          let ser = req.serviceName
-          // if (ser === "DI_ADI_REGISTER_INFO_select") {
-          //   ser = "mzghjl"
-          //   this.record_count.ghjl = res.data.data.length
-          // } else if (ser === "DI_ADI_RECORD_INFO_select") {
-          //   ser = "mzbl"
-          //   this.record_count.bljl = res.data.data.length
-          // } else if (ser === "DI_ADI_DIAREC_INFO_select") {
-          //   ser = "mzzdjl"
-          //   this.record_count.zdjl = res.data.data.length
-          // } else if (ser === "DI_ADI_DRUREC_INFO_select") {
-          //   ser = "mzyz"
-          //   this.record_count.yzjl = res.data.data.length
-          // } else if (ser === "DI_ADI_CLIEXA_INFO_select") {
-          //   ser = "mzjcbg"
-          //   this.record_count.jcbg = res.data.data.length
-          // } else if (ser === "DI_ADI_LAREXA_INFO_select") {
-          //   ser = "mzjybg"
-          //   this.record_count.jybg = res.data.data.length
-          // } else if (ser === "DI_ADI_OPEREC_INFO_select") {
-          //   ser = "mzssjl"
-          //   this.record_count.ssjl = res.data.data.length
-          // } else if (ser === "DI_ADI_EXPSET_INFO_select") {
-          //   ser = "mzfyjl"
-          //   this.record_count.fyjl = res.data.data.length
-          // } else if (ser === "DI_HAI_APRNOT_INFO_MR_select") {
-          //   ser = "zybasy"
-          //   this.record_count.zybasy = res.data.data.length
-          // } else if (ser === "DI_HDI_INRECORD_INFO_select") {
-          //   ser = "zyryjl"
-          //   this.record_count.zyryjl = res.data.data.length
-          // } else if (ser === "DI_HDI_DIAREC_INFO_select") {
-          //   ser = "zyzdjl"
-          //   this.record_count.zyzdjl = res.data.data.length
-          // } else if (ser === "DI_HDI_DRUREC_INFO_select") {
-          //   ser = "zyyzxx"
-          //   this.record_count.zyyzjl = res.data.data.length
-          // } else if (ser === "DI_HDI_CPATH_INFO_select") {
-          //   ser = "zylcljjl"
-          //   this.record_count.zylclj = res.data.data.length
-          // } else if (ser === "DI_HDI_CLIEXA_INFO_select") {
-          //   ser = "zyjcbg"
-          //   this.record_count.zyjcbg = res.data.data.length
-          // } else if (ser === "DI_HDI_LAREXA_INFO_select") {
-          //   ser = "zyjybg"
-          //   this.record_count.zyjybg = res.data.data.length
-          // } else if (ser === "DI_HDI_OPEREC_INFO_select") {
-          //   ser = "zyssjl"
-          //   this.record_count.zyssjl = res.data.data.length
-          // } else if (ser === "DI_HDI_OUTRECORD_INFO_select") {
-          //   ser = "zycyjl"
-          //   this.record_count.bljl = res.data.data.length
-          // } else if (ser === "DI_HDI_EXPSET_INFO_select") {
-          //   ser = "zyfyjl"
-          //   this.record_count.zyfyjl = res.data.data.length
-          // }
-          this.elTabsData[ser] = res.data.data
-          this.RigData = res.data.data;
-          // console.log("selectedtabData", this.elTabsData);
-        }).catch(err => {
-          console.log(err);
-        });
-        let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab
-        if (!exists) {
-          this.editableTabs.push({
-            title: data.tab,
-            name: data.tab,
-            content: data.component
+      // 根据身份证号查找证件信息及LOCAL_ID
+      let req = {
+        serviceName: "DI_MPI_CERT_REGISTERINFO_select",
+        condition: [
+          {
+            colName: "CERT_NUMBER",
+            ruleType: "eq",
+            value: this.id_card
+          }
+        ]
+      };
+      let url = this.getServiceUrl("select", req.serviceName, "emr");
+      this.axios({
+        method: "POST",
+        url: url,
+        data: req
+      }).then(res => {
+        console.log(res)
+        if (res.data.data[0]) {
+          this.LOCAL_ID = res.data.data[0].LOCAL_ID
+          console.log(`localID:${this.LOCAL_ID}`)
+          this.patientInfo.LOCAL_ID = res.data.data[0].LOCAL_ID
+          // 根据localid查找基本信息
+          let req2 = {
+            "serviceName": "DI_MPI_REGISTERINFO_select",
+            "condition": [
+              {
+                "colName": "LOCAL_ID",
+                "ruleType": "eq",
+                "value": this.LOCAL_ID
+              }
+            ],
+          };
+          let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
+          this.axios({
+            method: "POST",
+            url: url2,
+            data: req2
+          }).then(res => {
+            let data = res.data.data[0]
+            console.log("基本信息:", data);
+            this.patientInfo.name = data.NAME
+            this.patientInfo.gender = data.SEX_NAME
+            let birth = data.BIRTHDAY.toString().slice(0, 4)
+            birth = new Date(birth).getFullYear();
+            let today = new Date().getFullYear();
+            let age = today - birth
+            this.patientInfo.age = age
+            console.log(age)
+          }).catch(err => {
+            console.log(err);
           });
+          let req3 = {
+            "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
+            "condition": [
+              {
+                "colName": "LOCAL_ID",
+                "ruleType": "eq",
+                "value": this.LOCAL_ID
+              }
+            ],
+          }
+          let url3 = this.getServiceUrl("select", req3.serviceName, "emr");
+          this.axios({
+            method: "POST",
+            url: url3,
+            data: req3
+          }).then(res => {
+            console.log(res.data)
+            let ghjl = res.data.data[0]
+            this.ghjl = ghjl
+          }).catch(err => {
+            console.log(err);
+          })
+          let req4 = {
+            "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
+            "condition": [
+              {
+                "colName": "LOCAL_ID",
+                "ruleType": "eq",
+                "value": this.LOCAL_ID
+              }
+            ],
+          }
+          let url4 = this.getServiceUrl("select", req4.serviceName, "emr");
+          this.axios({
+            method: "POST",
+            url: url4,
+            data: req4
+          }).then(res => {
+            console.log(res.data.data[0])
+            let ryjl = res.data.data[0]
+            this.ryjl = ryjl
+          }).catch(err => {
+            console.log(err);
+          })
         }
-        this.editableTabsValue = data.tab;
-        this.dataState = !this.dataState
+      }).catch(err => {
+        console.log(err);
+      });
+      // if (data.serviceName && data.BUSINESS_ID) {
+      //   let req = {
+      //     serviceName: data.serviceName,
+      //     condition: [
+      //       {
+      //         colName: "BUSINESS_ID",
+      //         ruleType: "eq",
+      //         value: data.BUSINESS_ID
+      //       },
+      //       {
+      //         colName: "HOSPITAL_NAME",
+      //         ruleType: "eq",
+      //         value: data.HOSPITAL_NAME
+      //       },
+      //       {
+      //         colName: "LOCAL_ID",
+      //         ruleType: "eq",
+      //         value: this.LOCAL_ID
+      //       }
+      //     ]
+      //   };
+      //   let url = this.getServiceUrl("select", data.serviceName, "emr");
+      //   this.axios({
+      //     method: "POST",
+      //     url: url,
+      //     data: req
+      //   }).then(res => {
+      //     let ser = req.serviceName
+      //     this.elTabsData[ser] = res.data.data
+      //     this.RigData = res.data.data;
+      //     // console.log("selectedtabData", this.elTabsData);
+      //   }).catch(err => {
+      //     console.log(err);
+      //   });
+      //   let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab
+      //   if (!exists) {
+      //     this.editableTabs.push({
+      //       title: data.tab,
+      //       name: data.tab,
+      //       content: data.component
+      //     });
+      //   }
+      //   this.editableTabsValue = data.tab;
+      //   this.dataState = !this.dataState
 
-      }
+      // }
       //  else if (data.tab == "入院记录") {
       //   let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab,
       //   if (!exists) { // 若当前点击item对应的tab页不存在，则创建（push）对应的tab页
@@ -672,9 +747,16 @@ export default {
       //   this.editableTabsValue = data.tab;
       //   this.dataState = !this.dataState
       // } 
-      else if (data) {
+      if (data) {
         let req = {
-          serviceName: data.serviceName
+          serviceName: data.serviceName,
+          condition: [
+            {
+              colName: "LOCAL_ID",
+              ruleType: "eq",
+              value: this.LOCAL_ID
+            }
+          ]
         };
         let url = this.getServiceUrl("select", data.serviceName, "emr");
         this.axios({
@@ -760,7 +842,8 @@ export default {
     },
     closeAll() {
       this.editableTabsValue = '患者总览'
-      this.editableTabs = this.editableTabs.slice(0, 1)
+      // this.editableTabs = this.editableTabs.slice(0, 1)
+      this.editableTabs = []
     },
     initData(cod) {
       this.timeLineData = [];
@@ -905,7 +988,6 @@ export default {
                           HOSPITAL_NAME: item2.data.HOSPITAL_NAME
                         }
                       ]
-
                     }
                   )
                 }
@@ -1037,47 +1119,172 @@ export default {
         });
     },
     readCard() {
-      this.editableTabsValue = "患者总览";
-      this.patientInfo = {};
-      this.timeLineData = [];
-      this.dialogVisible = true;
+      this.dialogVisible = false
+      this.inputContext = ""
+      window.CardInfo = null
+      const oldId = this.id_card
+      this.oldId = oldId
+      this.id_card = null
+      this.LOCAL_ID = ""
+      this.readIdCard()
+
+      // this.editableTabsValue = "患者总览";
+      // this.patientInfo = {};
+      // this.timeLineData = [];
+      // this.dialogVisible = true;
+
+      this.ghjl = {}
+      this.ryjl = {}
     },
-    closeReadCard() {
+    selectCardData() {
+      if (this.oldId != this.id_card) {
+        this.patientInfo = {}
+        this.editableTabs.length = 0
+        this.editableTabsValue = ""
+      }
+      if (this.inputContext) {
+        this.id_card = this.inputContext
+        this.getData();
+        setTimeout(() => {
+          this.dialogVisible = false;
+        }, 500);
+      } else {
+        this.dialogVisible = false
+        this.readIdCard()
+        if (!this.inputContext) {
+          this.$message({
+            showClose: true,
+            message: '请输入身份证或刷卡',
+            type: 'warning'
+          });
+          this.dialogVisible = false;
+
+        }
+        return
+
+      }
+
+    },
+    readIdCard() {
+      this.dialogVisible = false
       this.BtnReadCard();
       // let CardInfo = localStorage.getItem("CardInfo")
+      // alert(CardInfo)
       setTimeout(() => {
         let CardInfo = window.CardInfo
         if (CardInfo) {
+          // alert(JSON.stringify(CardInfo))
+
           this.CardInfo = CardInfo
+          this.inputContext = CardInfo.id
+          if (this.userInfo) {
+
+            if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
+              // this.dialogText = "当前读取到的身份证号为:\n" + CardInfo.id
+              // alert("当前读取到的身份证号为:\n" + CardInfo.id)
+              this.id_card = CardInfo.id
+              // if (window.CardInfo.id != "") {
+              this.dialogVisible = true;
+              // } else {
+              //   this.$message({
+              //     showClose: true,
+              //     message: '请将身份证或就诊卡放到读卡机上',
+              //     type: 'warning'
+              //   });
+              // }
+              // setTimeout(() => {
+              // this.dialogVisible = false;
+              // this.getData();
+              // this.initData();
+              // }, 3000);
+              // setTimeout(() => {
+              //   this.dialogText = "点击确定按钮读卡"
+              // }, 3000);
+            }
+            else {
+              this.$message({
+                showClose: true,
+                message: '请将身份证或就诊卡放到读卡机上',
+                type: 'warning'
+              });
+              // localStorage.removeItem("CardInfo")
+              // this.dialogText = "没有读取到身份证信息"
+              // setTimeout(() => {
+              //   this.dialogText = "点击确定按钮读卡"
+              // }, 3000);
+              // return
+            }
+          }
+          // if (this.CardInfo.id = "") {
+          //   this.$message({
+          //     showClose: true,
+          //     message: '请输入身份证或刷卡',
+          //     type: 'warning'
+          //   });
+          //   this.dialogVisible = false
+          // }
+
+          if (this.oldId != this.id_card) {
+            // Object.assign(this.$data, this.$options.data())
+            this.patientInfo = {}
+            this.editableTabs.length = 0
+            this.editableTabsValue = ""
+          } else {
+            // this.id_card = this.oldId
+          }
+          // alert('aaaaa' + JSON.stringify(CardInfo))
           // CardInfo = JSON.parse(CardInfo)
           // if (this.userInfo) {
-          //   if (this.userInfo.user_no != "" && CardInfo.id != null) {
-          //     this.dialogText = "当前读取到的身份证号为:\n" + CardInfo.id
-          //     setTimeout(() => {
-          //       this.dialogVisible = false;
-          //       this.getData();
-          //       // this.initData();
-          //     }, 3000);
-          //     setTimeout(() => {
-          //       this.dialogText = "点击确定按钮读卡"
-          //     }, 3000);
+
+          //   if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
+          //     // this.dialogText = "当前读取到的身份证号为:\n" + CardInfo.id
+          //     // alert("当前读取到的身份证号为:\n" + CardInfo.id)
+          //     this.id_card = CardInfo.id
+          //     // if (window.CardInfo.id != "") {
+          //     this.dialogVisible = true;
+          //     // } else {
+          //     //   this.$message({
+          //     //     showClose: true,
+          //     //     message: '请将身份证或就诊卡放到读卡机上',
+          //     //     type: 'warning'
+          //     //   });
+          //     // }
+          //     // setTimeout(() => {
+          //     // this.dialogVisible = false;
+          //     // this.getData();
+          //     // this.initData();
+          //     // }, 3000);
+          //     // setTimeout(() => {
+          //     //   this.dialogText = "点击确定按钮读卡"
+          //     // }, 3000);
           //   }
-          //   else {
-          //     localStorage.removeItem("CardInfo")
-          //     this.dialogText = "没有读取到身份证信息"
-          //     setTimeout(() => {
-          //       this.dialogText = "点击确定按钮读卡"
-          //     }, 3000);
-          //     return
-          //   }
+          //   // else {
+          //   //   this.$message({
+          //   //     showClose: true,
+          //   //     message: '请将身份证或就诊卡放到读卡机上',
+          //   //     type: 'warning'
+          //   //   });
+          //   //   // localStorage.removeItem("CardInfo")
+          //   //   // this.dialogText = "没有读取到身份证信息"
+          //   //   // setTimeout(() => {
+          //   //   //   this.dialogText = "点击确定按钮读卡"
+          //   //   // }, 3000);
+          //   //   // return
+          //   // }
           // }
+        } else {
+          this.$message({
+            showClose: true,
+            message: '请输入身份证或刷卡',
+            type: 'warning'
+          });
+          // alert("请刷身份证或者社保卡")
         }
-        this.dialogVisible = false;
-        this.getData();
         // this.initData();
+        window.CardInfo = null
+        localStorage.removeItem("CardInfo")
+        // this.getData();
       });
-
-
 
     },
     getData() {
@@ -1105,33 +1312,28 @@ export default {
       let url = this.getServiceUrl("select", req.serviceName, "emr");
       this.axios({
         method: "POST",
-        headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") },
         url: url,
         data: req
       }).then(res => {
         console.log(res)
-        if (res.data.resultCode === "0011") {
-          this.$router.push({ name: "login" });
-          console.log(res.data.resultCode);
-        }
         if (res.data.data[0]) {
+          this.LOCAL_ID = res.data.data[0].LOCAL_ID
+          console.log(`localID:${this.LOCAL_ID}`)
           this.patientInfo.LOCAL_ID = res.data.data[0].LOCAL_ID
           // 根据localid查找基本信息
           let req2 = {
-            hisVer: true,
             "serviceName": "DI_MPI_REGISTERINFO_select",
             "condition": [
               {
                 "colName": "LOCAL_ID",
                 "ruleType": "eq",
-                "value": this.patientInfo.LOCAL_ID
+                "value": this.LOCAL_ID
               }
             ],
           };
           let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
           this.axios({
             method: "POST",
-            headers: { bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket") },
             url: url2,
             data: req2
           }).then(res => {
@@ -1148,6 +1350,50 @@ export default {
           }).catch(err => {
             console.log(err);
           });
+          let req3 = {
+            "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
+            "condition": [
+              {
+                "colName": "LOCAL_ID",
+                "ruleType": "eq",
+                "value": this.LOCAL_ID
+              }
+            ],
+          }
+          let url3 = this.getServiceUrl("select", req3.serviceName, "emr");
+          this.axios({
+            method: "POST",
+            url: url3,
+            data: req3
+          }).then(res => {
+            console.log(res.data)
+            let ghjl = res.data.data[0]
+            this.ghjl = ghjl
+          }).catch(err => {
+            console.log(err);
+          })
+          let req4 = {
+            "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
+            "condition": [
+              {
+                "colName": "LOCAL_ID",
+                "ruleType": "eq",
+                "value": this.LOCAL_ID
+              }
+            ],
+          }
+          let url4 = this.getServiceUrl("select", req4.serviceName, "emr");
+          this.axios({
+            method: "POST",
+            url: url4,
+            data: req4
+          }).then(res => {
+            console.log(res.data.data[0])
+            let ryjl = res.data.data[0]
+            this.ryjl = ryjl
+          }).catch(err => {
+            console.log(err);
+          })
         }
       }).catch(err => {
         console.log(err);
@@ -1160,8 +1406,13 @@ export default {
     BtnReadCard() {
       // this.dialogText = "读卡中..."
       if (typeof jsObj == "undefined") {
-        alert("jsObj参数未初始化")
-        // this.dialogText = "jsObj参数未初始化"
+        // alert("jsObj参数未初始化")
+        // alert("监测到当前环境非电子病历客户端，请从客户端中进入本页面")
+        this.$message({
+          showClose: true,
+          message: '监测到当前环境非电子病历客户端，请从客户端中进入本页面',
+          type: 'warning'
+        });
         return;
       }
       jsObj.ReadCommCard();
@@ -1190,7 +1441,7 @@ export default {
         condition.department = "";
       }
       this.timeLineData = [];
-      this.initData(condition);
+      // this.initData(condition);
       console.log(condition);
     },
     removeTab(targetName) {
@@ -1280,11 +1531,13 @@ body {
 .el-tabs--border-card {
   // height: 545px;
   height: 100%;
+  width: 100%;
 }
 
 .el-tabs--border-card /deep/ .el-tabs__content {
   height: 100%;
-  overflow: visible;
+  overflow-y: scroll;
+  // overflow: visible;
   .el-tab-pane {
     height: 100%;
   }

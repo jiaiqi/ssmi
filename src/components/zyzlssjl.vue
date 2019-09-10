@@ -2,7 +2,7 @@
   <div class="tab_content">
     <div class="tab_content_title">住院诊疗手术记录</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
             <td>医院</td>
@@ -110,6 +110,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

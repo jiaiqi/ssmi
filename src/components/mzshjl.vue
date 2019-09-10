@@ -2,11 +2,11 @@
   <div class="tab_content">
     <div class="tab_content_title">门急诊诊疗手术记录</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
-            <td>就诊流水号</td>
             <td>医院</td>
+            <td>就诊流水号</td>
             <td>手术开始时间</td>
             <td>手术结束时间</td>
             <td>手术级别</td>
@@ -16,9 +16,8 @@
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{ item.DE01_00_010_00}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
-
+            <td>{{ item.DE01_00_010_00}}</td>
             <td v-if="item.AP06_00_393_00">{{format_date(item.AP06_00_393_00,1)}}</td>
             <td v-else-if="!item.AP06_00_393_00"></td>
             <td v-if="item.AP06_00_394_00">{{format_date(item.AP06_00_394_00,1)}}</td>
@@ -51,12 +50,12 @@
               <div class="detail_title_header">
                 <div class="detail_title_headerone">
                   <span>科别:</span>
-                  <span>姓名:</span>
-                  <span>性别:</span>
-                  <span>年龄:</span>
+                  <span>姓名: {{ detail.DE02_01_039_00 }}</span>
+                  <span>性别: {{ detail.AP02_01_102_01 }}</span>
+                  <span>年龄: {{ detail.DE02_01_032_00 }} 岁</span>
                 </div>
                 <div class="detail_title_headertwo">
-                  <span class="span11">床号:</span>
+                  <!-- <span class="span11">床号: {{ detail.AP02_01_102_01 }}</span> -->
                   <span class="span22">门诊号:</span>
                   <!-- <span class="span33">住院号:</span> -->
                 </div>
@@ -69,23 +68,24 @@
               </div>
               <p>手术前诊断:</p>
               <p>手术后诊断:</p>
-              <p>手术名称:</p>
+              <p>手术名称: {{ detail.DE06_00_094_00 }}</p>
               <div class="detail_title_dif">
-                <p>手术日期:</p>
+                <p>手术日期: {{format_date(detail.DE06_00_095_00,1)}}</p>
                 <p>手术历时:</p>
               </div>
               <div class="detail_title_dif">
-                <p>手术者:</p>
+                <p>手术者: {{ detail.AP02_01_039_37 }}</p>
                 <p>助手:</p>
                 <p>护士:</p>
               </div>
-              <p>麻醉者:</p>
+              <p>麻醉者: {{ detail.AP02_01_039_76 }}</p>
               <p>体位:</p>
-              <p>手术经过:</p>
+              <p>手术经过: {{ detail.AP06_00_302_00 }}</p>
             </div>
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

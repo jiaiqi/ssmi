@@ -4,11 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>bxfront_unique</title>
+  <title>电子病历</title>
 </head>
 <script>
   function ReadCommCardRet(para) {
     // alert("收到读卡返回信息 " + para);
+    // obj = {"id":"srvcvs_medical_records_select","type":["*"],"condition":[{"colName":"ywfssj","value":"2019-09-09","ruleType":"[like]"}]}
+    let obj = JSON.parse(para)
     localStorage.setItem("CardInfo", para)
     let CardInfo = JSON.parse(para)
     window.CardInfo = CardInfo

@@ -3,7 +3,7 @@
     <div class="tab_content">
       <div class="tab_content_title">门急诊诊疗总费用信息</div>
       <div class="tab_content_main">
-        <table>
+        <table v-if="tabsData&&tabsData.length>0">
           <tbody>
             <tr>
               <td>就诊流水号</td>
@@ -127,6 +127,7 @@
             </el-dialog>
           </tbody>
         </table>
+        <div class="nodata" v-else>暂无数据......</div>
       </div>
     </div>
   </el-tab-pane>

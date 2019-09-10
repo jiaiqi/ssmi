@@ -32,7 +32,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="nodata" v-else>暂无数据。。。</div>
+        <div class="nodata" v-else>暂无数据......</div>
       </div>
     </div>
     <el-dialog :visible.sync="dialogVisible" width="1000px">

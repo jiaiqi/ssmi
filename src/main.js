@@ -23,6 +23,7 @@ Vue.config.productionTip = false
 Vue.prototype.axios = axios 
 Vue.prototype.http = axios // 挂载axios到vue.proto对象上原型属性
 axios.interceptors.request.use(function (config) {
+  config.timeout = 8000
   // 在发送请求之前做些什么
   let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
   if(bx_auth_ticket){

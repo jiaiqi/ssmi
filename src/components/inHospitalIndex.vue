@@ -3,7 +3,7 @@
     <div class="tab_content">
       <div class="tab_content_title">住院病案首页</div>
       <div class="tab_content_main">
-        <table>
+        <table v-if="tabsData&&tabsData.length>0">
           <tbody>
             <tr>
               <td>姓名</td>
@@ -26,6 +26,7 @@
             </tr>
           </tbody>
         </table>
+         <div class="nodata" v-else>暂无数据......</div>
       </div>
     </div>
     <el-dialog :visible.sync="dialogVisible" width="1000px">

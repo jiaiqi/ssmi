@@ -2,11 +2,11 @@
   <div class="tab_content">
     <div class="tab_content_title">门急诊诊疗诊断记录</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
-            <td>就诊流水号</td>
             <td>医院</td>
+            <td>就诊流水号</td>
             <td>姓名</td>
             <td>年龄</td>
             <td>诊断疾病名称</td>
@@ -16,8 +16,8 @@
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{ item.DE01_00_010_00 }}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{ item.DE01_00_010_00 }}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.DE02_01_032_00 }}</td>
             <td>{{ item.DE05_01_025_00 }}</td>
@@ -52,7 +52,7 @@
               <div class="content">
                 <div
                   class="content_item_detail"
-                >兹证明 {{detail.DE02_01_039_00}}同志， {{detail.AP02_01_102_01}} ，经在我院 {{detail.DE08_10_026_00}} 诊治</div>
+                >兹证明 {{detail.DE02_01_039_00}} 同志， {{detail.AP02_01_102_01}} ，经在我院 {{detail.DE08_10_026_00}} 诊治</div>
                 <div class="content_item_detail">诊疗号:{{detail.DE01_00_010_00}}</div>
                 <div class="content_item_detail">临床诊断为: {{detail.DE05_01_025_00}}</div>
                 <div class="content_item_detail">曾作处理:</div>
@@ -67,6 +67,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

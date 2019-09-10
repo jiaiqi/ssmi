@@ -1,108 +1,190 @@
 <template>
-  <div class="login">
-    <div class="message">登录</div>
-    <div id="darkbannerwrap"></div>
-    <form method="post">
-      <input name="action" value="login" type="hidden" />
-      <input name="username" placeholder="用户名" required type="text" v-model="userName" />
-      <hr class="hr15" />
-      <input
-        name="password"
-        placeholder="密码"
-        required
-        type="password"
-        v-model="pwd"
-        @keyup.enter="toHome"
-      />
-      <hr class="hr15" />
-      <el-checkbox v-model="saveAccount">记住密码</el-checkbox>
-      <hr class="hr15" />
-      <input value="登录" style="width:100%;" type="button" @click="toHome()" />
-      <hr class="hr20" />
-    </form>
+  <div class="container_view">
+    <div class="container">
+      <!-- <img src="../assets/images/bg.jpg" alt /> -->
+      <div class="panel">
+        <div class="content login">
+          <div class="form">
+            <div class="input" :class="{'focus':userNameFocus==true}" placeholder="用户名">
+              <input type="text" v-model="userName" @focus="focus('user')" @blur="blur('user')" />
+            </div>
+            <div class="input" :class="{'focus':pwdFocus==true}" placeholder="密 码">
+              <input
+                type="password"
+                v-model="pwd"
+                @focus="focus('pwd')"
+                @blur="blur('pwd')"
+                @keyup.enter="toHome"
+              />
+            </div>
+
+            <div id="forget_pwd_id" class="remberPass">
+              <input type="checkbox" name id="ck_rmbUser" v-model="saveAccount" />
+              <label for="ck_rmbUser">记住密码</label>
+            </div>
+            <button @click="toHome">登录</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
-      userName: '',
-      pwd: '',
-      saveAccount: false
+      userName: "",
+      pwd: "",
+      saveAccount: false,
+      userNameFocus: false,
+      pwdFocus: false,
     };
   },
   mounted() {
-    let account = localStorage.getItem("account")
+    // 在页面加载时从cookie获取登录信息
+    // let rmbUser = this.getCookie("rmbUser");
+    // let login_user_name = this.getCookie("login_user_name");
+    // let pwd = this.getCookie("pwd");
+    // // 如果存在赋值给表单，并且将记住密码勾选
+    // if (rmbUser) {
+    //   this.userName = login_user_name;
+    //   this.pwd = pwd;
+    //   this.saveAccount = rmbUser;
+    // }
+    let account = localStorage.getItem("account");
     if (account) {
-      account = JSON.parse(account)
-      console.log(account)
+      account = JSON.parse(account);
+      console.log(account);
       if (account.userName && account.pwd) {
-        this.userName = account.userName
-        this.pwd = account.pwd
+        this.userName = account.userName;
+        this.pwd = account.pwd;
       }
     }
   },
   methods: {
+    clicklogin() { },
+    focus(p) {
+      if (p == "user") {
+        this.userNameFocus = true
+      } else if (p == "pwd") {
+        this.pwdFocus = true
+      }
+    },
+    blur(p) {
+      if (p === "user" && this.userName === "") {
+        this.userNameFocus = false
+      } else if (p === "pwd" && this.pwd === "") {
+        this.pwdFocus = false
+      }
+    },
+    // 保存cookie
+    setCookie: function (cName, value, expiredays) {
+      var exdate = new Date();
+      exdate.setDate(exdate.getDate() + expiredays);
+      document.cookie =
+        cName +
+        "=" +
+        decodeURIComponent(value) +
+        (expiredays == null ? "" : ";expires=" + exdate.toGMTString());
+    },
+    // 获取cookie
+    getCookie: function (key) {
+      if (document.cookie.length > 0) {
+        var start = document.cookie.indexOf(key + "=");
+        if (start !== -1) {
+          start = start + key.length + 1;
+          var end = document.cookie.indexOf(";", start);
+          if (end === -1) end = document.cookie.length;
+          return unescape(document.cookie.substring(start, end));
+        }
+      }
+      return "";
+    },
+    /*保存登录账户信息*/
+    saveLoginUser() {
+      let username = this.userName;
+      let password = this.pwd;
+      this.setCookie("login_user_name", username, { expires: 7 });
+
+      if (this.saveAccount) {
+        this.setCookie("rmbUser", "true", { expires: 7 }); //存储一个带7天期限的cookie
+        this.setCookie("user_no", username, { expires: 7 });
+        this.setCookie("pwd", password, { expires: 7 });
+      } else {
+        this.setCookie("rmbUser", "false", { expire: -1 });
+        this.setCookie("user_no", "", { expires: -1 });
+        this.setCookie("pwd", "", { expires: -1 });
+      }
+    },
     toHome() {
-      let self = this
-      let user_no = this.userName
-      let pwd = this.pwd
-      let bxReqs = [];
-      let bxReq = {};
+      const self = this;
+      const user_no = this.userName;
+      const { pwd } = this;
+      const bxReqs = [];
+      const bxReq = {};
       bxReq.serviceName = "srvuser_login";
-      bxReq.data = [{ "user_no": user_no, "pwd": pwd }];
+      bxReq.data = [{ user_no: user_no, pwd: pwd }];
       bxReqs.push(bxReq);
       sessionStorage.setItem("need_login_flag", null);
-      // let path = "http://192.168.0.192:8101/sso/operate/srvuser_login";
-      let path = this.getServiceUrl("operate", bxReq.serviceName, "sso");
-      let callBack = function (data) {
+      let path = "http://192.168.0.192:8101/sso/operate/srvuser_login";
+      // const path = this.getServiceUrl("operate", bxReq.serviceName, "sso");
+      const callBack = data => {
         if (data.state == "SUCCESS") {
-          let resp = data.response[0];
-          let bx_auth_ticket = resp.response.bx_auth_ticket;
-          let current_login_user = resp.response.login_user_info;
+          const resp = data.response[0];
+          const { bx_auth_ticket } = resp.response;
+          // const current_login_user = resp.response.login_user_info;
           sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket);
         } else {
           alert(data.resultMessage);
         }
-      }
+      };
       function crosAjax(url, method, jsonData, succFun) {
-        console.log(jsonData)
-        if (sessionStorage.getItem("need_login_flag") == "need_login") {
-        } else {
+        console.log(jsonData);
+        if (sessionStorage.getItem("need_login_flag") != "need_login") {
           // let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
-          axios({
+          self.axios({
             // headers: { "bx_auth_ticket": bx_auth_ticket },
-            url: url,
-            method: method,
+            url,
+            method,
             data: jsonData,
             xhrFields: {
               withCredentials: true
-            },
-          }).then(res => {
-            console.log(res)
-            // if (res.data.resultCode === "SUCCESS") {
-            //   // let resp = res.data.response[0]
-            //   // let bx_auth_ticket = res.data.response[0].response.bx_auth_ticket
-            //   // sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
-            //   // let current_login_user = resp.response.login_user_info;
-            //   // sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
-            //   // top.user = current_login_user;
-            //   // window.user = current_login_user
-            //   // self.$router.go(-1)
-            console.log(self.$route)
-            if (self.$route.query.length > 0) {
-              let path = self.$route.query.from
-              console.log(path)
-              self.$router.push({ name: path })
-            } else {
-              self.$router.push({ name: 'dzbl' })
             }
-            // }
-          }).catch(err => {
-            console.log(err)
-          });
+          })
+            .then(res => {
+              if (res.data.resultCode === "SUCCESS") {
+                self.saveLoginUser();
+                const resp = res.data.response[0];
+                const { bx_auth_ticket } = res.data.response[0].response;
+                sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket);
+                const current_login_user = resp.response.login_user_info;
+                sessionStorage.setItem(
+                  "current_login_user",
+                  JSON.stringify(current_login_user)
+                );
+                top.user = current_login_user;
+                console.log(self.$route);
+                if (self.$route.query.length > 0) {
+                  const path = self.$route.query.from;
+                  console.log(path);
+                  self.$router.push({ name: path });
+                } else {
+                  self.$router.push({ name: "dzbl" });
+                }
+              }
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+              if (err.indexOf("timeout"))
+                this.$message({
+                  showClose: true,
+                  message: '登录超时，连接服务器失败，请稍后再试',
+                  type: 'warning'
+                });
+              // alert("登录超时，连接服务器失败，请稍后再试")
+            });
         }
       }
       crosAjax(path, "POST", bxReqs, callBack);
@@ -110,145 +192,144 @@ export default {
         let account = {
           userName: this.userName,
           pwd: this.pwd
-        }
-        account = JSON.stringify(account)
-        localStorage.setItem("account", account)
+        };
+        account = JSON.stringify(account);
+        localStorage.setItem("account", account);
       } else {
-        let account = localStorage.getItem("account")
+        const account = localStorage.getItem("account");
         if (account) {
-          localStorage.removeItem("account")
+          localStorage.removeItem("account");
         }
       }
     }
-
+  },
+  watch: {
+    saveAccount: function (new_v, old_v) {
+      console.log(new_v, old_v);
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 * {
-  padding: 0;
   margin: 0;
-  list-style: none;
-  box-sizing: border-box;
+  padding: 0;
 }
 
-body,
-html {
-  height: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-}
 body {
-  background-size: cover;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(45deg, rgb(181, 154, 254), rgb(245, 189, 253))
+    fixed;
+}
+.container_view {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // background-image: url("../assets/images/login_bgs.png");
+  background: #667db6; /* fallback for old browsers */
+  background: linear-gradient(to top, #667db6, #0082c8, #0082c8, #667db6);
+
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.container {
+  position: relative;
+  width: 800px;
+  height: 400px;
+  background: url("../assets/images/bg.jpg") no-repeat;
+  background-size: 60% 100%;
+  margin-right: 100px;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.login {
-  margin-top: 150px;
-  // min-height: 420px;
-  max-width: 420px;
-  padding: 40px;
-  background-color: #ffffff;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 4px;
-  box-sizing: border-box;
-  a {
-    color: #27a9e3;
-    text-decoration: none;
+// .container img {
+//   width: 100px;
+// }
+.content.login {
+  padding: 20px 0;
+  margin-left: 80px;
+  .remberPass {
+    display: flex;
+    align-items: center;
+    color: #fff;
+  }
+}
+.panel {
+  width: 430px;
+  background-color: rgba(255, 255, 255, 0.274);
+  // margin: 10rem 0 0;
+  // position: absolute;
+  // right: 0;
+  // top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  width: 230px;
+  padding-left: 50px;
+  // margin: 3rem 0 0;
+  .input {
+    position: relative;
+    opacity: 1;
+    height: 30px;
+    width: 100%;
+    margin: 30px 0;
+    display: inline-block;
+    transition: 0.4s;
+    input {
+      margin-top: 5px;
+      outline: none;
+      width: 100%;
+      border: none;
+      line-height: 30px;
+      text-indent: 16px;
+      border-bottom: 1px solid 0072ff;
+    }
+    &:after {
+      content: attr(placeholder);
+      position: absolute;
+      // left: 0;
+      top: 0;
+      left: -50px;
+      font-size: 14px;
+      line-height: 40px;
+      color: #fff;
+      transition: 0.3s;
+    }
+  }
+  button {
+    border: none;
+    outline: none;
+    margin: 70px 0;
+    width: 90%;
+    height: 50px;
+    border-radius: 40px;
+    background: #00c6ff; /* fallback for old browsers */
+    background: linear-gradient(to left, #1488cc, #0072ff);
+    cursor: pointer;
+    color: white;
+  }
+  label {
+    display: block;
+    color: #fff;
+    font-size: 12px;
     cursor: pointer;
   }
 }
-a.logo {
-  display: block;
-  height: 58px;
-  width: 167px;
-  margin: 0 auto 30px auto;
-  background-size: 167px 42px;
-}
-.message {
-  margin: 10px 0 0 -58px;
-  padding: 18px 10px 18px 60px;
-  background: #27a9e3;
-  position: relative;
-  color: #fff;
-  font-size: 16px;
-}
-#darkbannerwrap {
-  background: url(../assets/images/aiwrap.png);
-  width: 18px;
-  height: 10px;
-  margin: 0 0 20px -58px;
-  position: relative;
-}
 
-input[type="text"],
-input[type="file"],
-input[type="password"],
-input[type="email"],
-select {
-  border: 1px solid #dcdee0;
-  vertical-align: middle;
-  border-radius: 3px;
-  height: 50px;
-  padding: 0px 16px;
-  font-size: 14px;
-  color: #555555;
-  outline: none;
-  width: 100%;
-}
-input[type="text"]:focus,
-input[type="file"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-select:focus {
-  border: 1px solid #27a9e3;
-}
-
-input[type="submit"],
-input[type="button"] {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 12px 24px;
-  margin: 0px;
+.input.focus::after {
+  top: -100%;
+  left: 0;
   font-size: 18px;
-  line-height: 24px;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  color: #ffffff;
-  background-color: #27a9e3;
-  border-radius: 3px;
-  border: none;
-  -webkit-appearance: none;
-  outline: none;
-  width: 100%;
-}
-hr.hr15 {
-  height: 15px;
-  border: none;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-}
-hr.hr20 {
-  height: 20px;
-  border: none;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-}
-
-.copyright {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.85);
-  display: block;
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
 }
 </style>

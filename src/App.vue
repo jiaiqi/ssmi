@@ -110,4 +110,22 @@ body {
 .el-timeline-item__wrapper {
   padding-left: 15px !important;
 }
+.el-dialog {
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+.nodata {
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.el-tabs--border-card /deep/ .el-tabs__content {
+  height: 100%;
+  /* overflow: visible; */
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 </style>

@@ -2,11 +2,11 @@
   <div class="tab_content">
     <div class="tab_content_title">门急诊诊疗医嘱</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
-            <td>就诊流水号</td>
             <td>医院</td>
+            <td>就诊流水号</td>
             <td>医嘱项目类别</td>
             <td>医嘱项目</td>
             <td>药物剂型</td>
@@ -16,8 +16,8 @@
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.AP06_00_276_00}}</td>
             <td>{{item.AP06_00_278_00}}</td>
             <td>{{item.AP06_00_313_00}}</td>
@@ -25,18 +25,6 @@
             <td v-if="item.AP06_00_195_00">{{format_date(item.AP06_00_195_00)}}</td>
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">详情</td> -->
           </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
             <div class="yz_wrap">
@@ -56,7 +44,7 @@
                     </li>
                     <li>
                       年龄:
-                      <span>{{detail.DE02_01_032_00}}</span>岁
+                      <span>{{detail.DE02_01_032_00}}</span>
                     </li>
                     <li>
                       科室:
@@ -88,8 +76,8 @@
                     <td class="five">{{detail.AP06_00_265_00}}</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ detail.AP02_01_039_72 }}</td>
+                    <td>{{format_date(detail.AP06_00_200_00)}}</td>
                     <!-- <td>{{detail.AP02_01_039_72}}</td> -->
                     <!-- <td>{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)+' '+detail.AP06_00_200_00.slice(8,10)+':'+detail.AP06_00_200_00.slice(10,12)}}</td> -->
                     <td></td>
@@ -122,6 +110,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

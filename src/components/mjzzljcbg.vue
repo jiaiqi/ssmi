@@ -2,11 +2,11 @@
   <div class="tab_content">
     <div class="tab_content_title">门急诊诊疗检查报告</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
-            <td>就诊流水号</td>
             <td>医院</td>
+            <td>就诊流水号</td>
             <td>姓名</td>
             <td>性别</td>
             <td>检查日期</td>
@@ -16,8 +16,8 @@
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
-            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_010_00}}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
             <td>{{ item.AP02_01_102_01 }}</td>
             <td v-if="item.AP06_00_048_03">{{format_date(item.AP06_00_048_03)}}</td>
@@ -27,20 +27,6 @@
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
             </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">
-              <span>详情</span>
-            </td>-->
           </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
             <div class="wrap_jcbg">
@@ -149,7 +135,16 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
+    <!-- <el-pagination
+      layout="prev, pager, next"
+      :current-page="currentPage"
+      :total="totalNum"
+      :page-size="pageSize"
+      @current-change="changeCurrentPage"
+      @size-change="changeSize"
+    ></el-pagination>-->
   </div>
 </template>
 
@@ -161,7 +156,10 @@ export default {
     return {
       dialogVisible: false,
       detail: {},
-      tabsData: []
+      tabsData: [],
+      currentPage: 1,
+      totalNum: 1,
+      pageSize: 5,
     };
   },
   created() {
@@ -170,13 +168,25 @@ export default {
       console.log("mzjcbg", this.mzjcbg)
     }, 300);
   },
+  mounted() {
+    let tabsData = this.elTabsData.mzjcbg
+    // this.totalNum = tabsData.length
+  },
   methods: {
     changeDialogVisible(item) {
       this.dialogVisible = true;
       if (item) {
         this.detail = item;
       }
-    }
+    },
+    changeCurrentPage(val) {
+      this.currentPage = val
+      console.log(`当前页：${val}`)
+    },
+    changeSize(val) {
+      this.pageSize = val
+      console.log(`每页${val}条`)
+    },
   }
 };
 </script>
@@ -186,6 +196,9 @@ export default {
   width: 100%;
   height: 100%;
   text-align: center;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  padding-bottom: 150px;
   .tab_content_title {
     font-family: "Arial Negreta", "Arial Normal", "Arial";
     font-weight: 700;
@@ -196,7 +209,6 @@ export default {
     color: #7f7f7f;
   }
 }
-
 table {
   width: 80%;
   border-spacing: 0px;

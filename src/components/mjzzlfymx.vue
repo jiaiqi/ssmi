@@ -2,11 +2,11 @@
   <div class="tab_content">
     <div class="tab_content_title">门急诊诊疗费用明细信息</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
-            <td>就诊流水号</td>
             <td>医院</td>
+            <td>就诊流水号</td>
             <td>姓名</td>
             <td>缴费科室</td>
             <td>费用支付方式</td>
@@ -15,8 +15,8 @@
             <td>操作</td>
           </tr>
           <tr v-for="(item,index) in tabsData" :key="index">
-            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.ORGANIZATION_NAME}}</td>
+            <td>{{item.DE01_00_010_00}}</td>
             <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.DE08_10_026_00}}</td>
             <td>{{item.AP07_00_011_01}}</td>
@@ -45,7 +45,7 @@
                   <div>
                     <span>姓名:{{detail.DE02_01_039_00}}</span>
                     <span>性别:{{detail.AP02_01_102_01}}</span>
-                    <span>年龄:{{detail.DE02_01_032_00}}岁</span>
+                    <span>年龄:{{detail.DE02_01_032_00}}</span>
                   </div>
                   <div>
                     <span>就诊卡号:</span>
@@ -61,10 +61,10 @@
                     <span>联系人关系:</span>
                     <span>联系人电话:</span>
                   </div>
-                  <div>
+                  <!-- <div>
                     <span>入院日期:</span>
                     <span>出院日期:</span>
-                  </div>
+                  </div>-->
                 </div>
               </div>
               <div class="content">
@@ -77,9 +77,9 @@
                       <tr>
                         <td>日期</td>
                         <td>项目名</td>
-                        <td>单价</td>
-                        <td>金额</td>
-                        <td>科室</td>
+                        <td>单价（元）</td>
+                        <td>金额（元）</td>
+                        <td>收费科室</td>
                       </tr>
                       <tr v-for="(item,index) in data" :key="index">
                         <td v-if="!item.AP07_00_026_00"></td>
@@ -87,7 +87,7 @@
                         <td>{{item.AP07_00_018_00}}</td>
                         <td>{{item.AP07_00_022_00}}</td>
                         <td>{{item.AP07_00_022_00}}</td>
-                        <td>{{item.AP08_10_055_02}}</td>
+                        <td>{{item.DE08_10_026_00}}</td>
                       </tr>
                     </table>
                   </div>
@@ -97,6 +97,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

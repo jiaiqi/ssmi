@@ -2,7 +2,7 @@
   <div class="tab_content">
     <div class="tab_content_title">住院诊疗费用结算</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
             <td>医院</td>
@@ -118,15 +118,15 @@
                       <tr>
                         <td>时间</td>
                         <td>收费科室</td>
-                        <td>项目代码</td>
+                        <!-- <td>项目代码</td> -->
                         <td>项目名称</td>
                         <td>数量</td>
-                        <td>金额</td>
+                        <td>金额（元）</td>
                       </tr>
                       <tr v-for="(item,index) in datalist" :key="index">
                         <td>{{format_date(item.AP07_00_027_00)}}</td>
                         <td>{{item.AP08_10_055_02}}</td>
-                        <td>{{item.AP06_00_290_01}}</td>
+                        <!-- <td>{{item.AP06_00_290_01}}</td> -->
                         <td>{{item.AP07_00_018_00}}</td>
                         <td>{{item.AP07_00_021_00}}</td>
                         <td>{{item.AP07_00_022_00}}</td>
@@ -159,6 +159,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>

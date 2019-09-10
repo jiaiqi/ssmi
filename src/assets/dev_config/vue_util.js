@@ -1063,4 +1063,25 @@ function init_util() {
   }
 }
 
+/**
+ *  计算两个日期之间的天数之差
+ * @params date1: 时间字符串或数字  仅支持String和Number类型
+ * @params date2: 时间字符串或数字  仅支持String和Number类型
+ * @params type: 时间差单位 days/years/seconds
+ * 
+ */
+  Vue.prototype.dateDiff = function(date1,date2,type="day"){
+    console.log(`date1:${date1},date2:${date2}`)
+    let day = ""
+    if(date1&&date2){
+      date1 = this.format_date(date1)
+      date1 = moment(date1)
+      date2 = this.format_date(date2)
+      date2 = moment(date2)
+    day = date2.diff(date1,type)
+    }
+    return day
+  }
+
+
 export default init_util;

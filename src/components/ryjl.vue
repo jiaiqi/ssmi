@@ -2,7 +2,7 @@
   <div class="tab_content">
     <div class="tab_content_title">入院记录</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
             <td>医院</td>
@@ -47,6 +47,7 @@
           </tr>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
     <el-dialog title :visible.sync="dialogVisible" width="1000px">
       <div class="table_content">
@@ -96,10 +97,11 @@
               <td colspan="2">住院日期:</td>
               <td colspan="4" v-if="!detail.DE06_00_092_00"></td>
               <td colspan="4" v-if="detail.DE06_00_092_00">{{format_date(detail.DE06_00_092_00)}}</td>
-              <td>出院:</td>
+              <!-- <td>出院:</td>
               <td colspan="2" v-if="detail.AP04_01_011_00">{{format_date(detail.AP04_01_011_00)}}</td>
-              <td colspan="2" v-if="!detail.AP04_01_011_00"></td>
-              <td colspan="2">住院天数 天</td>
+              <td colspan="2" v-if="!detail.AP04_01_011_00"></td>-->
+              <!-- <td colspan="5">住院天数 天</td> -->
+              <td colspan="5"></td>
             </tr>
           </table>
           <div class="content">

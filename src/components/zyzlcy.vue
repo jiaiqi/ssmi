@@ -2,7 +2,7 @@
   <div class="tab_content">
     <div class="tab_content_title">出院记录</div>
     <div class="tab_content_main">
-      <table>
+      <table v-if="tabsData&&tabsData.length>0">
         <tbody>
           <tr>
             <td>医院</td>
@@ -100,7 +100,7 @@
                         detail.DE06_00_092_00.slice(6, 8)
                         }}
                       </td>
-                      <td>出院:</td>
+                      <td>出院日期:</td>
                       <td colspan="2" v-if="detail.DE06_00_016_00">
                         {{
                         detail.DE06_00_016_00.slice(0, 4) +
@@ -111,7 +111,7 @@
                         }}
                       </td>
                       <td>住院天数</td>
-                      <td>5 天</td>
+                      <td>{{this.dateDiff(detail.DE06_00_092_00,detail.DE06_00_016_00)}}</td>
                     </tr>
                   </table>
                   <div class="cy_content">
@@ -142,6 +142,7 @@
           </el-dialog>
         </tbody>
       </table>
+      <div class="nodata" v-else>暂无数据......</div>
     </div>
   </div>
 </template>
