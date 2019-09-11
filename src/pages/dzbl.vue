@@ -31,10 +31,6 @@
           <p class="text">返回</p>
           <p class="text">首页</p>
         </div>
-        <!-- <div class="header_btn">
-          <p class="text">医生</p>
-          <p class="text">服务</p>
-        </div>-->
         <div class="header_btn" v-if="userInfo.user_no">
           <p class="text">
             账号:
