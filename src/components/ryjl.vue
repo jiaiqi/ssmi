@@ -30,21 +30,6 @@
               <span>详情</span>
             </td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">
-              <span>详情</span>
-            </td>-->
-          </tr>
         </tbody>
       </table>
       <div class="nodata" v-else>暂无数据......</div>

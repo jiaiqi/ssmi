@@ -30,20 +30,7 @@
               <span>详情</span>
             </td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">
-              <span>详情</span>
-            </td>-->
-          </tr>
+
           <el-dialog :visible.sync="dialogVisible" width="1000px">
             <div class="tab_detail">
               <div class="title">门急诊诊疗手术记录</div>

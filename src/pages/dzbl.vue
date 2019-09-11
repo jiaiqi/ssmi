@@ -35,12 +35,12 @@
           <p class="text">医生</p>
           <p class="text">服务</p>
         </div>-->
-        <!-- <div class="header_btn" v-if="userInfo.user_no">
+        <div class="header_btn" v-if="userInfo.user_no">
           <p class="text">
             账号:
             <span style="font-weight:600;">{{userInfo.user_no}}</span>
           </p>
-        </div>-->
+        </div>
         <div class="header_btn" @click="exit_login">
           <p class="text">退出</p>
         </div>
@@ -102,26 +102,20 @@
           </div>
         </div>
         <div class="content_left_bottom">
-          <!-- <el-timeline style="padding-inline-start: 10px;padding-top:10px;padding-left:10px;">
-            <el-timeline-item
-              v-for="(item, index) in timeLineData"
-              :key="index"
-              :icon="item.icon"
-              :type="item.type"
-              :color="item.color"
-              :size="item.size"
-              placement="top"
-              :timestamp="item.dateTime"
-            >
-              <el-tree :data="item.data" :props="defaultProps" @node-click="addTab"></el-tree>
-            </el-timeline-item>
-          </el-timeline>-->
           <div class="tabs">
             <div class="label">
-              <div class="tab-pane-label" :class="{active: tabsActive == true}" @click="checkTabs">
+              <div
+                class="tab-pane-label"
+                :class="{active: tabsActive == true}"
+                @click="checkTabs(0)"
+              >
                 <span>门急诊诊疗</span>
               </div>
-              <div class="tab-pane-label" :class="{active: tabsActive == false}" @click="checkTabs">
+              <div
+                class="tab-pane-label"
+                :class="{active: tabsActive == false}"
+                @click="checkTabs(1)"
+              >
                 <span>住院诊疗</span>
               </div>
             </div>
@@ -300,7 +294,7 @@
       </div>
       <div class="content_right" v-loading="loading">
         <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
-          <div class="close-all" @click="closeAll" v-if="editableTabs.length>0">关闭所有</div>
+          <div class="close-all" @click="closeAll">关闭所有</div>
           <el-tab-pane
             v-for="(item,index) in editableTabs"
             :key="index"
@@ -309,7 +303,6 @@
             closable
           >
             <component
-              :tabData="RigData"
               v-bind:is="item.content"
               :patientInfo="patientInfo"
               :elTabsData="elTabsData"
@@ -333,7 +326,6 @@
                 placeholder="点击修改身份证号"
               ></el-input>
             </div>
-            <!-- {{dialogText}} -->
             <div class="id_card">
               <!-- <el-input v-model="id_card" style="width:200px;margin-top:50px;"></el-input> -->
             </div>
@@ -375,7 +367,6 @@ import zyzLzdjlxx from "../components/zyzlzdjlxx";
 import ryjl from '../components/ryjl'
 import hospitalindex from '../components/inHospitalIndex'
 import InspectionRecord from '../components/InspectionRecord'
-// import axios from "axios";
 import moment from 'moment'
 export default {
   name: "home",
@@ -390,18 +381,13 @@ export default {
       ryjl: {},
       datePickVal: "",
       loading: false,
-      userName: '',
-      detail: "",
       componentsKey: 0,
       tabsActive: true,
       itemsActive: 1,
       userInfo: {
         user_no: ""
       },
-      timeLineData: [],
       patientInfo: {},
-      record_count: {},
-      dialogText: "点击确定按钮读卡",
       pickerOptions: {
         shortcuts: [
           {
@@ -433,7 +419,7 @@ export default {
           }
         ]
       },
-      dialogVisible: true,
+      dialogVisible: false,
       queryCondition: {
         startDate: "",
         endDate: "",
@@ -442,25 +428,14 @@ export default {
         department: "就诊科室"
       },
       personInfo: {},
-      activities: [],
       defaultProps: {
         children: "children",
         label: "label"
       },
-      RigData: [],
       elTabsData: {},
-      // editableTabs: [{
-      //   title: "患者总览",
-      //   name: "患者总览",
-      //   content: PatientOverView
-      // }],
       editableTabs: [],
       editableTabsValue: "",
-      tabIndex: 1,
-      testData: [],
       showContent: false,
-      needData: [],
-      tabData: [],
       CardInfo: {}
     };
   },
@@ -473,9 +448,9 @@ export default {
     // alert(this.CardInfo)
   },
   methods: {
-    checkTabs() {
-      this.tabsActive = !this.tabsActive
-      if (this.tabsActive) {
+    checkTabs(num) {
+      if (num === 0) {
+        this.tabsActive = true
         this.editableTabsValue = "挂号记录"
         let exists = this.editableTabs.filter(tab => tab.name === "挂号记录").length > 0; // 过滤已存在tab
         if (!exists) {
@@ -485,7 +460,8 @@ export default {
             content: "zjzZlgh"
           });
         }
-      } else {
+      } else if (num === 1) {
+        this.tabsActive = false
         this.editableTabsValue = "住院病案首页"
         let exists = this.editableTabs.filter(tab => tab.name === "住院病案首页").length > 0; // 过滤已存在tab
         if (!exists) {
@@ -688,65 +664,6 @@ export default {
       }).catch(err => {
         console.log(err);
       });
-      // if (data.serviceName && data.BUSINESS_ID) {
-      //   let req = {
-      //     serviceName: data.serviceName,
-      //     condition: [
-      //       {
-      //         colName: "BUSINESS_ID",
-      //         ruleType: "eq",
-      //         value: data.BUSINESS_ID
-      //       },
-      //       {
-      //         colName: "HOSPITAL_NAME",
-      //         ruleType: "eq",
-      //         value: data.HOSPITAL_NAME
-      //       },
-      //       {
-      //         colName: "LOCAL_ID",
-      //         ruleType: "eq",
-      //         value: this.LOCAL_ID
-      //       }
-      //     ]
-      //   };
-      //   let url = this.getServiceUrl("select", data.serviceName, "emr");
-      //   this.axios({
-      //     method: "POST",
-      //     url: url,
-      //     data: req
-      //   }).then(res => {
-      //     let ser = req.serviceName
-      //     this.elTabsData[ser] = res.data.data
-      //     this.RigData = res.data.data;
-      //     // console.log("selectedtabData", this.elTabsData);
-      //   }).catch(err => {
-      //     console.log(err);
-      //   });
-      //   let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab
-      //   if (!exists) {
-      //     this.editableTabs.push({
-      //       title: data.tab,
-      //       name: data.tab,
-      //       content: data.component
-      //     });
-      //   }
-      //   this.editableTabsValue = data.tab;
-      //   this.dataState = !this.dataState
-
-      // }
-      //  else if (data.tab == "入院记录") {
-      //   let exists = this.editableTabs.filter(tab => tab.name === data.tab).length > 0; // 过滤已存在tab,
-      //   if (!exists) { // 若当前点击item对应的tab页不存在，则创建（push）对应的tab页
-      //     this.editableTabs.push({
-      //       title: data.tab,
-      //       name: data.tab,
-      //       content: data.component,
-      //       serviceName: data.serviceName
-      //     });
-      //   }
-      //   this.editableTabsValue = data.tab;
-      //   this.dataState = !this.dataState
-      // } 
       if (data) {
         let req = {
           serviceName: data.serviceName,
@@ -841,267 +758,7 @@ export default {
       this.$router.push({ name: "login" })
     },
     closeAll() {
-      this.editableTabsValue = '患者总览'
-      // this.editableTabs = this.editableTabs.slice(0, 1)
       this.editableTabs = []
-    },
-    initData(cod) {
-      this.timeLineData = [];
-      let req = {
-        serviceName: "srvdi_electronic_medical_record_select",
-        condition: [
-          {
-            colName: "HOSPITAL_NAME",
-            value: "",
-            ruleType: "eq"
-          },
-          {
-            colName: "BUSINESS_ACTIVE_TYPE",
-            value: "",
-            ruleType: "eq"
-          },
-          {
-            colName: "type",
-            value: "",
-            ruleType: "eq"
-          },
-          {
-            colName: "CERT_NUMBER",
-            value: this.id_card,
-            ruleType: "eq"
-          }
-        ]
-      };
-      if (cod) {
-        if (cod.hospital) {
-          req.condition[0].value = cod.hospital;
-        }
-        if (cod.type) {
-          req.condition[1].value = cod.type;
-        }
-        if (cod.department) {
-          req.condition[2].colName = "DE08_10_025_00";
-          req.condition[2].value = cod.department;
-        }
-      }
-      let url = this.getServiceUrl("select", req.serviceName, "emr");
-      this.axios({
-        method: "POST",
-        headers: {
-          bx_auth_ticket: sessionStorage.getItem("bx_auth_ticket")
-        },
-        url: url,
-        data: req
-      })
-        .then(res => {
-          let data = res.data.data;
-          if (!data.length > 0) {
-            this.loading = true
-          }
-          if (data && data.length > 0) {
-            this.loading = false
-            let arr = []
-            data.map(item => {
-              let timeLineData = {}
-              timeLineData.data = []
-              timeLineData.dateTime = item.dateTime
-              timeLineData.size = "large"
-              timeLineData.type = "primary"
-              item.data.map(item2 => {
-                let label = item2.data.label
-                if (item2.data.typeCode === "C0001") {
-                  let count = {
-                    "病历": item2.data.RECORD_INFO_COUNT,
-                    "诊断记录": item2.data.DIAREC_INFO_COUNT,
-                    "检查报告": item2.data.CLIEXA_INFO_COUNT,
-                    "医嘱": item2.data.DRUREC_INFO_COUNT,
-                    "费用记录": item2.data.EXPSET_INFO_COUNT,
-                    "检验报告": item2.data.LAREXA_INFO_COUNT,
-                    "手术记录": item2.data.OPEREC_INFO_COUNT,
-                  }
-                  timeLineData.data.push(
-                    {
-                      label: label,
-                      children: [
-                        {
-                          label: "挂号记录",
-                          tab: "挂号记录",
-                          serviceName: "DI_ADI_REGISTER_INFO_select",
-                          component: "zjzZlgh",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "病历" + "(" + count.病历 + ")",
-                          tab: "病历",
-                          serviceName: "DI_ADI_RECORD_INFO_select",
-                          component: "mjzZlbl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "诊断记录" + "(" + count.诊断记录 + ")",
-                          tab: "诊断记录",
-                          serviceName: "DI_ADI_DIAREC_INFO_select",
-                          component: "zjzZlzdjl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "医嘱" + "(" + count.医嘱 + ")",
-                          tab: "医嘱",
-                          serviceName: "DI_ADI_DRUREC_INFO_select",
-                          component: "mjzZlyz",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "检查报告" + "(" + count.检查报告 + ")",
-                          tab: "门诊检查报告",
-                          serviceName: "DI_ADI_CLIEXA_INFO_select",
-                          component: "mjzzljcbg",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "检验报告" + "(" + count.检验报告 + ")",
-                          tab: "检验报告",
-                          serviceName: "DI_ADI_LAREXA_INFO_select",
-                          component: "zjzZljymxjl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "手术记录" + "(" + count.手术记录 + ")",
-                          tab: "门诊手术记录",
-                          serviceName: "DI_ADI_OPEREC_INFO_select",
-                          component: "mzsHjl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "费用记录",
-                          tab: "费用记录",
-                          serviceName: "DI_ADI_EXPSET_INFO_select",
-                          component: "mjzZlfymx",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        }
-                      ]
-                    }
-                  )
-                }
-                else if (item2.data.typeCode === "C0002") {
-                  let count = {
-                    "住院病案首页": item2.data.APRNOT_INFO_MR_COUNT,
-                    "检验报告": item2.data.LAREXA_INFO_COUNT,
-                    "费用记录": item2.data.EXPSET_INFO_COUNT,
-                    "临床路径记录": item2.data.CPATH_INFO_COUNT,
-                    "住院检查报告": item2.data.CLIEXA_INFO_COUNT,
-                    "出院记录": item2.data.OUTRECORD_INFO_COUNT,
-                    "手术记录": item2.data.OPEREC_INFO_COUNT,
-                    "医嘱": item2.data.DRUREC_INFO_COUNT,
-                    "诊断记录": item2.data.DIAREC_INFO_COUNT,
-                  }
-                  timeLineData.data.push(
-                    {
-                      label: label,
-                      children: [
-                        {
-                          label: "住院病案首页",
-                          tab: "住院病案首页",
-                          serviceName: "DI_HAI_APRNOT_INFO_MR_select",
-                          component: "hospitalindex",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "入院记录",
-                          tab: "入院记录",
-                          serviceName: "DI_HDI_INRECORD_INFO_select",
-                          component: "ryjl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "诊断记录" + "(" + count.诊断记录 + ")",
-                          tab: "住院诊断记录",
-                          serviceName: "DI_HDI_DIAREC_INFO_select",
-                          component: "zyzLzdjlxx",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "医嘱信息" + "(" + count.医嘱 + ")",
-                          tab: "住院医嘱信息",
-                          serviceName: "DI_HDI_DRUREC_INFO_select",
-                          component: "zyzlyz",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "临床路径记录表" + "(" + count.临床路径记录 + ")",
-                          tab: "临床路径记录表",
-                          serviceName: "DI_HDI_CPATH_INFO_select",
-                          component: "zyzLlcljjl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "检查报告表" + "(" + count.住院检查报告 + ")",
-                          tab: "住院检查报告",
-                          serviceName: "DI_HDI_CLIEXA_INFO_select",
-                          component: "zyzLjcbg",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "检验报告" + "(" + count.检验报告 + ")",
-                          tab: "住院检验报告",
-                          serviceName: "DI_HDI_LAREXA_INFO_select",
-                          component: "InspectionRecord",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "手术记录" + "(" + count.手术记录 + ")",
-                          tab: "住院手术记录",
-                          serviceName: "DI_HDI_OPEREC_INFO_select",
-                          component: "zyzLssjl",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "出院记录" + "(" + count.出院记录 + ")",
-                          tab: "出院记录",
-                          serviceName: "DI_HDI_OUTRECORD_INFO_select",
-                          component: "zyzLcy",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        },
-                        {
-                          label: "费用结算",
-                          tab: "住院费用结算",
-                          serviceName: "DI_HDI_EXPSET_INFO_select",
-                          component: "zyzLfyjs",
-                          BUSINESS_ID: item2.data.BUSINESS_ID,
-                          HOSPITAL_NAME: item2.data.HOSPITAL_NAME
-                        }
-                      ]
-
-                    }
-                  )
-                }
-              })
-              arr.push(timeLineData)
-            })
-            this.timeLineData = arr
-            // console.log("timeLineData", this.timeLineData);
-          }
-        })
-        .catch(err => {
-          console.log("err", err);
-        });
     },
     toManangerment() {
       let str = window.location.href;
@@ -1127,12 +784,7 @@ export default {
       this.id_card = null
       this.LOCAL_ID = ""
       this.readIdCard()
-
-      // this.editableTabsValue = "患者总览";
-      // this.patientInfo = {};
-      // this.timeLineData = [];
-      // this.dialogVisible = true;
-
+      this.dialogVisible = true; // 控制显示输入身份证的dialog是否需要读卡 true不需要
       this.ghjl = {}
       this.ryjl = {}
     },
@@ -1158,48 +810,26 @@ export default {
             type: 'warning'
           });
           this.dialogVisible = false;
-
         }
         return
-
       }
-
     },
     readIdCard() {
       this.dialogVisible = false
       this.BtnReadCard();
       // let CardInfo = localStorage.getItem("CardInfo")
-      // alert(CardInfo)
       setTimeout(() => {
         let CardInfo = window.CardInfo
         if (CardInfo) {
           // alert(JSON.stringify(CardInfo))
-
           this.CardInfo = CardInfo
           this.inputContext = CardInfo.id
           if (this.userInfo) {
 
             if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
-              // this.dialogText = "当前读取到的身份证号为:\n" + CardInfo.id
               // alert("当前读取到的身份证号为:\n" + CardInfo.id)
               this.id_card = CardInfo.id
-              // if (window.CardInfo.id != "") {
               this.dialogVisible = true;
-              // } else {
-              //   this.$message({
-              //     showClose: true,
-              //     message: '请将身份证或就诊卡放到读卡机上',
-              //     type: 'warning'
-              //   });
-              // }
-              // setTimeout(() => {
-              // this.dialogVisible = false;
-              // this.getData();
-              // this.initData();
-              // }, 3000);
-              // setTimeout(() => {
-              //   this.dialogText = "点击确定按钮读卡"
-              // }, 3000);
             }
             else {
               this.$message({
@@ -1207,23 +837,8 @@ export default {
                 message: '请将身份证或就诊卡放到读卡机上',
                 type: 'warning'
               });
-              // localStorage.removeItem("CardInfo")
-              // this.dialogText = "没有读取到身份证信息"
-              // setTimeout(() => {
-              //   this.dialogText = "点击确定按钮读卡"
-              // }, 3000);
-              // return
             }
           }
-          // if (this.CardInfo.id = "") {
-          //   this.$message({
-          //     showClose: true,
-          //     message: '请输入身份证或刷卡',
-          //     type: 'warning'
-          //   });
-          //   this.dialogVisible = false
-          // }
-
           if (this.oldId != this.id_card) {
             this.patientInfo = {}
             this.editableTabs.length = 0
@@ -1231,46 +846,6 @@ export default {
           } else {
             // this.id_card = this.oldId
           }
-          // alert('aaaaa' + JSON.stringify(CardInfo))
-          // CardInfo = JSON.parse(CardInfo)
-          // if (this.userInfo) {
-
-          //   if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
-          //     // this.dialogText = "当前读取到的身份证号为:\n" + CardInfo.id
-          //     // alert("当前读取到的身份证号为:\n" + CardInfo.id)
-          //     this.id_card = CardInfo.id
-          //     // if (window.CardInfo.id != "") {
-          //     this.dialogVisible = true;
-          //     // } else {
-          //     //   this.$message({
-          //     //     showClose: true,
-          //     //     message: '请将身份证或就诊卡放到读卡机上',
-          //     //     type: 'warning'
-          //     //   });
-          //     // }
-          //     // setTimeout(() => {
-          //     // this.dialogVisible = false;
-          //     // this.getData();
-          //     // this.initData();
-          //     // }, 3000);
-          //     // setTimeout(() => {
-          //     //   this.dialogText = "点击确定按钮读卡"
-          //     // }, 3000);
-          //   }
-          //   // else {
-          //   //   this.$message({
-          //   //     showClose: true,
-          //   //     message: '请将身份证或就诊卡放到读卡机上',
-          //   //     type: 'warning'
-          //   //   });
-          //   //   // localStorage.removeItem("CardInfo")
-          //   //   // this.dialogText = "没有读取到身份证信息"
-          //   //   // setTimeout(() => {
-          //   //   //   this.dialogText = "点击确定按钮读卡"
-          //   //   // }, 3000);
-          //   //   // return
-          //   // }
-          // }
         } else {
           this.$message({
             showClose: true,
@@ -1279,12 +854,10 @@ export default {
           });
           // alert("请刷身份证或者社保卡")
         }
-        // this.initData();
         window.CardInfo = null
         localStorage.removeItem("CardInfo")
         // this.getData();
       });
-
     },
     getData() {
       this.patientInfo = {
@@ -1398,12 +971,7 @@ export default {
         console.log(err);
       });
     },
-    goHomePage() {
-      console.log("返回首页");
-      window.location.reload();
-    },
     BtnReadCard() {
-      // this.dialogText = "读卡中..."
       if (typeof jsObj == "undefined") {
         // alert("jsObj参数未初始化")
         // alert("监测到当前环境非电子病历客户端，请从客户端中进入本页面")
@@ -1439,16 +1007,9 @@ export default {
       if (this.queryCondition.department === "就诊科室") {
         condition.department = "";
       }
-      this.timeLineData = [];
-      // this.initData(condition);
       console.log(condition);
     },
     removeTab(targetName) {
-      // console.log("关闭标签页" + targetName);
-      if (targetName === "患者总览") {
-        alert("不可关闭！")
-        return
-      }
       let tabs = this.editableTabs;
       let activeName = this.editableTabsValue;
       if (activeName === targetName) {
@@ -1464,6 +1025,10 @@ export default {
       }
       this.editableTabsValue = activeName;
       this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+    },
+    goHomePage() {
+      console.log("返回首页");
+      window.location.reload();
     }
   },
   created() {
@@ -1535,10 +1100,12 @@ body {
 
 .el-tabs--border-card /deep/ .el-tabs__content {
   height: 100%;
-  overflow-y: scroll;
-  // overflow: visible;
+  // overflow-y: scroll;
+  overflow: visible;
   .el-tab-pane {
-    height: 100%;
+    // height: 100%;
+    overflow-y: scroll;
+    height: 620px;
   }
 }
 

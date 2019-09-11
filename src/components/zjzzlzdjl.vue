@@ -28,20 +28,7 @@
               <span>详情</span>
             </td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">
-              <span>详情</span>
-            </td>-->
-          </tr>
+
           <el-dialog :visible.sync="dialogVisible" width="1000px">
             <div class="table_mabl_content">
               <div class="main_title">

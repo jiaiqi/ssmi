@@ -1042,21 +1042,26 @@ function init_util() {
         operator = "-"
       }
       if(typeof date == "string"&&type==0){
-        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)
+        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8) // 2019-09-04
       }else if(typeof date == "string" && type == 1 &&date.length==15){ // 2019-09-04 12:22:22
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(9,11)+":"+date.slice(11,13)+":"+date.slice(13,15)
-      }else if(typeof date == "number" && type == 0 &&date.length==14){ // 2019-09-04 12:22:22
+      }else if(typeof date == "string" && type == 1 &&date.length==14){ // 2019-09-04  12:22:22
+        date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14)
+      }else if(typeof date == "number" && type == 0 &&date.length==14){ // 2019-09-04 
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)
       }else if(typeof date == "number" && type == 1 &&date.length==14){ // 2019-09-04 12:22:22
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14)
-      }else if(typeof date == "string" && type == 2 &&date.length==15){ // 2019-09-04 12:22:22
-        date.slice(9,11)+":"+date.slice(11,13)+":"+date.slice(13,15)
+      }else if(typeof date == "string" && type == 2 &&date.length==15){ // 12:22:22
+        date = date.slice(9,11)+":"+date.slice(11,13)+":"+date.slice(13,15)
+      }else if(typeof date == "string" && type == 2 &&date.length==14){ // 12:22:22
+        date = date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14)
       }else if(typeof date == "number"){
         let dateTime = date.toString()
         dateTime = dateTime.slice(0,4)+operator+dateTime.slice(4,6)+operator+dateTime.slice(6,8)
         return dateTime
       }else{
-        return "数据不规范,无法转化成标准时间"
+        // return "数据不规范,无法转化成标准时间"
+        return date
       }
       return date      
     }

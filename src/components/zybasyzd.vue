@@ -114,15 +114,6 @@
               </div>
             </div>
           </el-dialog>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
         </tbody>
       </table>
       <div class="nodata" v-else>暂无数据......</div>

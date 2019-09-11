@@ -230,6 +230,21 @@
                         </li>
                     </div>                   
                 </ul>
+                <!-- <div class="content_center_top">
+                   <div class="contet_item_box">
+                        <div class="content_list_item">
+                            <div class="label">姓名</div>
+                            <div class="content"></div>
+                        </div>
+                        <div class="content_list_item">
+                            <div class="label">性别</div>
+                            <div class="content"></div>
+                        </div>
+                        <div class="content_list_item"></div>
+                        <div class="content_list_item"></div>
+                        <div class="content_list_item"></div>
+                   </div>
+                </div> -->
                 <div class="content_bot">
                     <div class="content_b_title">
                         <ul class="content_b_title_ul">
@@ -707,6 +722,9 @@ ul, ol { list-style: none; }
     border: 1px solid black;
     width: 100%;
     font-size: 14px;
+    .content_center_top{
+
+    }
 }
 .content_center ul{
     overflow: hidden;
@@ -742,7 +760,7 @@ ul, ol { list-style: none; }
         flex-direction: row;
         justify-content: space-between;
         li{
-                width: 11rem;
+                width: 176px;
                 display: flex;
                 flex-direction: row;
             span{
@@ -756,11 +774,11 @@ ul, ol { list-style: none; }
             display: flex;
             .label_text{
                 
-                min-width:4rem; 
+                min-width:64px; 
             }
             span.text_line{
-                min-width: 3rem;
-                max-width: 16rem
+                min-width: 48px;
+                max-width: 256px;
             }
             .append_text{
                 
@@ -770,36 +788,36 @@ ul, ol { list-style: none; }
             width:40%;
             display: flex;
             .label_text{
-                min-width:4rem; 
+                min-width:64px; 
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
             }
             span.text_line{
-                min-width: 3rem;
-                max-width: 16rem;
-                width: calc(100% - 3rem);
+                min-width: 48px;
+                max-width: 256px;
+                width: calc(100% - 48px);
 
             }            
         }
         .row_seven{
             .label_text{
-                min-width: 7rem;
+                min-width: 112px;
             }
         }
         .row_last_3{
             width:40%;
             display: flex;
             .label_text{
-                min-width:4rem; 
+                min-width:64px; 
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
             }
             span.text_line{
-                min-width: 3rem;
-                max-width: 18rem;
-                width: calc(100% - 3rem);
+                min-width: 48px;
+                max-width: 288px;
+                width: calc(100% - 48px);
 
             }            
         }
@@ -810,16 +828,16 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:3rem; 
+                min-width:48px; 
             }
             span.text_line{
-                min-width: 4rem;
-                width: calc(100% - 4em);
-                max-width: 6rem
+                min-width: 64px;
+                width: calc(100% - 64px);
+                max-width: 96px
             }
         }
         span{
-            min-width:3rem;
+            min-width:48px;
         }
     }
     &.first_df_3{
@@ -830,13 +848,12 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width: 4rem;
+                min-width: 64px;
             }
             .text_line{
-                
-                min-width: 4rem;
-                width: calc(100% - 6rem);
-                max-width: 12rem;
+                min-width: 64px;
+                width: calc(100% - 96px);
+                max-width: 192px;
             }
         }
     }
@@ -848,12 +865,12 @@ ul, ol { list-style: none; }
             text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-            min-width: 3rem;
+            min-width: 48px;
         }
         .text_line{
-            min-width: 4rem;
-            width: calc(100% - 6rem);
-            max-width: 40rem;
+            min-width: 64px;
+            width: calc(100% - 96px);
+            max-width: 640px;
         }
     }
     .row_1{
@@ -863,12 +880,12 @@ ul, ol { list-style: none; }
             text-align: justify;
             text-justify:distribute-all-lines;
             text-align-last:justify;
-            min-width: 3rem;
+            min-width: 48px;
         }
         .text_line{
-            min-width: 4rem;
-            width: calc(100% - 6rem);
-            max-width: 6rem;
+            min-width: 64px;
+            width: calc(100% - 96px);
+            max-width: 96px;
         }
     }
     }
@@ -880,12 +897,12 @@ ul, ol { list-style: none; }
             text-align: justify;
             text-justify:distribute-all-lines;
             text-align-last:justify;
-            min-width: 5rem;
+            min-width: 90px;
         }
         .text_line{
-            min-width: 4rem;
-            width: calc(100% - 6rem);
-            max-width: 40rem;
+            min-width: 64px;
+            width: calc(100% - 96px);
+            max-width:640px;
         }
         }
         .row_1{
@@ -895,12 +912,12 @@ ul, ol { list-style: none; }
             text-align: justify;
             text-justify:distribute-all-lines;
             text-align-last:justify;
-            min-width: 3rem;
+            min-width: 48px;
         }
         .text_line{
-            min-width: 4rem;
-            width: calc(100% - 6rem);
-            max-width: 10rem;
+            min-width: 64px;
+            width: calc(100% - 96px);
+            max-width: 160px;
         }
         }
         
@@ -913,12 +930,12 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:3rem; 
+                min-width:48px; 
 
             }
             span.text_line{
-                min-width: 4rem;
-                max-width: 6rem;
+                min-width: 64px;
+                max-width: 96px;
             }
         }
         .row_1_5{
@@ -928,14 +945,14 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:2rem; 
-                max-width:4rem; 
+                min-width:32px; 
+                max-width:64px; 
 
 
             }
             span.text_line{
-                min-width: 6rem;
-                max-width: 6rem;
+                min-width: 96px;
+                max-width: 96px;
             }
         }
         
@@ -948,13 +965,13 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:2rem; 
+                min-width:32px; 
             }
             span.text_line{
                 flex:2;
-                min-width: 2rem;
-                width: calc(100% - 4rem);
-                max-width: 9.5rem;
+                min-width: 32px;
+                width: calc(100% - 64px);
+                max-width: 152px;
             }
         }
     }
@@ -966,14 +983,14 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:5rem; 
+                min-width:90px; 
             }
             
             span.text_line{
                 
-                min-width: 2rem;
-                width: calc(100% - 8rem);
-                max-width: 6rem;
+                min-width: 32px;
+                width: calc(100% -128px);
+                max-width: 96px;
             }
         }
         .phone{
@@ -983,13 +1000,13 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:3rem; 
+                min-width:48px; 
             }
             span.text_line{
                 
-                min-width: 6rem;
-                width: calc(100% - 8rem);
-                max-width: 6rem;
+                min-width: 96px;
+                width: calc(100% - 128px);
+                max-width: 96px;
             }
             }
         .row_2{
@@ -999,14 +1016,14 @@ ul, ol { list-style: none; }
                 text-align: justify;
                 text-justify:distribute-all-lines;
                 text-align-last:justify;
-                min-width:4rem; 
+                min-width:64px; 
                 text-align: center;
 
             }
             span.text_line{
-                min-width: 2rem;
-                width: calc(100% - 4rem);
-                max-width: 17rem;
+                min-width: 32px;
+                width: calc(100% - 64px);
+                max-width: 272px;
             }
         }
 

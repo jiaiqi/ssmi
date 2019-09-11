@@ -70,27 +70,14 @@
                   </tr>
                   <tr>
                     <td></td>
-                    <!-- <td>{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)}}</td> -->
-                    <!-- <td>{{detail.AP06_00_200_00.slice(8,10)+':'+detail.AP06_00_200_00.slice(10,12)}}</td> -->
+                    <td>{{format_date(detail.AP06_00_200_00)}}</td>
+                    <td>{{format_date(detail.AP06_00_200_00,2)}}</td>
                     <td>{{detail.AP06_00_278_00}}</td>
                     <td class="five">{{detail.AP06_00_265_00}}</td>
-                    <td></td>
-                    <td></td>
+                    <!-- <td></td>
+                    <td></td>-->
                     <td>{{ detail.AP02_01_039_72 }}</td>
-                    <td>{{format_date(detail.AP06_00_200_00)}}</td>
-                    <!-- <td>{{detail.AP02_01_039_72}}</td> -->
-                    <!-- <td>{{detail.AP06_00_200_00.slice(0,4)+'-'+detail.AP06_00_200_00.slice(4,6)+'-'+detail.AP06_00_200_00.slice(6,8)+' '+detail.AP06_00_200_00.slice(8,10)+':'+detail.AP06_00_200_00.slice(10,12)}}</td> -->
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="five"></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{format_date(detail.AP06_00_200_00,1)}}</td>
                     <td></td>
                     <td></td>
                   </tr>

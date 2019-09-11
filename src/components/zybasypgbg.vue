@@ -26,17 +26,6 @@
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">详情</!-->
-            -->
-          </tr>
           <el-dialog title :visible.sync="dialogVisible" width="1000px">
             <div class="dialog_rypg">
               <div class="dialog_title">住院病案首页评估</div>

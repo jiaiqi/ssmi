@@ -23,16 +23,7 @@
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">详情</td> -->
-          </tr>
+
           <el-dialog title :visible.sync="dialogVisible" width="1000px">
             <div class="tab_detail">
               <div class="detail_title">

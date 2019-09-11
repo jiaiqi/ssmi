@@ -28,19 +28,6 @@
               <span>详情</span>
             </td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!-- <td class="handle" @click="changeDialogVisible()">
-              <span></span>
-            </td>-->
-          </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
             <div class="wrap_yz">
               <div class="header">
