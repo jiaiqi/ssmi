@@ -11,7 +11,7 @@
             <td>医嘱分类</td>
             <td>医嘱下达时间</td>
             <!-- <td>医嘱内容</td> -->
-            <td>机构名称</td>
+            <!-- <td>机构名称</td> -->
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -22,7 +22,7 @@
             <td>{{ datas.AP06_00_287_00 }}</td>
             <td v-if="datas.AP06_00_207_00">{{format_date(datas.AP06_00_207_00,1)}}</td>
             <td v-if="!datas.AP06_00_207_00"></td>
-            <td>{{ datas.ORGANIZATION_NAME }}</td>
+            <!-- <td>{{ datas.ORGANIZATION_NAME }}</td> -->
             <td>{{format_date(datas.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(tabsData)">
               <span>详情</span>
@@ -34,26 +34,26 @@
                 <div class="header_top">
                   <h3>住院诊疗医嘱信息</h3>
                 </div>
-                <div class="header_bot" v-if="tabData[0]">
+                <div class="header_bot" v-if="tabsData[0]">
                   <p>
                     <span>姓名:</span>
-                    <span>{{ tabData[0].DE02_01_039_00 }}</span>
+                    <span>{{ tabsData[0].DE02_01_039_00 }}</span>
                   </p>
                   <p>
                     <span>性别:</span>
-                    <span>{{ tabData[0].AP02_01_102_01 }}</span>
+                    <span>{{ tabsData[0].AP02_01_102_01 }}</span>
                   </p>
                   <p>
                     <span>年龄:</span>
-                    <span>{{ tabData[0].DE02_01_032_00 }}</span>岁
+                    <span>{{ tabsData[0].DE02_01_032_00 }}</span>岁
                   </p>
                   <p>
                     <span>住院号:</span>
-                    <span>{{ tabData[0].DE01_00_014_00 }}</span>
+                    <span>{{ tabsData[0].DE01_00_014_00 }}</span>
                   </p>
                   <p>
                     <span>住院科室:</span>
-                    <span>{{ tabData[0].AP08_10_026_11 }}</span>
+                    <span>{{ tabsData[0].AP08_10_026_11 }}</span>
                   </p>
                 </div>
               </div>
@@ -120,6 +120,14 @@ export default {
       datas: {}
     };
   },
+  watch: {
+    tabsData: {
+      handler(newName, oldName) {
+        this.tabsData = this.elTabsData.zyyzxx
+      },
+      deep: true
+    }
+  },
   mounted() {
     setTimeout(() => {
       this.tabsData = this.elTabsData.zyyzxx
@@ -131,8 +139,7 @@ export default {
           }
         })
       }
-    }, 300);
-
+    }, 500);
   },
   methods: {
     changeDialogVisible(item) {

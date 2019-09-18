@@ -7,20 +7,22 @@
           <tr>
             <td>医院</td>
             <td>住院号</td>
-            <td>检查项目</td>
+            <td>报告单名称</td>
             <td>检查日期</td>
-            <td>科室</td>
-            <td>检查结论</td>
+            <td>检查项目</td>           
+            <!-- <td>科室</td> -->
+            <!-- <td>检查结论</td> -->
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
-            <td>{{ item.DE04_30_020_00 }}</td>
+            <td>{{ item.AP04_50_056_00 }}</td>            
             <td v-if="item.AP06_00_048_03">{{format_date(item.AP06_00_048_03)}}</td>
-            <td>{{ item.AP04_30_060_00 }}</td>
-            <td class="ellipsis">{{item.AP04_30_046_00}}</td>
+            <td>{{ item.DE04_30_020_00 }}</td>
+            <!-- <td>{{ item.AP04_30_060_00 }}</td> -->
+            <!-- <td class="ellipsis">{{item.AP04_30_046_00}}</td> -->
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>

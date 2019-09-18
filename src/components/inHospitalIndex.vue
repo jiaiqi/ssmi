@@ -10,8 +10,9 @@
               <td>就诊地点</td>
               <td>住院号</td>
               <td>住院途径</td>
-              <td>入院日期</td>
               <td>入院科别</td>
+              <td>入院日期</td>
+              <td>出院日期</td>
               <td>操作</td>
             </tr>
             <tr v-for="(item, index) in tabsData" :key="index">
@@ -19,9 +20,11 @@
               <td>{{ item.ORGANIZATION_NAME }}</td>
               <td>{{ item.DE01_00_014_00 }}</td>
               <td>{{ item.AP06_00_369_00 }}</td>
+              <td>{{item.AP08_10_026_01}}</td>
               <td>{{format_date(item.DE06_00_092_00)}}</td>
               <td v-if="!item.DE06_00_092_00"></td>
-              <td>{{item.AP08_10_026_01}}</td>
+              <td>{{format_date(item.DE06_00_016_00)}}</td>
+              <td v-if="!item.DE06_00_016_00"></td>
               <td @click="changeDialogVisible(item)" class="handle">详情</td>
             </tr>
           </tbody>

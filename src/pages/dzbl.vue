@@ -2,7 +2,9 @@
   <div class="home">
     <header class="heade">
       <div class="header_item">
-        <div class="header_img"></div>
+        <div class="header_img">
+          <div class="hospital_name">延安市中医医院</div>
+        </div>
         <div class="header_user_info">
           <div class="header_user_info_item">
             患者姓名:
@@ -24,7 +26,7 @@
       </div>
       <div class="header_item">
         <div class="header_btn" @click="readCard()">
-          <p class="text">重新</p>
+          <!-- <p class="text">重新</p> -->
           <p class="text">读卡</p>
         </div>
         <div class="header_btn" @click="goHomePage()">
@@ -80,7 +82,7 @@
           <div class="content_left_top_item">
             <select
               class="content_left_top_item_select"
-              style="width:230px;"
+              style="width:220px;"
               v-model="queryCondition.department"
             >
               <option class="content_left_top_item_select_option">就诊科室</option>
@@ -115,7 +117,7 @@
                 <span>住院诊疗</span>
               </div>
             </div>
-            <div class="content">
+            <div class="content2">
               <div class="tab-pane-title">
                 <div>记录类型</div>
                 <div>数量</div>
@@ -229,7 +231,7 @@
                   <div class v-if="ryjl&&ryjl.DRUREC_INFO_COUNT">{{ryjl.DRUREC_INFO_COUNT}}</div>
                   <div v-else></div>
                 </div>
-                <div
+                <!-- <div
                   class="tab-pane-item"
                   :class="{itemsActive: itemsActive == 5}"
                   @click="clickListItem(5,1)"
@@ -237,7 +239,7 @@
                   <div>临床路径记录</div>
                   <div class v-if="ryjl&&ryjl.CPATH_INFO_COUNT">{{ryjl.CPATH_INFO_COUNT}}</div>
                   <div v-else></div>
-                </div>
+                </div>-->
                 <div
                   class="tab-pane-item"
                   :class="{itemsActive: itemsActive == 6}"
@@ -307,11 +309,11 @@
           </el-tab-pane>
         </el-tabs>
         <el-dialog
-          title
           :visible.sync="dialogVisible"
           width="500px"
           :before-close="handleClose"
           center
+          class="read_card_dialog"
         >
           <div class="read_card">
             当前读取到的身份账号为：
@@ -432,13 +434,17 @@ export default {
       editableTabs: [],
       editableTabsValue: "",
       showContent: false,
-      CardInfo: {}
+      CardInfo: {},
+      from: ''
     };
   },
   mounted() {
     let user = sessionStorage.getItem("current_login_user")
     this.userInfo = JSON.parse(user)
     // alert(JSON.stringify(this.CardInfo))
+    let param = this.$route.params.target
+    this.from = param
+    console.log(param)
   },
   updated() {
     // alert(this.CardInfo)
@@ -559,6 +565,7 @@ export default {
       this.addTab(datas)
     },
     addTab(data) {
+      // debugger
       console.log(data)
       // 根据身份证号查找证件信息及LOCAL_ID
       let req = {
@@ -577,7 +584,7 @@ export default {
         url: url,
         data: req
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.data.data[0]) {
           this.LOCAL_ID = res.data.data[0].LOCAL_ID
           console.log(`localID:${this.LOCAL_ID}`)
@@ -677,7 +684,7 @@ export default {
           url: url,
           data: req
         }).then(res => {
-          console.log(res.data.data)
+          console.log("res.data.data", res.data.data)
           let ser = req.serviceName
           if (ser === "DI_ADI_REGISTER_INFO_select") {
             ser = "mzghjl"
@@ -703,6 +710,7 @@ export default {
             ser = "zyzdjl"
           } else if (ser === "DI_HDI_DRUREC_INFO_select") {
             ser = "zyyzxx"
+            console.log("res.data.data", res.data.data)
           } else if (ser === "DI_HDI_CPATH_INFO_select") {
             ser = "zylclj"
           } else if (ser === "DI_HDI_CLIEXA_INFO_select") {
@@ -717,6 +725,8 @@ export default {
             ser = "zyfyjl"
           }
           this.elTabsData[ser] = res.data.data
+          console.log(this.elTabsData["zyyzxx"]);
+
         }).catch(err => {
           console.log(err)
         })
@@ -780,7 +790,14 @@ export default {
       this.id_card = null
       this.LOCAL_ID = ""
       this.readIdCard()
-      this.dialogVisible = true; // 控制显示输入身份证的dialog是否需要读卡 true不需要
+      if (this.from == "web") {
+        this.dialogVisible = true;
+        console.log(this.dialogVisible)
+      } else {
+        this.dialogVisible = false;
+        console.log(this.dialogVisible)
+
+      }// 控制显示输入身份证的dialog是否需要读卡 true不需要
       this.ghjl = {}
       this.ryjl = {}
     },
@@ -792,6 +809,7 @@ export default {
       }
       if (this.inputContext) {
         this.id_card = this.inputContext
+        // this.patientInfo.name = window.CardInfo.name
         this.getData();
         setTimeout(() => {
           this.dialogVisible = false;
@@ -821,9 +839,9 @@ export default {
           this.CardInfo = CardInfo
           this.inputContext = CardInfo.id
           if (this.userInfo) {
-
             if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
               // alert("当前读取到的身份证号为:\n" + CardInfo.id)
+              this.patientInfo.name = CardInfo.name
               this.id_card = CardInfo.id
               this.dialogVisible = true;
             }
@@ -843,11 +861,13 @@ export default {
             // this.id_card = this.oldId
           }
         } else {
-          this.$message({
-            showClose: true,
-            message: '请输入身份证或刷卡',
-            type: 'warning'
-          });
+          if (this.from != "web") {
+            this.$message({
+              showClose: true,
+              message: '请输入身份证或刷卡...',
+              type: 'warning'
+            });
+          }
           // alert("请刷身份证或者社保卡")
         }
         window.CardInfo = null
@@ -856,16 +876,7 @@ export default {
       });
     },
     getData() {
-      this.patientInfo = {
-        name: "",
-        gender: "",
-        age: "",
-        identityCard: this.id_card,
-        profession: "",
-        familyAddress: "",
-        contact: "",
-        LOCAL_ID: ""
-      };
+      this.patientInfo.identityCard = this.id_card
       // 根据身份证号查找证件信息及LOCAL_ID
       let req = {
         serviceName: "DI_MPI_CERT_REGISTERINFO_select",
@@ -907,7 +918,9 @@ export default {
           }).then(res => {
             let data = res.data.data[0]
             console.log("基本信息:", data);
-            this.patientInfo.name = data.NAME
+            if (data.NAME) {
+              this.patientInfo.name = data.NAME
+            }
             this.patientInfo.gender = data.SEX_NAME
             let birth = data.BIRTHDAY.toString().slice(0, 4)
             birth = new Date(birth).getFullYear();
@@ -971,11 +984,20 @@ export default {
       if (typeof jsObj == "undefined") {
         // alert("jsObj参数未初始化")
         // alert("监测到当前环境非电子病历客户端，请从客户端中进入本页面")
-        this.$message({
-          showClose: true,
-          message: '监测到当前环境非电子病历客户端，请从客户端中进入本页面',
-          type: 'warning'
-        });
+        if (this.from !== "web") {
+          this.$message({
+            showClose: true,
+            message: '监测到当前环境非电子病历客户端，请从客户端中进入本页面',
+            type: 'warning'
+          });
+        } else {
+          this.$message({
+            showClose: true,
+            message: '当前访问环境为浏览器',
+            type: 'warning'
+          });
+        }
+
         return;
       }
       jsObj.ReadCommCard();
@@ -1084,7 +1106,7 @@ body {
 }
 
 .block .el-date-editor.el-input__inner {
-  width: 325px;
+  width: 220px;
   height: 37px;
 }
 
@@ -1101,7 +1123,8 @@ body {
   .el-tab-pane {
     // height: 100%;
     overflow-y: scroll;
-    height: 620px;
+    height: 90%;
+    margin-right: -50px;
   }
 }
 
@@ -1127,10 +1150,11 @@ body {
   display: none !important;
 }
 .home {
-  max-width: 95vw;
+  max-width: 100vw;
   min-width: 950px;
-  max-width: 1500px;
+  // max-width: 1500px;
   margin: 0 auto;
+  max-height: 100vh;
 }
 .nodata {
   height: 100%;
@@ -1162,9 +1186,17 @@ body {
 
 .header_img {
   width: 240px;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
   border: 1px #666 solid;
+  .hospital_name {
+    width: 100%;
+    font-size: 30px;
+    text-align: center;
+    font-family: "楷体";
+  }
 }
 
 .header_user_info {
@@ -1220,23 +1252,24 @@ body {
 .content {
   /* height: 550px; */
   display: flex;
-  height: 700px;
+  min-height: 700px;
   margin-top: 10px;
+  height: 90vh;
   box-sizing: border-box;
   .content_left {
     box-sizing: border-box;
-    width: 325px;
+    width: 220px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-right: 20px;
+    margin: 0 10px;
     float: left;
     .content_left_top {
       margin: 0 auto;
       box-sizing: border-box;
       .content_left_top_item {
-        width: 325px;
+        width: 220px;
         margin-bottom: 10px;
         &:first-child {
           background-color: transparent;
@@ -1252,9 +1285,10 @@ body {
       margin: 0 auto;
       box-sizing: border-box;
       background-color: #fff;
-      width: 325px;
+      width: 100%;
       border: 1px solid rgba(228, 228, 228, 1);
-      height: 500px;
+      height: 700px;
+      // height: 500px;
       .tabs {
         width: 100%;
         display: flex;
@@ -1281,7 +1315,7 @@ body {
             color: #fff;
           }
         }
-        .content {
+        .content2 {
           display: block;
           .tab-pane-title {
             display: flex;
@@ -1344,6 +1378,9 @@ body {
     // min-width: 800px;
     flex: 1;
     height: 100%;
+    overflow: hidden;
+  }
+  .read_card_dialog {
     overflow: hidden;
   }
 }

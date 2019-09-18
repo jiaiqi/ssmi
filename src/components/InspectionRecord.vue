@@ -15,18 +15,20 @@
           <tbody>
             <tr>
               <td>医院</td>
-              <td>住院号</td>
-              <td>检验时间</td>
+              <td>住院号</td>              
               <td>检验报告单号</td>
+              <td>检验时间</td>
+              <td>检验报告名称</td>
               <td>数据产生时间</td>
               <td>操作</td>
             </tr>
             <tr v-for="(item, index) in tabsData" :key="index">
               <td>{{item.ORGANIZATION_NAME}}</td>
               <td>{{item.DE01_00_014_00}}</td>
-              <td v-if="!item.AP06_00_048_02"></td>
-              <td v-if="item.AP06_00_048_02">{{format_date(item.AP06_00_048_02)}}</td>
               <td>{{item.AP04_50_057_00}}</td>
+              <td v-if="!item.AP06_00_048_02"></td>
+              <td v-if="item.AP06_00_048_02">{{format_date(item.AP06_00_048_02)}}</td>             
+              <td>{{item.AP04_50_056_00}}</td>
               <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
               <td class="handle" @click="changeDialogVisible(item)">详情</td>
             </tr>

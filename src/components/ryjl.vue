@@ -8,11 +8,12 @@
             <td>医院</td>
             <td>住院号</td>
             <td>姓名</td>
-            <td>职业类别</td>
-            <td>籍贯</td>
+            <!-- <td>职业类别</td> -->
+            <!-- <td>籍贯</td> -->
             <td>住院入住科室</td>
+            <td>入院日期</td>
             <td>住院症状</td>
-            <td>住院医师</td>
+            <!-- <td>住院医师</td> -->
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -20,11 +21,12 @@
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
-            <td>{{ item.AP02_01_103_00 }}</td>
-            <td>{{ item.AP02_01_099_00 }}</td>
+            <!-- <td>{{ item.AP02_01_103_00 }}</td> -->
+            <!-- <td>{{ item.AP02_01_099_00 }}</td> -->
             <td>{{ item.AP08_10_026_01 }}</td>
+            <td>{{format_date(item.DE06_00_092_00)}}</td>
             <td>{{ item.AP04_01_008_00 }}</td>
-            <td>{{ item.AP02_01_039_50 }}</td>
+            <!-- <td>{{ item.AP02_01_039_50 }}</td> -->
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>

@@ -8,10 +8,9 @@
             <td>医院</td>
             <td>住院号</td>
             <td>手术申请单号</td>
-            <td>手术时间</td>
-            <td>手术级别</td>
-            <td>愈合等级</td>
-            <td>机构名称</td>
+            <td>手术日期</td>
+            <td>手术名称</td>
+            <!-- <td>愈合等级</td> -->
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -21,9 +20,8 @@
             <td>{{ item.AP01_00_024_00}}</td>
             <td v-if="item.DE06_00_095_00">{{format_date(item.DE06_00_095_00)}}</td>
             <td v-else-if="!item.DE06_00_095_00"></td>
-            <td>{{ item.AP06_00_367_00 }}</td>
-            <td>{{ item.AP05_01_054_00 }}</td>
-            <td>{{ item.ORGANIZATION_NAME }}</td>
+            <td>{{ item.DE06_00_094_00 }}</td>
+            <!-- <td>{{ item.AP05_01_054_00 }}</td> -->
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
@@ -45,21 +43,21 @@
                   <!-- <span class="span33">住院号:</span> -->
                 </div>
               </div>
-              <p>手术前诊断:</p>
-              <p>手术后诊断:</p>
-              <p>手术名称:{{detail.DE06_00_094_00}}</p>
+              <p><strong>手术前诊断: </strong>&nbsp;&nbsp;{{ detail.AP05_01_115_00}}</p>
+              <p><strong>手术后诊断:</strong> &nbsp;&nbsp;{{ detail.AP05_01_117_00}}</p>
+              <p><strong>手术名称:</strong>&nbsp;&nbsp;{{detail.DE06_00_094_00}}</p>
               <div class="detail_title_dif1">
-                <p>手术日期:{{detail.DE06_00_095_00}}</p>
-                <p class="detail_title_dif1_two">手术历时:{{detail.AP06_00_394_00}}</p>
+                <p><strong>手术日期:</strong>&nbsp;&nbsp;{{format_date(detail.DE06_00_095_00)}}</p>
+                <!-- <p class="detail_title_dif1_two">手术历时:{{detail.AP06_00_394_00}}</p> -->
               </div>
               <div class="detail_title_dif2">
-                <p>手术者:{{detail.AP02_01_039_37}}</p>
-                <p class="detail_title_dif2_two">助手:</p>
-                <p class="detail_title_dif2_three">护士:</p>
+                <p><strong>手术者:</strong>&nbsp;&nbsp;{{detail.AP02_01_039_37}}</p>
+                <p class="detail_title_dif2_two"><strong>助手:</strong>&nbsp;&nbsp;{{detail.AP02_01_039_75}}</p>
+                <p class="detail_title_dif2_three"><strong>护士:</strong></p>
               </div>
-              <p>麻醉者:</p>
-              <p>体位:</p>
-              <p>手术经过:{{detail.AP06_00_302_00}}</p>
+              <p><strong>麻醉者:</strong>&nbsp;&nbsp;{{detail.AP02_01_039_76}}</p>
+              <p><strong>体位:</strong></p>
+              <p><strong>手术经过:</strong>&nbsp;&nbsp;{{detail.AP06_00_302_00}}</p>
             </div>
             <!-- <div class="tab_detail">
               <div class="detail_title">

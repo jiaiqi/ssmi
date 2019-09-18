@@ -8,10 +8,9 @@
             <td>医院</td>
             <td>住院号</td>
             <td>姓名</td>
-            <td>入院日期</td>
-            <td>出院日期</td>
             <td>住院患者入院科室</td>
-            <td>机构名称</td>
+            <td>入院日期</td>
+            <td>出院日期</td>           
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -19,14 +18,13 @@
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{ item.DE01_00_014_00 }}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
+            <td>{{ item.AP08_10_026_01 }}</td>
             <td
               v-if="item.DE06_00_092_00"
             >{{ item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8) }}</td>
             <td
               v-if="item.DE06_00_016_00"
-            >{{ item.DE06_00_016_00.slice(0,4)+'-'+item.DE06_00_016_00.slice(4,6)+'-'+item.DE06_00_016_00.slice(6,8) }}</td>
-            <td>{{ item.AP08_10_026_01 }}</td>
-            <td>{{ item.ORGANIZATION_NAME }}</td>
+            >{{ item.DE06_00_016_00.slice(0,4)+'-'+item.DE06_00_016_00.slice(4,6)+'-'+item.DE06_00_016_00.slice(6,8) }}</td>            
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>

@@ -114,6 +114,9 @@ body {
   max-height: 80vh;
   overflow-y: scroll;
 }
+.read_card_dialog{
+  overflow: hidden!important;
+}
 .nodata {
   width: 100%;
   height: 100%;

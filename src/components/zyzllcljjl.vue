@@ -8,10 +8,10 @@
             <td>医院</td>
             <td>住院号</td>
             <td>姓名</td>
-            <td>年龄</td>
+            <!-- <td>年龄</td> -->
             <td>入径日期</td>
             <td>入径诊断</td>
-            <td>机构名称</td>
+            <!-- <td>机构名称</td> -->
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -19,10 +19,10 @@
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
             <td>{{item.DE02_01_039_00}}</td>
-            <td>{{item.DE02_01_032_00}}</td>
+            <!-- <td>{{item.DE02_01_032_00}}</td> -->
             <td v-if="item.AP05_01_212_00">{{format_date(item.AP05_01_212_00)}}</td>
             <td>{{item.AP05_01_215_02}}</td>
-            <td>{{item.ORGANIZATION_NAME}}</td>
+            <!-- <td>{{item.ORGANIZATION_NAME}}</td> -->
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>

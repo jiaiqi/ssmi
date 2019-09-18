@@ -8,8 +8,9 @@
             <td>医院</td>
             <td>住院号</td>
             <td>姓名</td>
-            <td>年龄</td>
+            <!-- <td>年龄</td> -->
             <td>诊断疾病名称</td>
+            <td>诊断日期</td>
             <td>科室</td>
             <td>数据产生时间</td>
             <td>操作</td>
@@ -18,8 +19,9 @@
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
             <td>{{ item.DE02_01_039_00 }}</td>
-            <td>{{ item.DE02_01_032_00 }}</td>
+            <!-- <td>{{ item.DE02_01_032_00 }}</td> -->
             <td>{{ item.AP05_01_025_01 }}</td>
+            <td>{{format_date(item.DE05_01_058_00)}}</td>
             <td>{{ item.AP08_10_026_11 }}</td>
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
