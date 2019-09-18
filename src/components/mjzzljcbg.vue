@@ -172,6 +172,14 @@ export default {
     let tabsData = this.elTabsData.mzjcbg
     // this.totalNum = tabsData.length
   },
+  watch: {
+    tabsData: {
+      handler(newName, oldName) {
+        this.tabsData = this.elTabsData.mzjcbg
+      },
+      deep: true
+    }
+  },
   methods: {
     changeDialogVisible(item) {
       this.dialogVisible = true;

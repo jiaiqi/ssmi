@@ -85,7 +85,7 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.tabsData = this.elTabsData.mzjyjl
+      this.tabsData = this.elTabsData.mzjybg
     }, 300);
   },
   methods: {

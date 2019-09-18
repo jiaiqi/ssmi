@@ -33,14 +33,15 @@
           <p class="text">返回</p>
           <p class="text">首页</p>
         </div>
+
+        <div class="header_btn" @click="exit_login">
+          <p class="text">退出</p>
+        </div>
         <div class="header_btn" v-if="userInfo.user_no">
           <p class="text">
             账号:
             <span style="font-weight:600;">{{userInfo.user_no}}</span>
           </p>
-        </div>
-        <div class="header_btn" @click="exit_login">
-          <p class="text">退出</p>
         </div>
       </div>
     </header>
@@ -684,7 +685,6 @@ export default {
           url: url,
           data: req
         }).then(res => {
-          console.log("res.data.data", res.data.data)
           let ser = req.serviceName
           if (ser === "DI_ADI_REGISTER_INFO_select") {
             ser = "mzghjl"
@@ -725,7 +725,6 @@ export default {
             ser = "zyfyjl"
           }
           this.elTabsData[ser] = res.data.data
-          console.log(this.elTabsData["zyyzxx"]);
 
         }).catch(err => {
           console.log(err)
@@ -1243,8 +1242,12 @@ body {
   font-size: 14px;
 }
 
-.header_btn:nth-child(2) {
-  border-color: rgba(228, 228, 228, 1);
+// .header_btn:nth-child(2) {
+//   border-color: rgba(228, 228, 228, 1);
+// }
+.header_btn:nth-child(4) {
+  border-color: #fff;
+  cursor: auto;
 }
 
 /* content */
