@@ -566,7 +566,6 @@ export default {
       this.addTab(datas)
     },
     addTab(data) {
-      // debugger
       console.log(data)
       // 根据身份证号查找证件信息及LOCAL_ID
       let req = {
