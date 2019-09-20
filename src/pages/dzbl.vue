@@ -47,7 +47,7 @@
     </header>
     <div class="content">
       <div class="content_left">
-        <div class="content_left_top">
+        <!-- <div class="content_left_top">
           <div class="content_left_top_item">
             <div class="block">
               <el-date-picker
@@ -99,7 +99,7 @@
             </select>
             <div class="select-btn" @click="querySelector">查询</div>
           </div>
-        </div>
+        </div>-->
         <div class="content_left_bottom">
           <div class="tabs">
             <div class="label">
@@ -561,120 +561,25 @@ export default {
       let datas = {
         tab: tab,
         serviceName: serviceName,
-        component: component
+        component: component,
+        type: type
       }
       this.addTab(datas)
     },
     addTab(data) {
+      // 点击列表查询对应记录数据,增加对应tab页
       console.log(data)
-      // 根据身份证号查找证件信息及LOCAL_ID
-      let req = {
-        serviceName: "DI_MPI_CERT_REGISTERINFO_select",
-        condition: [
-          {
-            colName: "CERT_NUMBER",
-            ruleType: "eq",
-            value: this.id_card
-          }
-        ]
-      };
-      let url = this.getServiceUrl("select", req.serviceName, "emr");
-      this.axios({
-        method: "POST",
-        url: url,
-        data: req
-      }).then(res => {
-        // console.log(res)
-        if (res.data.data[0]) {
-          this.LOCAL_ID = res.data.data[0].LOCAL_ID
-          console.log(`localID:${this.LOCAL_ID}`)
-          this.patientInfo.LOCAL_ID = res.data.data[0].LOCAL_ID
-          // 根据localid查找基本信息
-          let req2 = {
-            "serviceName": "DI_MPI_REGISTERINFO_select",
-            "condition": [
-              {
-                "colName": "LOCAL_ID",
-                "ruleType": "eq",
-                "value": this.LOCAL_ID
-              }
-            ],
-          };
-          let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
-          this.axios({
-            method: "POST",
-            url: url2,
-            data: req2
-          }).then(res => {
-            let data = res.data.data[0]
-            console.log("基本信息:", data);
-            this.patientInfo.name = data.NAME
-            this.patientInfo.gender = data.SEX_NAME
-            let birth = data.BIRTHDAY.toString().slice(0, 4)
-            birth = new Date(birth).getFullYear();
-            let today = new Date().getFullYear();
-            let age = today - birth
-            this.patientInfo.age = age
-            console.log(age)
-          }).catch(err => {
-            console.log(err);
-          });
-          let req3 = {
-            "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
-            "condition": [
-              {
-                "colName": "LOCAL_ID",
-                "ruleType": "eq",
-                "value": this.LOCAL_ID
-              }
-            ],
-          }
-          let url3 = this.getServiceUrl("select", req3.serviceName, "emr");
-          this.axios({
-            method: "POST",
-            url: url3,
-            data: req3
-          }).then(res => {
-            console.log(res.data)
-            let ghjl = res.data.data[0]
-            this.ghjl = ghjl
-          }).catch(err => {
-            console.log(err);
-          })
-          let req4 = {
-            "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
-            "condition": [
-              {
-                "colName": "LOCAL_ID",
-                "ruleType": "eq",
-                "value": this.LOCAL_ID
-              }
-            ],
-          }
-          let url4 = this.getServiceUrl("select", req4.serviceName, "emr");
-          this.axios({
-            method: "POST",
-            url: url4,
-            data: req4
-          }).then(res => {
-            console.log(res.data.data[0])
-            let ryjl = res.data.data[0]
-            this.ryjl = ryjl
-          }).catch(err => {
-            console.log(err);
-          })
-        }
-      }).catch(err => {
-        console.log(err);
-      });
+      // if (data.type == "0") {
+      //   // 根据身份证号查找门急诊记录
+      // }
       if (data) {
         let req = {
           serviceName: data.serviceName,
           condition: [
             {
-              colName: "LOCAL_ID",
+              colName: "CERT_NUMBER",
               ruleType: "eq",
-              value: this.LOCAL_ID
+              value: this.id_card
             }
           ]
         };
@@ -709,7 +614,6 @@ export default {
             ser = "zyzdjl"
           } else if (ser === "DI_HDI_DRUREC_INFO_select") {
             ser = "zyyzxx"
-            console.log("res.data.data", res.data.data)
           } else if (ser === "DI_HDI_CPATH_INFO_select") {
             ser = "zylclj"
           } else if (ser === "DI_HDI_CLIEXA_INFO_select") {
@@ -724,7 +628,6 @@ export default {
             ser = "zyfyjl"
           }
           this.elTabsData[ser] = res.data.data
-
         }).catch(err => {
           console.log(err)
         })
@@ -740,6 +643,7 @@ export default {
         this.dataState = !this.dataState
       }
       ++this.componentsKey
+
     },
     removeTab(targetName) {
       let tabs = this.editableTabs;
@@ -808,7 +712,8 @@ export default {
       if (this.inputContext) {
         this.id_card = this.inputContext
         // this.patientInfo.name = window.CardInfo.name
-        this.getData();
+        // this.getData();
+        this.getBasicData()
         setTimeout(() => {
           this.dialogVisible = false;
         }, 500);
@@ -873,11 +778,10 @@ export default {
         // this.getData();
       });
     },
-    getData() {
-      this.patientInfo.identityCard = this.id_card
-      // 根据身份证号查找证件信息及LOCAL_ID
-      let req = {
-        serviceName: "DI_MPI_CERT_REGISTERINFO_select",
+    getBasicData() {
+      // 获取基本信息、挂号记录统计、入院记录统计
+      let params = {
+        serviceName: "DI_MPI_REGISTERINFO_select",
         condition: [
           {
             colName: "CERT_NUMBER",
@@ -886,97 +790,67 @@ export default {
           }
         ]
       };
-      let url = this.getServiceUrl("select", req.serviceName, "emr");
-      this.axios({
-        method: "POST",
-        url: url,
-        data: req
-      }).then(res => {
-        console.log(res)
-        if (res.data.data[0]) {
-          this.LOCAL_ID = res.data.data[0].LOCAL_ID
-          console.log(`localID:${this.LOCAL_ID}`)
-          this.patientInfo.LOCAL_ID = res.data.data[0].LOCAL_ID
-          // 根据localid查找基本信息
-          let req2 = {
-            "serviceName": "DI_MPI_REGISTERINFO_select",
-            "condition": [
-              {
-                "colName": "LOCAL_ID",
-                "ruleType": "eq",
-                "value": this.LOCAL_ID
-              }
-            ],
-          };
-          let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
-          this.axios({
-            method: "POST",
-            url: url2,
-            data: req2
-          }).then(res => {
-            let data = res.data.data[0]
-            console.log("基本信息:", data);
-            if (data.NAME) {
-              this.patientInfo.name = data.NAME
-            }
-            this.patientInfo.gender = data.SEX_NAME
-            let birth = data.BIRTHDAY.toString().slice(0, 4)
-            birth = new Date(birth).getFullYear();
-            let today = new Date().getFullYear();
-            let age = today - birth
-            this.patientInfo.age = age
-            console.log(age)
-          }).catch(err => {
-            console.log(err);
-          });
-          let req3 = {
-            "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
-            "condition": [
-              {
-                "colName": "LOCAL_ID",
-                "ruleType": "eq",
-                "value": this.LOCAL_ID
-              }
-            ],
+      let url = this.getServiceUrl("select", params.serviceName, "emr");
+      this.axios.post(url, params)
+        .then(res => {
+          let data = res.data.data[0]
+          console.log("基本信息:", data);
+          if (data.NAME) {
+            this.patientInfo.name = data.NAME
           }
-          let url3 = this.getServiceUrl("select", req3.serviceName, "emr");
-          this.axios({
-            method: "POST",
-            url: url3,
-            data: req3
-          }).then(res => {
-            console.log(res.data)
-            let ghjl = res.data.data[0]
-            this.ghjl = ghjl
-          }).catch(err => {
-            console.log(err);
-          })
-          let req4 = {
-            "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
-            "condition": [
-              {
-                "colName": "LOCAL_ID",
-                "ruleType": "eq",
-                "value": this.LOCAL_ID
-              }
-            ],
+          this.patientInfo.gender = data.SEX_NAME
+          let birth = data.BIRTHDAY.toString().slice(0, 4)
+          birth = new Date(birth).getFullYear();
+          let today = new Date().getFullYear();
+          let age = today - birth
+          this.patientInfo.age = age
+          console.log("age:", age)
+        })
+        .catch(err => {
+          console.error(err);
+        })
+      // 查询挂号记录
+      let paramsb = {
+        "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
+        "condition": [
+          {
+            colName: "CERT_NUMBER",
+            ruleType: "eq",
+            value: this.id_card
           }
-          let url4 = this.getServiceUrl("select", req4.serviceName, "emr");
-          this.axios({
-            method: "POST",
-            url: url4,
-            data: req4
-          }).then(res => {
-            console.log(res.data.data[0])
-            let ryjl = res.data.data[0]
-            this.ryjl = ryjl
-          }).catch(err => {
-            console.log(err);
-          })
-        }
-      }).catch(err => {
-        console.log(err);
-      });
+        ],
+      }
+      let urlb = this.getServiceUrl("select", paramsb.serviceName, "emr");
+      this.axios.post(urlb, paramsb)
+        .then(res => {
+          let ghjl = res.data.data[0]
+          this.ghjl = ghjl
+          console.log("挂号记录:", res.data.data)
+        })
+        .catch(err => {
+          console.error(err);
+        })
+
+      let paramsc = {
+        "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
+        "condition": [
+          {
+            colName: "CERT_NUMBER",
+            ruleType: "eq",
+            value: this.id_card
+          }
+        ],
+      }
+      let urlc = this.getServiceUrl("select", paramsc.serviceName, "emr");
+      this.axios.post(urlc, paramsc)
+        .then(res => {
+          let ryjl = res.data.data[0]
+          this.ryjl = ryjl
+          console.log("入院记录：", this.ryjl)
+        })
+        .catch(err => {
+          console.error(err);
+        })
     },
     BtnReadCard() {
       if (typeof jsObj == "undefined") {
@@ -995,7 +869,6 @@ export default {
             type: 'warning'
           });
         }
-
         return;
       }
       jsObj.ReadCommCard();
