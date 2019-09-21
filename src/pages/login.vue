@@ -244,7 +244,6 @@ body {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-
   .container {
     position: relative;
     width: 800px;
@@ -335,7 +334,6 @@ body {
     cursor: pointer;
     color: white;
   }
-
   label {
     display: block;
     color: #fff;
@@ -343,7 +341,6 @@ body {
     cursor: pointer;
   }
 }
-
 .input.focus::after {
   top: -100%;
   left: 0;

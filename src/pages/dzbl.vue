@@ -26,13 +26,12 @@
       </div>
       <div class="header_item">
         <div class="header_btn" @click="readCard()">
-          <!-- <p class="text">重新</p> -->
           <p class="text">读卡</p>
         </div>
-        <div class="header_btn" @click="goHomePage()">
+        <!-- <div class="header_btn" @click="goHomePage()">
           <p class="text">返回</p>
           <p class="text">首页</p>
-        </div>
+        </div> -->
 
         <div class="header_btn" @click="exit_login">
           <p class="text">退出</p>
@@ -1039,7 +1038,6 @@ body {
   width: 100%;
   margin: 0 auto;
   display: flex;
-  // height: 80px;
   justify-content: space-between;
   box-sizing: border-box;
   padding: 10px;
@@ -1123,7 +1121,6 @@ body {
 }
 
 /* content */
-
 .content {
   /* height: 550px; */
   display: flex;
@@ -1162,8 +1159,8 @@ body {
       background-color: #fff;
       width: 100%;
       border: 1px solid rgba(228, 228, 228, 1);
-      height: 700px;
-      // height: 500px;
+      // height: 700px;
+      height: 100%;
       .tabs {
         width: 100%;
         display: flex;
@@ -1249,10 +1246,9 @@ body {
   .content_right {
     box-sizing: border-box;
     display: flex;
-    // max-width: 1000px;
-    // min-width: 800px;
     flex: 1;
     height: 100%;
+    margin-right: 10px;
     overflow: hidden;
   }
   .read_card_dialog {
