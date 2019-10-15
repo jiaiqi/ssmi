@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  name: "", // 门诊医嘱
+  name: "OutpatientMedicalAdvice", // 门诊医嘱
   data() {
     return {
       businessId: "",

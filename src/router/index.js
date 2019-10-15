@@ -37,98 +37,98 @@ export default new Router({
       }
     },
     {
-      path: '/inHospitalClinicalPathway/:businessId',
+      path: '/inHospitalClinicalPathway/:businessId', // 住院诊疗临床路径记录
       name: 'inHospitalClinicalPathway',
       component: () => import('../dialog/inHospitalClinicalPathway.vue'),
     },
     {
-      path: '/inHospitalCost/:businessId',
+      path: '/inHospitalCost/:businessId', // 住院诊疗费用结算
       name: 'inHospitalCost',
       component: () => import('../dialog/inHospitalCost.vue'),
     },
     {
-      path: '/inHospitalDiagnoseRecord/:businessId',
+      path: '/inHospitalDiagnoseRecord/:businessId', //住院诊疗诊断记录
       name: 'inHospitalDiagnoseRecord',
       component: () => import('../dialog/inHospitalDiagnoseRecord.vue'),
     },
     {
       path: '/inHospitalDischargeRecord/:businessId',
-      name: 'inHospitalDischargeRecord',
+      name: 'inHospitalDischargeRecord', // 住院诊疗出院记录
       component: () => import('../dialog/inHospitalDischargeRecord.vue'),
     },
     {
       path: '/inHospitalIndexCost/:businessId',
-      name: 'inHospitalIndexCost',
+      name: 'inHospitalIndexCost', // 住院病案首页费用结算
       component: () => import('../dialog/inHospitalIndexCost.vue'),
     },
     {
       path: '/inHospitalIndexDiagnose/:businessId',
-      name: 'inHospitalIndexDiagnose',
+      name: 'inHospitalIndexDiagnose', // 住院病案首页诊断记录
       component: () => import('../dialog/inHospitalIndexDiagnose.vue'),
     },
     {
       path: '/inHospitalIndexEvaluation/:businessId',
-      name: 'inHospitalIndexEvaluation',
+      name: 'inHospitalIndexEvaluation', // 住院病案首页评估报告
       component: () => import('../dialog/inHospitalIndexEvaluation.vue'),
     },
     {
       path: '/inHospitalIndexOperation/:businessId',
-      name: 'inHospitalIndexOperation',
+      name: 'inHospitalIndexOperation', // 住院病案首页手术记录
       component: () => import('../dialog/inHospitalIndexOperation.vue'),
     },
     {
       path: '/inHospitalInspectionReport/:businessId',
-      name: 'inHospitalInspectionReport',
+      name: 'inHospitalInspectionReport', // 住院诊疗检查报告
       component: () => import('../dialog/inHospitalInspectionReport.vue'),
     },
     {
       path: '/inHospitalMedicalAdvice/:businessId',
-      name: 'inHospitalMedicalAdvice',
+      name: 'inHospitalMedicalAdvice', // 住院诊疗医嘱信息
       component: () => import('../dialog/inHospitalMedicalAdvice.vue'),
     },
     {
       path: '/inHospitalOperationNote/:businessId',
-      name: 'inHospitalOperationNote',
+      name: 'inHospitalOperationNote', // 住院诊疗手术记录
       component: () => import('../dialog/inHospitalOperationNote.vue'),
     },
     {
       path: '/inHospitalSurveyReport/:businessId',
-      name: 'inHospitalSurveyReport',
+      name: 'inHospitalSurveyReport', // 住院诊疗检验报告
       component: () => import('../dialog/inHospitalSurveyReport.vue'),
     },
     {
       path: '/outpatientCost/:businessId',
-      name: 'outpatientCost',
+      name: 'outpatientCost', // 门诊费用记录
       component: () => import('../dialog/outpatientCost.vue'),
     },
     {
       path: '/outpatientDiagnosticRecords/:businessId',
-      name: 'outpatientDiagnosticRecords',
+      name: 'outpatientDiagnosticRecords', // 门诊诊断记录
       component: () => import('../dialog/outpatientDiagnosticRecords.vue'),
     },
     {
       path: '/outpatientInspectionReport/:businessId',
-      name: 'outpatientInspectionReport',
+      name: 'outpatientInspectionReport', // 门诊检查报告
       component: () => import('../dialog/outpatientInspectionReport.vue'),
     },
     {
       path: '/outpatientMedicalAdvice/:businessId',
-      name: 'outpatientMedicalAdvice',
+      name: 'outpatientMedicalAdvice', // 门诊医嘱
       component: () => import('../dialog/outpatientMedicalAdvice.vue'),
     },
     {
       path: '/outpatientMedicalHistory/:businessId',
-      name: 'outpatientMedicalHistory',
+      name: 'outpatientMedicalHistory', // 门诊病历
       component: () => import('../dialog/outpatientMedicalHistory.vue'),
     },
     {
       path: '/outpatientOperationNote/:businessId',
-      name: 'outpatientOperationNote',
+      name: 'outpatientOperationNote', // 门诊诊手术记录
       component: () => import('../dialog/outpatientOperationNote.vue'),
     },
     {
       path: '/outpatientOperationNote/:businessId',
-      name: 'outpatientOperationNote',
+      name: 'outpatientOperationNote', // 门诊检验报告
       component: () => import('../dialog/outpatientOperationNote.vue'),
     },
 

@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: "", // 门诊病历
+  name: "OutpatientMedicalHistory", // 门诊病历
   data() {
     return {
       businessId: "",
