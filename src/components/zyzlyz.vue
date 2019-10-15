@@ -29,6 +29,7 @@
             </td>
           </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
+            <!-- <medical-advice></medical-advice> -->
             <div class="wrap_yz">
               <div class="header">
                 <div class="header_top">
@@ -110,8 +111,13 @@
 </template>
 
 <script>
+import MedicalAdvice from "../dialog/inHospitalMedicalAdvice";
 export default {
-  name: "zyzlyz", props: ["tabData", "patientInfo", "elTabsData"],
+  name: "zyzlyz",
+  props: ["tabData", "patientInfo", "elTabsData"],
+  // components: {
+  //   MedicalAdvice
+  // },
   data() {
     return {
       dialogVisible: false,
@@ -123,28 +129,28 @@ export default {
   watch: {
     tabsData: {
       handler(newName, oldName) {
-        this.tabsData = this.elTabsData.zyyzxx
+        this.tabsData = this.elTabsData.zyyzxx;
       },
       deep: true
     }
   },
   mounted() {
     setTimeout(() => {
-      this.tabsData = this.elTabsData.zyyzxx
-      let data = this.tabsData
+      this.tabsData = this.elTabsData.zyyzxx;
+      let data = this.tabsData;
       if (data && data.length > 0) {
         data.map((item, index) => {
           if (index == 1) {
-            this.datas = item
+            this.datas = item;
           }
-        })
+        });
       }
     }, 500);
   },
   methods: {
     changeDialogVisible(item) {
       this.dialogVisible = true;
-      this.detail = {}
+      this.detail = {};
       if (item) {
         this.detail = item;
       }

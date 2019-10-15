@@ -131,7 +131,6 @@ export default {
       sessionStorage.setItem("need_login_flag", null);
       // let path = "http://192.168.0.192:8101/sso/operate/srvuser_login";
       let path = this.getServiceUrl("operate", "srvuser_login", "sso");
-
       const callBack = data => {
         if (data.state == "SUCCESS") {
           const resp = data.response[0];
@@ -159,6 +158,7 @@ export default {
                 const { bx_auth_ticket } = res.data.response[0].response;
                 sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket);
                 const current_login_user = resp.response.login_user_info;
+                // alert(JSON.stringify(resp))
                 sessionStorage.setItem(
                   "current_login_user",
                   JSON.stringify(current_login_user)
@@ -174,7 +174,6 @@ export default {
                     self.$router.push({ name: "dzbl", params: { target: param } });
                   } else {
                     self.$router.push({ name: "dzbl" });
-
                   }
                 }
               }

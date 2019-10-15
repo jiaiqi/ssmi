@@ -28,6 +28,7 @@
             </td>
           </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
+            <!-- <operation-note></operation-note> -->
             <div class="tab_detail">
               <div class="title">住院诊疗手术记录</div>
               <div class="detail_title_header">
@@ -37,27 +38,50 @@
                   <span>性别:{{detail.AP02_01_102_01}}</span>
                   <span>年龄:{{detail.DE02_01_032_00}}</span>
                 </div>
-                <div class="detail_title_headertwo">
-                  <!-- <span class="span11">床号:</span> -->
-                  <!-- <span class="span22">门诊号:</span> -->
-                  <!-- <span class="span33">住院号:</span> -->
-                </div>
+                <div class="detail_title_headertwo"></div>
               </div>
-              <p><strong>手术前诊断: </strong>&nbsp;&nbsp;{{ detail.AP05_01_115_00}}</p>
-              <p><strong>手术后诊断:</strong> &nbsp;&nbsp;{{ detail.AP05_01_117_00}}</p>
-              <p><strong>手术名称:</strong>&nbsp;&nbsp;{{detail.DE06_00_094_00}}</p>
+              <p>
+                <strong>手术前诊断:</strong>
+                &nbsp;&nbsp;{{ detail.AP05_01_115_00}}
+              </p>
+              <p>
+                <strong>手术后诊断:</strong>
+                &nbsp;&nbsp;{{ detail.AP05_01_117_00}}
+              </p>
+              <p>
+                <strong>手术名称:</strong>
+                &nbsp;&nbsp;{{detail.DE06_00_094_00}}
+              </p>
               <div class="detail_title_dif1">
-                <p><strong>手术日期:</strong>&nbsp;&nbsp;{{format_date(detail.DE06_00_095_00)}}</p>
-                <!-- <p class="detail_title_dif1_two">手术历时:{{detail.AP06_00_394_00}}</p> -->
+                <p>
+                  <strong>手术日期:</strong>
+                  &nbsp;&nbsp;{{format_date(detail.DE06_00_095_00)}}
+                </p>
               </div>
               <div class="detail_title_dif2">
-                <p><strong>手术者:</strong>&nbsp;&nbsp;{{detail.AP02_01_039_37}}</p>
-                <p class="detail_title_dif2_two"><strong>助手:</strong>&nbsp;&nbsp;{{detail.AP02_01_039_75}}</p>
-                <p class="detail_title_dif2_three"><strong>护士:</strong></p>
+                <p>
+                  <strong>手术者:</strong>
+                  &nbsp;&nbsp;{{detail.AP02_01_039_37}}
+                </p>
+                <p class="detail_title_dif2_two">
+                  <strong>助手:</strong>
+                  &nbsp;&nbsp;{{detail.AP02_01_039_75}}
+                </p>
+                <p class="detail_title_dif2_three">
+                  <strong>护士:</strong>
+                </p>
               </div>
-              <p><strong>麻醉者:</strong>&nbsp;&nbsp;{{detail.AP02_01_039_76}}</p>
-              <p><strong>体位:</strong></p>
-              <p><strong>手术经过:</strong>&nbsp;&nbsp;{{detail.AP06_00_302_00}}</p>
+              <p>
+                <strong>麻醉者:</strong>
+                &nbsp;&nbsp;{{detail.AP02_01_039_76}}
+              </p>
+              <p>
+                <strong>体位:</strong>
+              </p>
+              <p>
+                <strong>手术经过:</strong>
+                &nbsp;&nbsp;{{detail.AP06_00_302_00}}
+              </p>
             </div>
             <!-- <div class="tab_detail">
               <div class="detail_title">
@@ -100,8 +124,12 @@
 </template>
 
 <script>
+// import OperationNote from "../dialog/InHospitalOperationNote";
 export default {
   name: "zyzlssjl",
+  // components: {
+  //   OperationNote
+  // },
   props: ["tabData", "elTabsData"],
   data() {
     return {
@@ -112,7 +140,7 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.tabsData = this.elTabsData.zyssjl
+      this.tabsData = this.elTabsData.zyssjl;
     }, 300);
   },
   methods: {

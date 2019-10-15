@@ -20,15 +20,20 @@ Vue.use(elementUI)
 VueInit()
 VueUtil()
 Vue.config.productionTip = false
-Vue.prototype.axios = axios 
+Vue.prototype.axios = axios
 Vue.prototype.http = axios // 挂载axios到vue.proto对象上原型属性
 axios.interceptors.request.use(function (config) {
   config.timeout = 8000
   // 在发送请求之前做些什么
   let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
+  let cert_auth_ticket = sessionStorage.getItem("cert_auth_ticket")
   if(bx_auth_ticket){
     config.headers["bx_auth_ticket"] = bx_auth_ticket;
   }
+  if(cert_auth_ticket){
+    config.headers["cert_auth_ticket"] = cert_auth_ticket;
+  }
+  // alert("aaa"+bx_auth_ticket+'---'+cert_auth_ticket)
   return config;
 }, function (error) {
   // 对请求错误做些什么
@@ -58,10 +63,10 @@ axios.interceptors.response.use(response=>{
       sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
       let current_login_user = resp.response.login_user_info;
       sessionStorage.setItem("current_login_user", JSON.stringify(current_login_user))
-      top.user = current_login_user; 
+      top.user = current_login_user;
     }
   }
-  return response; 
+  return response;
 })
 // Vue.http.options.xhr = { withCredentials: true }// vueresource请求跨域
 // Vue.http.interceptors.push((request, next) => {

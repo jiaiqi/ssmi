@@ -50,7 +50,6 @@
                 <div class="content_item_detail"></div>
                 <div class="content_item_title">处理意见:</div>
                 <div class="content_item_detail">{{detail.DE06_00_087_00}}</div>
-                <!-- <div class="content_footer">初步诊断:</div> -->
               </div>
               <div class="footer">
                 <div class="footer_item">数据产生日期:{{format_date(detail.DATAGENERATE_DATE)}}</div>
@@ -69,7 +68,7 @@
 <script>
 export default {
   name: "OutpatientMedicalRecords", // 门急诊诊疗病历
-  props: ["tabData", "elTabsData", "changeData"],
+  props: ["elTabsData"],
   data() {
     return {
       dialogVisible: false,
@@ -85,6 +84,27 @@ export default {
   mounted() {
   },
   methods: {
+    getData() {
+      let params = {
+        serviceName: "DI_ADI_RECORD_INFO_select",
+        condition: [
+          {
+            colName: "BUSINESS_ID",
+            ruleType: "eq",
+            value: this.businessId
+          }
+        ]
+      }
+      let url = this.getServiceUrl("select", params.serviceName, "emr");
+      this.axios.post(url, params)
+        .then(res => {
+          console.log(res)
+          this.tabsData = res.data.data
+        })
+        .catch(err => {
+          console.error(err);
+        })
+    },
     changeDialogVisible(item) {
       this.dialogVisible = true;
       if (item) {

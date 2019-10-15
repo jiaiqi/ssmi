@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" @click="hideAccountInfo">
     <header class="heade">
       <div class="header_item">
         <div class="header_img">
@@ -28,11 +28,20 @@
         <div class="header_btn" @click="readCard()">
           <p class="text">读卡</p>
         </div>
+        <div class="account_box" @click.stop="changeAccountVisible">
+          <div class="account_info" v-if="showAccount">
+            <div class="account_info_item">
+              <span class="text">账号:</span>
+              <span style="font-weight:600;">{{userInfo.user_no}}</span>
+            </div>
+            <div class="account_info_item" @click="exit_login">退出登录</div>
+          </div>
+        </div>
         <!-- <div class="header_btn" @click="goHomePage()">
           <p class="text">返回</p>
           <p class="text">首页</p>
-        </div> -->
-
+        </div>-->
+        <!--
         <div class="header_btn" @click="exit_login">
           <p class="text">退出</p>
         </div>
@@ -41,7 +50,7 @@
             账号:
             <span style="font-weight:600;">{{userInfo.user_no}}</span>
           </p>
-        </div>
+        </div>-->
       </div>
     </header>
     <div class="content">
@@ -373,6 +382,8 @@ export default {
     return {
       // id_card: "610627196001190000",
       id_card: "",
+      device_verify: {},
+      device_auth_ticket: "",
       inputContext: "",
       oldId: "",
       ghjl: {},
@@ -435,7 +446,8 @@ export default {
       editableTabsValue: "",
       showContent: false,
       CardInfo: {},
-      from: ''
+      from: '',
+      showAccount: false,
     };
   },
   mounted() {
@@ -447,9 +459,15 @@ export default {
     console.log(param)
   },
   updated() {
-    // alert(this.CardInfo)
   },
   methods: {
+    requestMachineNum() {
+      // let url = "/erm/operate/select/srvdi_electronic_card_cert"
+      let serviceName = "srvdi_electronic_card_cert"
+      let url = this.getServiceUrl("select", serviceName, "emr");
+      let cardType = "身份证"
+      let deviceAuthTicket = ""
+    },
     checkTabs(num) {
       if (num === 0) {
         this.tabsActive = true
@@ -730,19 +748,62 @@ export default {
         return
       }
     },
+    verifyDevice(ticket, card_type, card_no) {
+      let serviceName = "srvdi_electronic_card_cert"
+      let req = {
+        "serviceName": "srvdi_electronic_card_cert",
+        "condition": [
+          {
+            "colName": "device_auth_ticket",
+            "ruleType": "eq",
+            "value": ticket,
+          },
+          {
+            "colName": "card_type",
+            "ruleType": "eq",
+            "value": card_type,
+          },
+          {
+            "colName": "card_no",
+            "ruleType": "eq",
+            "value": card_no,
+          }]
+      }
+      let url = this.getServiceUrl("select", serviceName, "emr");
+      this.axios.post(url, req).then(res => {
+        if (res.data.data) {
+          this.device_verify = {
+            cert_auth_ticket: res.data.data[0].cert_auth_ticket, // 卡机票据
+            expire_date: res.data.data[0].expire_date // 到期时间
+          }
+          window.sessionStorage.setItem("cert_auth_ticket", this.device_verify.cert_auth_ticket)
+          this.cert_auth_ticket = res.data.data.cert_auth_ticket
+        }
+      }).catch(err => {
+        alert('05' + err)
+      })
+    },
     readIdCard() {
       this.dialogVisible = false
       this.BtnReadCard();
-      // let CardInfo = localStorage.getItem("CardInfo")
+      /**
+       * TODO
+       * 增加卡机设备验证
+       */
       setTimeout(() => {
         let CardInfo = window.CardInfo
         if (CardInfo) {
-          // alert(JSON.stringify(CardInfo))
+          let ticket = CardInfo.bx_auth_ticket
+          let card_Type = CardInfo.cardtype
+          if (card_Type == '居民身份证') {
+            card_Type = '身份证'
+          }
+          let card_no = CardInfo.id
+          this.verifyDevice(ticket, card_Type, card_no)
           this.CardInfo = CardInfo
           this.inputContext = CardInfo.id
           if (this.userInfo) {
             if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
-              // alert("当前读取到的身份证号为:\n" + CardInfo.id)
               this.patientInfo.name = CardInfo.name
               this.id_card = CardInfo.id
               this.dialogVisible = true;
@@ -917,6 +978,14 @@ export default {
     goHomePage() {
       console.log("返回首页");
       window.location.reload();
+    },
+    changeAccountVisible() {
+      // 显示/隐藏账户信息
+      this.showAccount = !this.showAccount
+    },
+    hideAccountInfo() {
+      // 隐藏账户信息
+      this.showAccount = false
     }
   },
   created() {
@@ -1044,27 +1113,64 @@ body {
   background-color: #fff;
   color: #333;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
-}
-
-.header_item {
-  height: 100%;
-  display: flex;
-  width: auto;
-  color: #333;
-}
-
-.header_img {
-  width: 240px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  border: 1px #666 solid;
-  .hospital_name {
-    width: 100%;
-    font-size: 30px;
-    text-align: center;
-    font-family: "楷体";
+  .header_item {
+    height: 100%;
+    display: flex;
+    width: auto;
+    flex: 1;
+    color: #333;
+    &:last-child {
+      justify-content: space-between;
+    }
+    .header_img {
+      width: 240px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      border: 1px #666 solid;
+      .hospital_name {
+        width: 100%;
+        font-size: 30px;
+        text-align: center;
+        font-family: "楷体";
+      }
+    }
+    .account_box {
+      cursor: pointer;
+      position: relative;
+      margin: 0 30px 0 100px;
+      height: 60px;
+      width: 60px;
+      background-image: url("../assets/images/account.png");
+      // background-color: #575858;
+      background-size: 100%;
+      overflow: visible;
+      .account_info {
+        cursor: default;
+        padding-top: 10px;
+        border: 1px solid #333;
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        bottom: -100px;
+        left: -120px;
+        background-color: #333;
+        border-radius: 5px;
+        color: #eee;
+        z-index: 999;
+        .account_info_item {
+          font-size: 16px;
+          cursor: pointer;
+          // height: 60px;
+          text-indent: 16px;
+          line-height: 40px;
+          &:hover {
+            background-color: #409eff;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -1250,9 +1356,12 @@ body {
     height: 100%;
     margin-right: 10px;
     overflow: hidden;
-  }
-  .read_card_dialog {
-    overflow: hidden;
+    .read_card_dialog {
+      overflow: hidden;
+      & /deep/ .el-dialog--center {
+        overflow: hidden;
+      }
+    }
   }
 }
 
@@ -1306,6 +1415,7 @@ select {
 .read_card {
   min-height: 100px;
   text-align: center;
+  overflow: hidden;
   // line-height: 100px;
   font-weight: 600;
   font-size: 20px;

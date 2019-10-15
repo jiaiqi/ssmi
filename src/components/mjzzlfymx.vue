@@ -117,12 +117,7 @@ export default {
       }
       this.dialogVisible = true;
       let req = {
-        serviceName: "DI_ADI_EXPSET_LIST_select",
-        // page: {
-        //   pageNo: 1,
-        //   rownumber: 5,
-        //   total: 17
-        // }
+        serviceName: "DI_ADI_EXPSET_LIST_select"
       };
       let url = this.getServiceUrl("select", req.serviceName, "emr");
       axios({

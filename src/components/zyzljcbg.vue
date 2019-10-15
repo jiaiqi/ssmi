@@ -9,7 +9,7 @@
             <td>住院号</td>
             <td>报告单名称</td>
             <td>检查日期</td>
-            <td>检查项目</td>           
+            <td>检查项目</td>
             <!-- <td>科室</td> -->
             <!-- <td>检查结论</td> -->
             <td>数据产生时间</td>
@@ -18,7 +18,7 @@
           <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
-            <td>{{ item.AP04_50_056_00 }}</td>            
+            <td>{{ item.AP04_50_056_00 }}</td>
             <td v-if="item.AP06_00_048_03">{{format_date(item.AP06_00_048_03)}}</td>
             <td>{{ item.DE04_30_020_00 }}</td>
             <!-- <td>{{ item.AP04_30_060_00 }}</td> -->
@@ -29,6 +29,7 @@
             </td>
           </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
+            <!-- <inspection-report></inspection-report> -->
             <div class="wrap_jcbg">
               <div class="header">
                 <div class="header_top">
@@ -82,11 +83,6 @@
                       </p>
                     </li>
                     <li>
-                      <!-- <p>
-                        <span
-                          v-if="detail.UPLOAD_TIME"
-                        >报告时间:{{detail.UPLOAD_TIME.slice(0,4)+'-'+detail.UPLOAD_TIME.slice(4,6)+'-'+detail.UPLOAD_TIME.slice(6,8)}}</span>
-                      </p>-->
                       <p></p>
                     </li>
                   </ul>
@@ -107,7 +103,6 @@
                     <p>{{ detail.AP04_30_046_00 }}</p>
                     <p></p>
                   </div>
-                  <!-- <div class="opinion"> -->
                   <div class="inspect">
                     <p>疾病诊断名称:</p>
                     <p>{{detail.DE05_01_025_00}}</p>
@@ -144,8 +139,11 @@
 </template>
 
 <script>
+import InspectionReport from "../dialog/inHospitalInspectionReport";
+
 export default {
   name: "zyzljcbg",
+  // components: { InspectionReport },
   props: ["tabData", "elTabsData"],
   data() {
     return {
@@ -156,7 +154,7 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.tabsData = this.elTabsData.zyjcbg
+      this.tabsData = this.elTabsData.zyjcbg;
     }, 300);
   },
   methods: {

@@ -8,10 +8,8 @@
             <td>医院</td>
             <td>住院号</td>
             <td>姓名</td>
-            <!-- <td>年龄</td> -->
             <td>入径日期</td>
             <td>入径诊断</td>
-            <!-- <td>机构名称</td> -->
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -19,54 +17,12 @@
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
             <td>{{item.DE02_01_039_00}}</td>
-            <!-- <td>{{item.DE02_01_032_00}}</td> -->
             <td v-if="item.AP05_01_212_00">{{format_date(item.AP05_01_212_00)}}</td>
             <td>{{item.AP05_01_215_02}}</td>
-            <!-- <td>{{item.ORGANIZATION_NAME}}</td> -->
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">详情</td>
           </tr>
           <el-dialog :visible.sync="dialogVisible" width="1000px">
-            <!-- <div class="lclj_wrap">
-              <div class="header">
-                <div class="header_top">
-                  <p>住院诊疗临床路径记录</p>
-                </div>
-
-                <div class="header_cen">
-                  <p>姓名:{{detail.DE02_01_039_00}}</p>
-                  <p>病案号:{{detail.DE01_00_004_00}}</p>
-                </div>
-              </div>
-              <div class="content">
-                <table>
-                  <tr>
-                    <td>住院号</td>
-                    <td>入径时间</td>
-                    <td>出径时间</td>
-                    <td>住院病区</td>
-                    <td>住院床号</td>
-                    <td>住院科室</td>
-                    <td>责任护士</td>
-                  </tr>
-                  <tr>
-                    <td>{{detail.DE01_00_014_00}}</td>
-                    <td
-                      v-if="detail.AP05_01_212_00"
-                    >{{detail.AP05_01_212_00.slice(0,4)+'-'+detail.AP05_01_212_00.slice(4,6)+'-'+detail.AP05_01_212_00.slice(6,8)}}</td>
-                    <td v-else-if="!detail.AP05_01_212_00"></td>
-                    <td
-                      v-if="detail.AP05_01_214_00"
-                    >{{detail.AP05_01_214_00.slice(0,4)+'-'+detail.AP05_01_214_00.slice(4,6)+'-'+detail.AP05_01_214_00.slice(6,8)}}</td>
-                    <td v-else-if="!detail.AP05_01_214_00"></td>
-                    <td>{{detail.AP08_10_002_00}}</td>
-                    <td>{{detail.AP08_10_001_00}}</td>
-                    <td>{{detail.AP08_10_026_11}}</td>
-                    <td>{{detail.AP02_01_105_00}}</td>
-                  </tr>
-                </table>
-              </div>
-            </div>-->
             <div class="zyzllclj">
               <div class="title"></div>
               <div class="little_title">临床路径</div>
@@ -102,8 +58,10 @@
 </template>
 
 <script>
+import ClinicalPathway from '../dialog/inHospitalClinicalPathway'
 export default {
-  name: "zyzllcljjl", props: ["tabData", "elTabsData"],
+  name: "zyzllcljjl", props: ["elTabsData"],
+  components: { ClinicalPathway },
   data() {
     return {
       dialogVisible: false,
@@ -132,7 +90,6 @@ export default {
   width: 100%;
   height: 100%;
   text-align: center;
-
   .tab_content_title {
     font-family: "Arial Negreta", "Arial Normal", "Arial";
     font-weight: 700;
@@ -212,29 +169,6 @@ export default {
         min-height: 50px;
         font-weight: 100;
       }
-    }
-  }
-}
-.lclj_wrap {
-  .header {
-    width: 90%;
-    box-shadow: none;
-    display: flex;
-    margin: 0 auto;
-    flex-direction: column;
-  }
-  .header_top {
-    font-weight: 700;
-    margin-top: 15px;
-    font-size: 22px;
-    width: 100%;
-    text-align: center;
-  }
-  .content {
-    box-sizing: border-box;
-    min-height: 200px;
-    table {
-      margin-bottom: 50px;
     }
   }
 }

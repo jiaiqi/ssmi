@@ -111,21 +111,21 @@ export default {
       dialogVisible: false,
       detail: {},
       tabsData: []
-    }
+    };
   },
   created() {
     setTimeout(() => {
-      this.tabsData = this.elTabsData.mzyz
+      this.tabsData = this.elTabsData.mzyz;
     }, 300);
   },
   methods: {
     changeDialogVisible(item) {
-      this.dialogVisible = true
+      this.dialogVisible = true;
       if (item) {
-        this.detail = item
+        this.detail = item;
       }
     }
-  },
+  }
 };
 </script>
 

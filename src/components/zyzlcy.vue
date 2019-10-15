@@ -10,7 +10,7 @@
             <td>姓名</td>
             <td>住院患者入院科室</td>
             <td>入院日期</td>
-            <td>出院日期</td>           
+            <td>出院日期</td>
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
@@ -24,7 +24,7 @@
             >{{ item.DE06_00_092_00.slice(0,4)+'-'+item.DE06_00_092_00.slice(4,6)+'-'+item.DE06_00_092_00.slice(6,8) }}</td>
             <td
               v-if="item.DE06_00_016_00"
-            >{{ item.DE06_00_016_00.slice(0,4)+'-'+item.DE06_00_016_00.slice(4,6)+'-'+item.DE06_00_016_00.slice(6,8) }}</td>            
+            >{{ item.DE06_00_016_00.slice(0,4)+'-'+item.DE06_00_016_00.slice(4,6)+'-'+item.DE06_00_016_00.slice(6,8) }}</td>
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
             <td class="handle" @click="changeDialogVisible(item)">
               <span>详情</span>
@@ -186,21 +186,6 @@ export default {
   p {
     margin-left: 2%;
   }
-}
-
-.detail_title {
-  display: flex;
-  justify-content: space-around;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #333;
-}
-
-.detail_title_block {
-  width: 25%;
-  line-height: 20px;
-  display: flex;
-  text-align: left;
-  flex-direction: column;
 }
 
 table {

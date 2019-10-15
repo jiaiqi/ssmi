@@ -37,7 +37,7 @@
         <div class="header">
             <div class="header_top">
                 <p>医疗机构<span>{{detail.AP08_10_013_06}}</span></p>
-                <p>（组织机构代码：<span>{{detail.AP08_10_052_03}}</span>）</p>                
+                <p>（组织机构代码：<span>{{detail.AP08_10_052_03}}</span>）</p>
             </div>
             <div class="header_title">
                 <p><span>医疗付款方式：</span><span>2</span></p>
@@ -67,12 +67,12 @@
                             <span>{{detail.DE02_01_005_01}}</span>
                         </li>
                         <li class="row_1">
-                           <div class="label_text">年龄</div> 
+                           <div class="label_text">年龄</div>
                             <span class="text_line">{{detail.DE02_01_032_00}}</span>
-                           <div class="append_text">岁</div> 
+                           <div class="append_text">岁</div>
                         </li>
                         <li class="row_1">
-                           <div class="label_text">国籍</div> 
+                           <div class="label_text">国籍</div>
                             <span class="text_line">{{detail.AP02_01_015_00}}</span>
                         </li>
                     </div>
@@ -95,18 +95,18 @@
                     </div>
                     <div class="first first_df_3">
                         <li class="row">
-                           <div class="label_text">出生地</div> 
+                           <div class="label_text">出生地</div>
                             <span class="text_line">{{detail.AP02_01_061_00}} </span>
                         </li>
                         <li class="row">
-                           <div class="label_text">籍贯</div> 
+                           <div class="label_text">籍贯</div>
                             <span class="text_line"> {{detail.AP02_01_099_00}}</span>
                         </li>
                         <li class="row">
-                           <div class="label_text">民族</div> 
+                           <div class="label_text">民族</div>
                             <span class="text_line">{{detail.AP02_01_025_03}} </span>
                         </li>
-                    </div>                    
+                    </div>
                     <div class="first first_3">
                         <li class="row_3">
                             <div class="label_text">身份证</div>
@@ -146,7 +146,6 @@
                             <span class="text_line">{{detail.DE02_01_047_00}}</span>
                             </li>
                     </div>
-                    
                     <div class="first first_3">
                         <li class="row_3 row_seven">
                            <div class="label_text">工作单位及地址</div> 
@@ -224,14 +223,14 @@
                     </div>
                     <div class="first first_end_2">
                         <li class="row_3">
-                           <div class="label_text">门(急)诊诊断</div> 
+                           <div class="label_text">门(急)诊诊断</div>
                             <span class="text_line">   </span>
                         </li>
                         <li class="row_1">
-                            <div class="label_text">疾病编码</div>    
+                            <div class="label_text">疾病编码</div>
                             <span class="text_line">  </span>
                         </li>
-                    </div>                   
+                    </div>
                 </ul>
                 <!-- <div class="content_center_top">
                    <div class="contet_item_box">
@@ -362,7 +361,7 @@
                             </li>
                         </ul>
                         <ul class="content_page2_ul_one">
-                            <li class="content_list_one">                           
+                            <li class="content_list_one">
                                 <!-- 空 -->
                                 <div class="operation_note" v-for="(item,index) in ssjl" :key="index">
                                   <div class="tr">
@@ -398,7 +397,7 @@
                                     <div class="td">{{item.DE06_00_074_00}}</div>
                                     <div class="td">{{item.AP02_01_039_79}}</div>
                                   </div>
-                                </div>                               
+                                </div>
                                 <div class="operation_note" v-if="!ssjl.length>0">
                                   <div class="tr">
                                     <div class="td">编码</div>
@@ -433,8 +432,7 @@
                                     <div class="td"> - </div>
                                     <div class="td"> - </div>
                                   </div>
-                                </div>                               
-
+                                </div>
                                 <P>离院方式<span>  -  </span>1.医嘱离院 2.医嘱转院，拟接收医疗机构名称：<input type="text" value="-"></P>  
                                 <p>3.医嘱转社区卫生服务机构/乡镇卫生院，拟接收医疗机构名称：<input type="text" value="-">4.非医嘱离院 5.死亡 6.其他</p>
                                 <p>是否有出院31天内在住院计划 <span> - </span>  1.无 2.有    目的<input type="text" value="-"></p>
@@ -725,9 +723,6 @@ ul, ol { list-style: none; }
     border: 1px solid black;
     width: 100%;
     font-size: 14px;
-    .content_center_top{
-
-    }
 }
 .content_center ul{
     overflow: hidden;
@@ -800,8 +795,7 @@ ul, ol { list-style: none; }
                 min-width: 48px;
                 max-width: 256px;
                 width: calc(100% - 48px);
-
-            }            
+            }
         }
         .row_seven{
             .label_text{
@@ -821,8 +815,7 @@ ul, ol { list-style: none; }
                 min-width: 48px;
                 max-width: 288px;
                 width: calc(100% - 48px);
-
-            }            
+            }
         }
         .row_1{
             display: flex;

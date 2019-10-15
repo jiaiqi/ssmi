@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tab_content">
-      <div class="tab_content_title">住院检验记录</div>
+      <div class="tab_content_title">住院检验报告</div>
       <div class="tab_content_main">
         <!-- <el-table :data="tabsData" border style="width: 100%">
           <el-table-column prop="ORGANIZATION_NAME" label="医院"></el-table-column>
@@ -15,7 +15,7 @@
           <tbody>
             <tr>
               <td>医院</td>
-              <td>住院号</td>              
+              <td>住院号</td>
               <td>检验报告单号</td>
               <td>检验时间</td>
               <td>检验报告名称</td>
@@ -27,7 +27,7 @@
               <td>{{item.DE01_00_014_00}}</td>
               <td>{{item.AP04_50_057_00}}</td>
               <td v-if="!item.AP06_00_048_02"></td>
-              <td v-if="item.AP06_00_048_02">{{format_date(item.AP06_00_048_02)}}</td>             
+              <td v-if="item.AP06_00_048_02">{{format_date(item.AP06_00_048_02)}}</td>
               <td>{{item.AP04_50_056_00}}</td>
               <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
               <td class="handle" @click="changeDialogVisible(item)">详情</td>
