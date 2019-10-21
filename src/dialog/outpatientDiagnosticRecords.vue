@@ -6,11 +6,21 @@
     </div>
     <div class="header"></div>
     <div class="content">
-      <div
-        class="content_item_detail"
-      >兹证明 {{detail.DE02_01_039_00}} 同志， {{detail.AP02_01_102_01}} ，经在我院 {{detail.DE08_10_026_00}} 诊治</div>
-      <div class="content_item_detail">诊疗号:{{detail.DE01_00_010_00}}</div>
-      <div class="content_item_detail">临床诊断为: {{detail.DE05_01_025_00}}</div>
+      <div class="content_item_detail">
+        兹证明
+        <span class="font-bold">{{detail.DE02_01_039_00}}</span>
+        同志，
+        <span class="font-bold">{{detail.AP02_01_102_01}}</span> ，经在我院
+        <span class="font-bold">{{detail.DE08_10_026_00}}</span> 诊治
+      </div>
+      <div class="content_item_detail">
+        诊疗号:
+        <span class="font-bold">{{detail.DE01_00_010_00}}</span>
+      </div>
+      <div class="content_item_detail">
+        临床诊断为:
+        <span class="font-bold">{{detail.DE05_01_025_00}}</span>
+      </div>
       <div class="content_item_detail">曾作处理:</div>
       <!-- <div class="content_item_detail">建议:1.禁烟酒。2避免劳累。3.动态监测相关指标变化。</div> -->
     </div>
@@ -29,7 +39,7 @@ export default {
     return {
       businessId: "",
       detail: {}
-    }
+    };
   },
   methods: {
     getData() {
@@ -42,36 +52,40 @@ export default {
             value: this.businessId
           }
         ]
-      }
+      };
       let url = this.getServiceUrl("select", params.serviceName, "emr");
-      this.axios.post(url, params)
+      this.axios
+        .post(url, params)
         .then(res => {
-          console.log(res)
-          this.detail = res.data.data[0]
+          console.log(res);
+          this.detail = res.data.data[0];
         })
         .catch(err => {
           console.error(err);
-        })
-    },
+        });
+    }
   },
   mounted() {
-    let businessId = this.$route.params.businessId
+    let businessId = this.$route.params.businessId;
     if (businessId) {
-      this.businessId = businessId
+      this.businessId = businessId;
+      this.getData();
     } else {
-      console.error("未找到BUSINESS_ID.\n\n\n--门诊诊断记录")
+      console.error("未找到BUSINESS_ID.\n\n\n--门诊诊断记录");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .table_mabl_content {
-  // width: 1000px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  min-height: 500px;
+  background-color: #fff;
+  // overflow-y: scroll;
+  min-height: 100vh;
   .main_title {
     width: 100%;
     letter-spacing: 5px;
@@ -104,10 +118,20 @@ export default {
     padding-bottom: 20px;
     min-height: 500px;
     margin-bottom: 20px;
+    width: 95%;
+    margin: 0 auto;
     border-bottom: 2px solid #333;
     flex-direction: column;
     text-align: left;
     text-indent: 20px;
+    .font-bold {
+      font-weight: bold;
+      padding: 0 0.625rem /* 10/16 */;
+    }
+  }
+  .content_bottom {
+    display: flex;
+    justify-content: space-around;
   }
   .content_item_title {
     text-indent: 32px;
@@ -121,7 +145,6 @@ export default {
   .content_footer {
     text-align: right;
   }
-
   .footer {
     padding: 0 30px;
     display: flex;

@@ -5,10 +5,9 @@ import login from '@/pages/login'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
-      redirect:'/dzbl'
+      redirect: '/dzbl'
     },
     {
       path: '/dzbl',
@@ -17,12 +16,14 @@ export default new Router({
       beforeEnter: (to, from, next) => {
         // ...
         let isLogin = sessionStorage.getItem("isLogin")
-        if(isLogin){
+        if (isLogin) {
           next()
-        }else{
+        } else {
           next({
             path: '/login',
-            query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+            query: {
+              redirect: to.fullPath
+            } // 将跳转的路由path作为参数，登录成功后跳转到该路由
           })
         }
       }
@@ -31,7 +32,7 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login,
-      beforeEnter:(to, from, next) => {
+      beforeEnter: (to, from, next) => {
         sessionStorage.clear()
         next()
       }
@@ -47,7 +48,7 @@ export default new Router({
       component: () => import('../dialog/inHospitalCost.vue'),
     },
     {
-      path: '/inHospitalDiagnoseRecord/:businessId', //住院诊疗诊断记录
+      path: '/inHospitalDiagnoseRecord/:seats/:businessId', //住院诊疗诊断记录
       name: 'inHospitalDiagnoseRecord',
       component: () => import('../dialog/inHospitalDiagnoseRecord.vue'),
     },
@@ -77,7 +78,7 @@ export default new Router({
       component: () => import('../dialog/inHospitalIndexOperation.vue'),
     },
     {
-      path: '/inHospitalInspectionReport/:businessId',
+      path: '/inHospitalInspectionReport/:seats/:businessId',
       name: 'inHospitalInspectionReport', // 住院诊疗检查报告
       component: () => import('../dialog/inHospitalInspectionReport.vue'),
     },
@@ -92,12 +93,12 @@ export default new Router({
       component: () => import('../dialog/inHospitalOperationNote.vue'),
     },
     {
-      path: '/inHospitalSurveyReport/:businessId',
+      path: '/inHospitalSurveyReport/:seats/:businessId',
       name: 'inHospitalSurveyReport', // 住院诊疗检验报告
       component: () => import('../dialog/inHospitalSurveyReport.vue'),
     },
     {
-      path: '/outpatientCost/:businessId',
+      path: '/outpatientCost/:timeNum/:businessId',
       name: 'outpatientCost', // 门诊费用记录
       component: () => import('../dialog/outpatientCost.vue'),
     },
@@ -127,9 +128,9 @@ export default new Router({
       component: () => import('../dialog/outpatientOperationNote.vue'),
     },
     {
-      path: '/outpatientOperationNote/:businessId',
-      name: 'outpatientOperationNote', // 门诊检验报告
-      component: () => import('../dialog/outpatientOperationNote.vue'),
+      path: '/outpatientSurveyReport/:oddNum/:businessId',
+      name: 'outpatientSurveyReport', // 门诊检验报告
+      component: () => import('../dialog/outpatientSurveyReport.vue'),
     },
 
   ]

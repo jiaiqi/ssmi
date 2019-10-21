@@ -148,7 +148,10 @@ export default {
 <style lang="scss" scoped>
 .wrap_jcbg {
   width: 100%;
-  height: 100%;
+  background-color: #fff;
+  // overflow-y: scroll;
+  min-height: 100vh;
+  margin: 0 auto;
   .header {
     width: 100%;
     box-shadow: none;

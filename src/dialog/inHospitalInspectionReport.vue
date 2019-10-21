@@ -3,12 +3,12 @@
     <div class="header">
       <div class="header_top">
         <h1>{{detail.AP04_50_076_02}}</h1>
-        <h3>住院检查报告单</h3>
+        <h3>{{detail.BASIC_ACTIVE_DES}}</h3>
       </div>
       <div class="header_cen">
         <p>
-          <span>影像号:</span>
-          <span></span>
+          <span>检查类别:</span>
+          <span>{{detail.AP04_30_018_01}}</span>
         </p>
       </div>
       <div class="header_bot">
@@ -33,7 +33,7 @@
           </li>
           <li>
             <p>
-              <span>检查号:</span>
+              <span>检查报告单号:</span>
               <span>{{ detail.AP04_50_057_00 }}</span>
             </p>
           </li>
@@ -62,6 +62,20 @@
     </div>
     <div class="content">
       <div class="content_top">
+        <!-- <table>
+          <tr>
+            <td>检查项目</td>
+            <td>检查方法</td>
+            <td>检查结论</td>
+            <td>疾病诊断名称</td>
+          </tr>
+          <tr v-for="(item,index) in detail" :key="index">
+            <td>{{item.DE04_30_020_00}}</td>
+            <td>{{item.AP04_30_061_00}}</td>
+            <td>{{item.AP04_30_046_00}}</td>
+            <td>{{item.DE05_01_025_00}}</td>
+          </tr>
+        </table>-->
         <div class="inspect">
           <p>检查项目:</p>
           <p>{{ detail.DE04_30_020_00 }}</p>
@@ -75,7 +89,6 @@
           <p>{{ detail.AP04_30_046_00 }}</p>
           <p></p>
         </div>
-        <!-- <div class="opinion"> -->
         <div class="inspect">
           <p>疾病诊断名称:</p>
           <p>{{detail.DE05_01_025_00}}</p>
@@ -95,7 +108,7 @@
         </p>
         <p>
           <span>审核时间:</span>
-          <span></span>
+          <span>{{format_date(detail.UPDATE_DATE)}}</span>
         </p>
       </div>
       <div class="foot_bot">
@@ -111,7 +124,7 @@ export default {
   data() {
     return {
       businessId: "",
-      detail: {}
+      detail: []
     };
   },
   methods: {
@@ -123,6 +136,11 @@ export default {
             colName: "BUSINESS_ID",
             ruleType: "eq",
             value: this.businessId
+          },
+          {
+            colName: "AP04_50_057_00", // 检查报告单号
+            ruleType: "eq",
+            value: this.$route.params.seats
           }
         ]
       };
@@ -130,7 +148,7 @@ export default {
       this.axios
         .post(url, params)
         .then(res => {
-          console.log(res);
+          console.log("住院诊疗检查报告-------------", res.data.data);
           this.detail = res.data.data[0];
         })
         .catch(err => {
@@ -142,6 +160,7 @@ export default {
     let businessId = this.$route.params.businessId;
     if (businessId) {
       this.businessId = businessId;
+      this.getData();
     } else {
       console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗检查报告");
     }
@@ -152,7 +171,16 @@ export default {
 <style lang="scss" scoped>
 .wrap_jcbg {
   width: 100%;
-  height: 100%;
+  background-color: #fff;
+  // overflow-y: scroll;
+  max-width: 62.5rem /* 1000/16 */;
+  margin: 0 auto;
+  min-height: 100vh;
+  .title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
   .header {
     width: 100%;
     box-shadow: none;
@@ -194,6 +222,7 @@ export default {
     width: 100%;
     display: flex;
     margin-left: 1%;
+    margin: 0;
   }
   .content {
     width: 95%;

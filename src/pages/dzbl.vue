@@ -12,7 +12,7 @@
           </div>
           <div class="header_user_info_item">
             性别:
-            <span v-if="patientInfo.gender">{{ patientInfo.gender }}</span>
+            <span v-if="patientInfo.sex">{{ patientInfo.sex }}</span>
           </div>
           <div class="header_user_info_item">
             年龄:
@@ -721,13 +721,14 @@ export default {
       this.ryjl = {}
     },
     selectCardData() {
-      if (this.oldId != this.id_card) {
-        this.patientInfo = {}
-        this.editableTabs.length = 0
-        this.editableTabsValue = ""
-      }
+      // if (this.oldId != this.id_card) {
+      //   this.patientInfo = {}
+      //   this.editableTabs.length = 0
+      //   this.editableTabsValue = ""
+      // }
       if (this.inputContext) {
         this.id_card = this.inputContext
+        // this.patientInfo.identityCard = this.id_card
         // this.patientInfo.name = window.CardInfo.name
         // this.getData();
         this.getBasicData()
@@ -798,17 +799,28 @@ export default {
           if (card_Type == '居民身份证') {
             card_Type = '身份证'
           }
+          this.patientInfo.name = CardInfo.name
+          this.patientInfo.card_type = card_Type
+          this.patientInfo.sex = CardInfo.sex
+          this.patientInfo.identityCard = CardInfo.id
+          let nowYear = moment().format().slice(0, 4)
+          let birth = CardInfo.id.toString().slice(6, 14)
+          let birth_month = birth.slice(4, 6) // 出生月
+          let birth_yeaer = birth.slice(0, 4) // 出生年
+          let age = parseInt(nowYear) - parseInt(birth_yeaer)
+          this.patientInfo.age = age
           let card_no = CardInfo.id
           this.verifyDevice(ticket, card_Type, card_no)
           this.CardInfo = CardInfo
           this.inputContext = CardInfo.id
           if (this.userInfo) {
             if (this.userInfo.user_no != "" && window.CardInfo.id != null) {
-              this.patientInfo.name = CardInfo.name
-              this.id_card = CardInfo.id
               this.dialogVisible = true;
-            }
-            else {
+              this.patientInfo.name = CardInfo.name
+              this.patientInfo.identityCard = CardInfo.id
+              this.patientInfo.sex = CardInfo.sex
+              this.id_card = CardInfo.id
+            } else {
               this.$message({
                 showClose: true,
                 message: '请将身份证或就诊卡放到读卡机上',
@@ -816,13 +828,13 @@ export default {
               });
             }
           }
-          if (this.oldId != this.id_card) {
-            this.patientInfo = {}
-            this.editableTabs.length = 0
-            this.editableTabsValue = ""
-          } else {
-            // this.id_card = this.oldId
-          }
+          // if (this.oldId != this.id_card) {
+          //   this.patientInfo = {}
+          //   this.editableTabs.length = 0
+          //   this.editableTabsValue = ""
+          // } else {
+          //   // this.id_card = this.oldId
+          // }
         } else {
           if (this.from != "web") {
             this.$message({
@@ -858,7 +870,7 @@ export default {
           if (data.NAME) {
             this.patientInfo.name = data.NAME
           }
-          this.patientInfo.gender = data.SEX_NAME
+          this.patientInfo.sex = data.SEX_NAME
           let birth = data.BIRTHDAY.toString().slice(0, 4)
           birth = new Date(birth).getFullYear();
           let today = new Date().getFullYear();

@@ -27,14 +27,14 @@
           <el-dialog title :visible.sync="dialogVisible" width="1000px">
             <div class="tab_detail">
               <div class="detail_title">
-                <div class="detail_title_block" v-if="detail">
-                  <span>姓名:{{detail.DE02_01_039_00}}</span>
-                  <span>性别:{{detail.AP02_01_102_01}}</span>
-                  <span>年龄:{{detail.DE02_01_032_00}}</span>
+                <div class="detail_title_block" v-if="info">
+                  <span>姓名:{{info.DE02_01_039_00}}</span>
+                  <span>性别:{{info.AP02_01_102_01}}</span>
+                  <span>年龄:{{info.DE02_01_032_00}}</span>
                 </div>
                 <div class="detail_title_block">
                   <span>样本号:</span>
-                  <span>送检医生:{{detail.AP02_01_122_00}}</span>
+                  <span>送检医生:{{info.AP02_01_122_00}}</span>
                   <span>备注:</span>
                 </div>
               </div>
@@ -49,12 +49,12 @@
                         <td>单位</td>
                         <td>参考范围</td>
                       </tr>
-                      <tr>
-                        <td>{{detail.AP04_50_067_00}}</td>
-                        <td>{{detail.DE04_30_020_00}}</td>
-                        <td>{{detail.AP04_30_003_00}}</td>
-                        <td>{{detail.DE04_30_016_00}}</td>
-                        <td>{{detail.AP05_10_042_00}}</td>
+                      <tr v-for="(item,index) in detail" :key="index">
+                        <td>{{item.AP04_50_067_00}}</td>
+                        <td>{{item.DE04_30_020_00}}</td>
+                        <td>{{item.AP04_30_003_00}}</td>
+                        <td>{{item.DE04_30_016_00}}</td>
+                        <td>{{item.AP05_10_042_00}}</td>
                       </tr>
                     </table>
                   </div>
@@ -79,8 +79,9 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      detail: {},
-      tabsData: []
+      tabsData: [],
+      detail: [],
+      info: {}
     };
   },
   created() {
@@ -92,8 +93,30 @@ export default {
     changeDialogVisible(item) {
       this.dialogVisible = true;
       if (item) {
-        this.detail = item;
+        this.info = item
+        this.getDetail(item.AP04_50_057_00)
       }
+
+    },
+    getDetail(item) {
+      let params = {
+        serviceName: "DI_ADI_LAREXADET_LIST_select",
+        condition: [
+          {
+            colName: "AP04_50_057_00",
+            ruleType: "eq",
+            value: item //检验报告单号
+          }
+        ]
+      };
+      let url = this.getServiceUrl("select", params.serviceName, "emr");
+      this.axios.post(url, params)
+        .then(res => {
+          this.detail = res.data.data
+        })
+        .catch(err => {
+          console.error(err);
+        })
     }
   }
 };

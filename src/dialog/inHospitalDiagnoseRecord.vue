@@ -24,8 +24,9 @@ export default {
   data() {
     return {
       businessId: "",
-      detail: {}
-    }
+      detail: {},
+      seats: this.$route.params.seats
+    };
   },
   methods: {
     getData() {
@@ -36,33 +37,43 @@ export default {
             colName: "BUSINESS_ID",
             ruleType: "eq",
             value: this.businessId
+          },
+          {
+            colName: "DE01_00_014_00",
+            ruleType: "eq",
+            value: this.seats
           }
         ]
-      }
+      };
       let url = this.getServiceUrl("select", params.serviceName, "emr");
-      this.axios.post(url, params)
+      this.axios
+        .post(url, params)
         .then(res => {
-          console.log(res)
-          this.detail = res.data.data[0]
+          console.log(res);
+          this.detail = res.data.data[0];
         })
         .catch(err => {
           console.error(err);
-        })
-    },
+        });
+    }
   },
   mounted() {
-    let businessId = this.$route.params.businessId
+    let businessId = this.$route.params.businessId;
     if (businessId) {
-      this.businessId = businessId
+      this.businessId = businessId;
+      this.getData();
     } else {
-      console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗诊断记录")
+      console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗诊断记录");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .table_mabl_content {
+  background-color: #fff;
+  min-height: 100vh;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;

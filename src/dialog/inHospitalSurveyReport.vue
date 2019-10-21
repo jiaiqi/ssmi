@@ -1,5 +1,6 @@
 <template>
   <div class="tab_detail">
+    <h3>住院诊疗检验报告</h3>
     <div class="detail_title">
       <div class="detail_title_block">
         <span>姓名:{{detail.DE02_01_039_00}}</span>
@@ -67,7 +68,8 @@ export default {
   data() {
     return {
       businessId: "",
-      detail: {}
+      detail: {},
+      detailData: []
     };
   },
   methods: {
@@ -79,6 +81,11 @@ export default {
             colName: "BUSINESS_ID",
             ruleType: "eq",
             value: this.businessId
+          },
+          {
+            colName: "AP04_50_057_00",
+            ruleType: "eq",
+            value: this.seats
           }
         ]
       };
@@ -88,6 +95,29 @@ export default {
         .then(res => {
           console.log(res);
           this.detail = res.data.data[0];
+          this.getBotData();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    getBotData() {
+      let params = {
+        serviceName: "DI_HDI_LAREXADET_LIST_select",
+        condition: [
+          {
+            colName: "AP01_00_024_00",
+            value: this.detail.AP01_00_024_00,
+            ruleType: "eq"
+          }
+        ]
+      };
+      let url = this.getServiceUrl("select", params.serviceName, "emr");
+      this.axios
+        .post(url, params)
+        .then(res => {
+          console.log(res);
+          this.detailData = res.data.data;
         })
         .catch(err => {
           console.error(err);
@@ -96,8 +126,11 @@ export default {
   },
   mounted() {
     let businessId = this.$route.params.businessId;
-    if (businessId) {
+    let seats = this.$route.params.seats;
+    if (businessId && seats) {
       this.businessId = businessId;
+      this.seats = seats;
+      this.getData();
     } else {
       console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗检验报告");
     }
@@ -107,21 +140,35 @@ export default {
 
 <style lang="scss" scoped>
 .tab_detail {
+  background: white;
+  overflow-y: scroll;
   box-sizing: border-box;
   width: 900px;
-  margin: 0 auto;
-  min-height: 500px;
+  margin: 0rem auto;
+  padding-top: 4rem;
+  min-height: calc(100vh - 4rem);
+  max-width: 1000px;
+  h3 {
+    width: 20%;
+    margin: 1rem auto;
+    text-align: center;
+  }
   .detail_title {
     display: flex;
     justify-content: space-between;
     padding-bottom: 5px;
     border-bottom: 1px solid #333;
+    margin: 10px 10px 0 10px;
     .detail_title_block {
       width: 25%;
       line-height: 20px;
+      text-align: center;
       display: flex;
       flex-direction: column;
     }
+  }
+  .detail_content {
+    padding: 0px 10px 10px 10px;
   }
   .detail_content_title {
     display: flex;

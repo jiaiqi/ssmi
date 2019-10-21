@@ -75,7 +75,7 @@ export default {
     return {
       businessId: "",
       detail: {}
-    }
+    };
   },
   methods: {
     getData() {
@@ -88,35 +88,43 @@ export default {
             value: this.businessId
           }
         ]
-      }
+      };
       let url = this.getServiceUrl("select", params.serviceName, "emr");
-      this.axios.post(url, params)
+      this.axios
+        .post(url, params)
         .then(res => {
-          console.log(res)
-          this.detail = res.data.data[0]
+          console.log(res);
+          this.detail = res.data.data[0];
         })
         .catch(err => {
           console.error(err);
-        })
-    },
+        });
+    }
   },
   mounted() {
-    let businessId = this.$route.params.businessId
+    let businessId = this.$route.params.businessId;
     if (businessId) {
-      this.businessId = businessId
+      this.businessId = businessId;
+      this.getData();
     } else {
-      console.error("未找到BUSINESS_ID.\n\n\n--门诊医嘱")
+      console.error("未找到BUSINESS_ID.\n\n\n--门诊医嘱");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .yz_wrap {
+  background-color: #fff;
+  // overflow-y: scroll;
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 100vh;
   * {
     padding: 0;
     margin: 0;
   }
+
   ul,
   li {
     list-style: none;
@@ -146,7 +154,8 @@ export default {
     margin-left: 3%;
   }
   .content {
-    width: 100%;
+    padding: 0 10px;
+    min-height: 35rem;
   }
   table {
     border-collapse: collapse;
@@ -168,6 +177,8 @@ export default {
   .bottom {
     margin-top: 30px;
     overflow: hidden;
+    display: flex;
+    justify-content: space-around;
   }
   .bottom p {
     float: left;

@@ -11,18 +11,18 @@
           <span>年龄:{{detail.DE02_01_032_00}}</span>
         </div>
         <div>
-          <span>就诊卡号:</span>
-          <span>职业:</span>
-          <span>工作单位:</span>
+          <span>就诊卡号: -</span>
+          <span>职业: -</span>
+          <span>工作单位: -</span>
         </div>
         <div>
-          <span>家庭地址</span>
-          <span>家庭电话:</span>
+          <span>家庭地址: -</span>
+          <span>家庭电话: -</span>
         </div>
         <div>
-          <span>联系人姓名:</span>
-          <span>联系人关系:</span>
-          <span>联系人电话:</span>
+          <span>联系人姓名: -</span>
+          <span>联系人关系: -</span>
+          <span>联系人电话: -</span>
         </div>
         <!-- <div>
                     <span>入院日期:</span>
@@ -65,7 +65,9 @@ export default {
   data() {
     return {
       businessId: "",
-      detail: {}
+      detail: {},
+      data: [],
+      timeNum: ""
     };
   },
   methods: {
@@ -86,6 +88,28 @@ export default {
         .then(res => {
           console.log(res);
           this.detail = res.data.data[0];
+          this.getBotDatas();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    getBotDatas() {
+      let req = {
+        serviceName: "DI_ADI_EXPSET_LIST_select",
+        condition: [
+          {
+            colName: "AP07_00_026_00",
+            ruleType: "eq",
+            value: this.$route.params.timeNum
+          }
+        ]
+      };
+      let url = this.getServiceUrl("select", req.serviceName, "emr");
+      this.axios
+        .post(url, req)
+        .then(res => {
+          this.data = res.data.data;
         })
         .catch(err => {
           console.error(err);
@@ -99,12 +123,17 @@ export default {
     } else {
       console.error("未找到BUSINESS_ID.\n\n\n--门诊费用记录");
     }
+    this.getData();
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .fymx_wrap {
+  background-color: #fff;
+  min-height: 100vh;
+  max-width: 1000px;
+  margin: 0 auto;
   .header {
     width: 100%;
     display: flex;
@@ -130,8 +159,31 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
+    table {
+      width: 80%;
+      border-spacing: 0px;
+      border-collapse: collapse;
+      margin: 0 auto;
+      td {
+        min-width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 0 10px;
+        white-space: nowrap;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        color: #7f7f7f;
+        &.handle {
+          cursor: pointer;
+          color: #409eff;
+        }
+      }
+    }
   }
   .content_bot_top {
+    width: 80%;
+    margin: 0 auto;
+
     p {
       font-weight: 600;
     }

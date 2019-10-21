@@ -9,19 +9,19 @@
             <td>就诊流水号</td>
             <td>就诊科室</td>
             <td>预约途径</td>
+            <td>挂号类别</td>
             <td>就诊类别</td>
             <td>挂号日期</td>
-            <td>数据产生时间</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{ item.DE01_00_010_00 }}</td>
             <td>{{ item.DE08_10_026_00 }}</td>
             <td>{{ item.AP06_00_401_02 }}</td>
+            <td>{{ item.AP09_00_004_01 }}</td>
             <td>{{ item.BUSINESS_ACTIVE_DES }}</td>
             <td v-if="!item.AP09_00_024_00"></td>
             <td v-if="item.AP09_00_024_00">{{format_date(item.AP09_00_024_00)}}</td>
-            <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
           </tr>
         </tbody>
       </table>

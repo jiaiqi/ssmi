@@ -9,16 +9,8 @@
         <span>年龄: {{ detail.DE02_01_032_00 }} 岁</span>
       </div>
       <div class="detail_title_headertwo">
-        <!-- <span class="span11">床号: {{ detail.AP02_01_102_01 }}</span> -->
         <span class="span22">门诊号:</span>
-        <!-- <span class="span33">住院号:</span> -->
       </div>
-      <!-- <span>医师:{{ detail.AP02_01_039_37 }}</span> -->
-      <!-- <span>床号:</span>
-                            <span
-                              v-if="detail.DE06_00_095_00"
-                            >就诊时间: {{ detail.DE06_00_095_00.slice(0,4)+'-'+detail.DE06_00_095_00.slice(4,6)+'-'+detail.DE06_00_095_00.slice(6,8) }}</span>
-      <span>医院:{{detail.HOSPITAL_NAME}}</span>-->
     </div>
     <p>手术前诊断:</p>
     <p>手术后诊断:</p>
@@ -74,6 +66,7 @@ export default {
     let businessId = this.$route.params.businessId
     if (businessId) {
       this.businessId = businessId
+      this.getData()
     } else {
       console.error("未找到BUSINESS_ID.\n\n\n--门诊诊手术记录")
     }
@@ -82,14 +75,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* 详情 */
 .tab_detail {
   box-sizing: border-box;
-  // width: 900px;
   margin: 0 auto;
   min-height: 500px;
+  background-color: #fff;
+  max-width: 1000px;
   text-align: left;
-  p {
-    margin-left: 2%;
+  min-height: 100vh;
+  padding: 0 50px;
+  .title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  .detail_title_header {
+    width: 100%;
+  }
+  .detail_title_headerone {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+  }
+  .detail_title_headertwo > .span11 {
+    margin-left: 100px;
+  }
+  .detail_title_headertwo > .span22 {
+    margin-left: 190px;
+  }
+  .detail_title_headertwo > .span33 {
+    margin-left: 420px;
+  }
+  .detail_title_dif {
+    width: 100%;
+    display: block;
+  }
+  .detail_title_dif:nth-of-type(2) {
+    margin-left: 200px;
   }
 }
 </style>

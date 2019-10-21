@@ -77,7 +77,7 @@
           <p>结账分类费用</p>
         </div>
         <div class="content_top_b" style="margin-bottom:20px;">
-          <table>
+          <table style="width:80%;">
             <tr>
               <td>时间</td>
               <td>收费科室</td>
@@ -127,8 +127,9 @@ export default {
   data() {
     return {
       businessId: "",
-      detail: {}
-    }
+      detail: {},
+      datalist: []
+    };
   },
   methods: {
     getData() {
@@ -141,31 +142,55 @@ export default {
             value: this.businessId
           }
         ]
-      }
+      };
       let url = this.getServiceUrl("select", params.serviceName, "emr");
-      this.axios.post(url, params)
+      this.axios
+        .post(url, params)
         .then(res => {
-          console.log(res)
-          this.detail = res.data.data[0]
+          console.log(res);
+          this.detail = res.data.data[0];
         })
         .catch(err => {
           console.error(err);
+        });
+      let req2 = {
+        serviceName: "DI_HDI_EXPSET_LIST_select"
+      };
+      let url2 = this.getServiceUrl("select", req2.serviceName, "emr");
+      this.axios({
+        method: "POST",
+        url: url2,
+        data: req2
+      })
+        .then(res => {
+          this.datalist = res.data.data;
         })
-    },
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
   mounted() {
-    let businessId = this.$route.params.businessId
+    let businessId = this.$route.params.businessId;
     if (businessId) {
-      this.businessId = businessId
+      this.businessId = businessId;
+      this.getData();
     } else {
-      console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗费用结算")
+      console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗费用结算");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .fymx_wrap {
+  background-color: #fff;
+  min-height: 100vh;
+  max-width: 1000px;
+  margin: 0 auto;
+  // overflow-y: scroll;
+  max-width: 1000px;
+  margin: 0 auto;
   .header {
     width: 100%;
     display: flex;
@@ -205,6 +230,7 @@ export default {
   }
   .content_top_b {
     overflow: hidden;
+    margin-bottom: 1rem;
   }
 
   table,
@@ -217,7 +243,7 @@ export default {
   }
   table {
     border-collapse: collapse;
-    width: 22%;
+    width: 80%;
   }
   td {
     padding: 2px 5px;

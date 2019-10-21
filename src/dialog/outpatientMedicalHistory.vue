@@ -70,6 +70,7 @@ export default {
     let businessId = this.$route.params.businessId
     if (businessId) {
       this.businessId = businessId
+      this.getData()
     } else {
       console.error("未找到BUSINESS_ID.\n\n\n--门诊病历")
     }
@@ -82,7 +83,10 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  min-height: 500px;
+  background-color: #fff;
+  // overflow-y: scroll;
+  max-width: 1000px;
+  min-height: 100vh;
 
   .main_title {
     width: 100%;

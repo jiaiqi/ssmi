@@ -49,7 +49,7 @@
           <td>医师</td>
           <td>护士</td>
         </tr>
-        <tr v-for="(item,index) in detail" :key="index">
+        <tr v-for="(item,index) in tabsData" :key="index">
           <td v-if="item.AP06_00_200_00">{{format_date(item.AP06_00_200_00)}}</td>
           <td v-else-if="!item.AP06_00_200_00"></td>
           <td v-if="item.AP06_00_200_00">{{format_date(item.AP06_00_200_00)}}</td>
@@ -79,7 +79,8 @@ export default {
   data() {
     return {
       businessId: "",
-      detail: {}
+      detail: {},
+      tabsData: []
     };
   },
   methods: {
@@ -98,8 +99,9 @@ export default {
       this.axios
         .post(url, params)
         .then(res => {
-          console.log(res);
-          this.detail = res.data.data[0];
+          console.log("住院诊疗医嘱信息", res.data.data);
+
+          this.tabsData = res.data.data;
         })
         .catch(err => {
           console.error(err);
@@ -110,6 +112,7 @@ export default {
     let businessId = this.$route.params.businessId;
     if (businessId) {
       this.businessId = businessId;
+      this.getData();
     } else {
       console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗医嘱信息");
     }
@@ -119,8 +122,13 @@ export default {
 
 <style lang="scss" scoped>
 .wrap_yz {
-  width: 1000px;
+  width: 100%;
   margin: 0 auto;
+  min-height: calc(100vh - 1px);
+  border-top: 1px solid transparent;
+  background-color: #fff;
+  // overflow-y: scroll;
+  max-width: 62.5rem /* 1000/16 */;
   .header {
     width: 90%;
     margin: 0 auto;

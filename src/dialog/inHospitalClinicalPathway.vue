@@ -78,8 +78,9 @@ export default {
   padding: 3.125rem /* 50/16 */ 6.25rem /* 100/16 */ 0;
   background-color: #fff;
   max-width: 1000px;
+  // overflow-y: scroll;
   margin: 0 auto;
-  height: 100vh;
+  min-height: calc(100vh - 3.125rem);
   .title {
     text-align: center;
     font-size: 18px;

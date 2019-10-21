@@ -9,14 +9,14 @@
             <td>住院号</td>
             <td>姓名</td>
             <td>住院科室</td>
-            <td>结算日期</td>           
+            <td>结算日期</td>
             <td>数据产生时间</td>
             <td>操作</td>
           </tr>
           <tr v-for="(item, index) in tabsData" :key="index">
             <td>{{item.ORGANIZATION_NAME}}</td>
             <td>{{item.DE01_00_014_00}}</td>
-            <td>{{item.DE02_01_039_00}}</td>           
+            <td>{{item.DE02_01_039_00}}</td>
             <td>{{item.AP08_10_026_11}}</td>
             <td v-if="item.AP07_00_027_00">{{format_date(item.AP07_00_027_00)}}</td>
             <td>{{format_date(item.DATAGENERATE_DATE)}}</td>
@@ -176,7 +176,8 @@ export default {
         this.detail = item;
       }
       let req = {
-        serviceName: "DI_HDI_EXPSET_LIST_select"
+        serviceName: "DI_HDI_EXPSET_LIST_select",
+        LOCAL_ID: this.detail.LOCAL_ID
       };
       let url = this.getServiceUrl("select", req.serviceName, "emr");
       axios({

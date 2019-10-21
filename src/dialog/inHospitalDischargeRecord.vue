@@ -11,7 +11,7 @@
         <div class="header_item">
           <div class="header_item_item">
             <span class="item_title">住院号:</span>
-            <span class="item_text">{{ detail.DE01_00_014_00 }}</span>
+            <span class="item_text value">{{ detail.DE01_00_014_00 }}</span>
           </div>
           <div class="header_item_item">
             <span class="item_title">影像号:</span>
@@ -26,24 +26,24 @@
       <div class="top">
         <table class="table">
           <tr class="row">
-            <td>姓名:</td>
-            <td colspan="2">{{ detail.DE02_01_039_00 }}</td>
-            <td>性别:</td>
+            <td class="label">姓名:</td>
+            <td class="left">{{ detail.DE02_01_039_00 }}</td>
+            <td class="label">性别:</td>
             <td>{{ detail.AP02_01_102_01 }}</td>
-            <td>年龄:</td>
-            <td>{{ detail.DE02_01_032_00 }}</td>
-            <td>住院患者出院科室:</td>
-            <td colspan="3">{{ detail.AP08_10_026_08 }}</td>
+            <td class="label">年龄:</td>
+            <span class="value">{{ detail.DE02_01_032_00 }}</span>
           </tr>
-          <tr>
-            <td>籍贯:</td>
-            <td colspan="4">陕西，延安</td>
-            <td>医疗费用支付方式:</td>
+          <tr class="row">
+            <td class="label">住院患者出院科室:</td>
+            <td>{{ detail.AP08_10_026_08 }}</td>
+            <td class="label">籍贯:</td>
+            <td></td>
+            <td class="label">医疗费用支付方式:</td>
             <td colspan="5">{{ detail.AP07_00_011_01 }}</td>
           </tr>
-          <tr v-if="detail.DE06_00_092_00">
-            <td colspan="2">住院日期:</td>
-            <td colspan="2" v-if="detail.DE06_00_092_00">
+          <tr class="row" v-if="detail.DE06_00_092_00">
+            <td class="label">住院日期:</td>
+            <span class="value" v-if="detail.DE06_00_092_00">
               {{
               detail.DE06_00_092_00.slice(0, 4) +
               "-" +
@@ -51,9 +51,9 @@
               "-" +
               detail.DE06_00_092_00.slice(6, 8)
               }}
-            </td>
-            <td>出院日期:</td>
-            <td colspan="2" v-if="detail.DE06_00_016_00">
+            </span>
+            <td class="label">出院日期:</td>
+            <span class="value" v-if="detail.DE06_00_016_00">
               {{
               detail.DE06_00_016_00.slice(0, 4) +
               "-" +
@@ -61,9 +61,9 @@
               "-" +
               detail.DE06_00_016_00.slice(6, 8)
               }}
-            </td>
-            <td>住院天数</td>
-            <td>{{this.dateDiff(detail.DE06_00_092_00,detail.DE06_00_016_00)}}</td>
+            </span>
+            <td class="label">住院天数</td>
+            <span class="value">{{this.dateDiff(detail.DE06_00_092_00,detail.DE06_00_016_00)}}</span>
           </tr>
         </table>
         <div class="cy_content">
@@ -100,7 +100,7 @@ export default {
     return {
       businessId: "",
       detail: {}
-    }
+    };
   },
   methods: {
     getData() {
@@ -113,35 +113,38 @@ export default {
             value: this.businessId
           }
         ]
-      }
+      };
       let url = this.getServiceUrl("select", params.serviceName, "emr");
-      this.axios.post(url, params)
+      this.axios
+        .post(url, params)
         .then(res => {
-          console.log(res)
-          this.detail = res.data.data[0]
+          console.log(res);
+          this.detail = res.data.data[0];
         })
         .catch(err => {
           console.error(err);
-        })
-    },
+        });
+    }
   },
   mounted() {
-    let businessId = this.$route.params.businessId
+    let businessId = this.$route.params.businessId;
     if (businessId) {
-      this.businessId = businessId
+      this.businessId = businessId;
+      this.getData();
     } else {
-      console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗出院记录")
+      console.error("未找到BUSINESS_ID.\n\n\n--住院诊疗出院记录");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .tab_detail {
   box-sizing: border-box;
-  // width: 900px;
+  background-color: #fff;
+  min-height: 100vh;
+  max-width: 1000px;
   margin: 0 auto;
-  min-height: 500px;
   text-align: left;
   p {
     margin-left: 2%;
@@ -190,6 +193,9 @@ export default {
     display: flex;
     min-width: 150px;
     text-align: cneter;
+    .value {
+      line-height: 1.5rem;
+    }
   }
   .item_title {
     display: inline-block;
@@ -208,6 +214,16 @@ export default {
     border-collapse: collapse;
     .row {
       box-sizing: border-box;
+      height: 2.5rem /* 40/16 */;
+      .label {
+        text-align: right;
+      }
+      .value {
+        display: inline-block;
+        height: 100%;
+        line-height: 2.5rem /* 24/16 */;
+        text-indent: 1rem;
+      }
     }
   }
   /** content**/

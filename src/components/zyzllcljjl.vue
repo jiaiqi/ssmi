@@ -58,10 +58,11 @@
 </template>
 
 <script>
-import ClinicalPathway from '../dialog/inHospitalClinicalPathway'
+import ClinicalPathway from "../dialog/inHospitalClinicalPathway";
 export default {
-  name: "zyzllcljjl", props: ["elTabsData"],
-  components: { ClinicalPathway },
+  name: "zyzllcljjl",
+  props: ["elTabsData"],
+  // components: { ClinicalPathway },
   data() {
     return {
       dialogVisible: false,
@@ -71,7 +72,7 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.tabsData = this.elTabsData.zylclj
+      this.tabsData = this.elTabsData.zylclj;
     }, 300);
   },
   methods: {

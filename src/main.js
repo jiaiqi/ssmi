@@ -27,10 +27,10 @@ axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   let bx_auth_ticket = sessionStorage.getItem("bx_auth_ticket");
   let cert_auth_ticket = sessionStorage.getItem("cert_auth_ticket")
-  if(bx_auth_ticket){
+  if (bx_auth_ticket) {
     config.headers["bx_auth_ticket"] = bx_auth_ticket;
   }
-  if(cert_auth_ticket){
+  if (cert_auth_ticket) {
     config.headers["cert_auth_ticket"] = cert_auth_ticket;
   }
   // alert("aaa"+bx_auth_ticket+'---'+cert_auth_ticket)
@@ -39,12 +39,12 @@ axios.interceptors.request.use(function (config) {
   // 对请求错误做些什么
   return Promise.reject(error);
 });
-axios.interceptors.response.use(response=>{
+axios.interceptors.response.use(response => {
   if (response.data.state == "FAILURE") {
     if (response.data.resultCode == '0011') {
       if (sessionStorage.getItem("need_login_flag") != "need_login") {
         sessionStorage.setItem("need_login_flag", "need_login");
-        sessionStorage.setItem("isLogin","false")
+        sessionStorage.setItem("isLogin", "false")
       }
     } else if (response.data.resultCode == '0000') {
       if (sessionStorage.getItem("need_login_flag") != "need_login") {
@@ -55,9 +55,9 @@ axios.interceptors.response.use(response=>{
         alert(response.data.resultMessage);
       }
     }
-  }else if(response.data.state == "SUCCESS"){
-    sessionStorage.setItem("isLogin","true")
-    if(response.data.response){
+  } else if (response.data.state == "SUCCESS") {
+    sessionStorage.setItem("isLogin", "true")
+    if (response.data.response) {
       let resp = response.data.response[0]
       let bx_auth_ticket = response.data.response[0].response.bx_auth_ticket
       sessionStorage.setItem("bx_auth_ticket", bx_auth_ticket)
@@ -79,7 +79,9 @@ axios.interceptors.response.use(response=>{
 window.app = new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>',
   render: h => h(App)
 })

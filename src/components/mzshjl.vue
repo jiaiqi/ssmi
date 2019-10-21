@@ -108,117 +108,57 @@ export default {
   width: 100%;
   height: 100%;
   text-align: center;
-}
-
-.tab_content_title {
-  font-family: "Arial Negreta", "Arial Normal", "Arial";
-  font-weight: 700;
-  height: 60px;
-  line-height: 60px;
-  font-style: normal;
-  font-size: 16px;
-  text-align: center;
-  color: #7f7f7f;
+  .tab_content_title {
+    font-family: "Arial Negreta", "Arial Normal", "Arial";
+    font-weight: 700;
+    height: 60px;
+    line-height: 60px;
+    font-style: normal;
+    font-size: 16px;
+    text-align: center;
+    color: #7f7f7f;
+  }
 }
 
 /* 详情 */
 .tab_detail {
   box-sizing: border-box;
-  // width: 900px;
   margin: 0 auto;
   min-height: 500px;
+  background-color: #fff;
+  max-width: 1000px;
   text-align: left;
-  p {
-    margin-left: 2%;
+  min-height: 100vh;
+  .title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
   }
-}
-
-.detail_title {
-  display: flex;
-  justify-content: space-around;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #333;
-}
-
-.detail_title_block {
-  width: 25%;
-  line-height: 20px;
-  display: flex;
-  text-align: left;
-  flex-direction: column;
-}
-.detail {
-  display: flex;
-  justify-content: space-between;
-  .detail_left {
-    width: 45%;
-    min-height: 530px;
-    text-align: left;
-    border-right: 1px solid black;
-    p {
-      margin-left: 5%;
-    }
-  }
-  .detail_rig {
-    width: 45%;
-    text-align: left;
-    margin-right: 2%;
-    p {
-      margin-right: 5%;
-    }
-  }
-}
-
-.read_card {
-  min-height: 100px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 20px;
-}
-/* 内容 */
-.detail_content_title {
-  display: flex;
-  width: 100%;
-}
-
-.title_left {
-  flex: 1;
-
-  display: flex;
-  justify-content: space-around;
-  table,
-  tr,
-  td {
-    border: 1px solid #333;
-    margin-top: 15px;
-  }
-  table {
+  .detail_title_header {
     width: 100%;
   }
-}
-
-.title_right {
-  display: flex;
-  justify-content: space-around;
-  flex: 1;
-}
-
-.detail_content_content {
-  width: 100%;
-  min-height: 300px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.detail_content_left {
-  border-right: 1px #333 solid;
-  height: 300px;
-  width: 50%;
-}
-
-.detail_content_right {
-  height: 300px;
-  width: 50%;
+  .detail_title_headerone {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+  }
+  .detail_title_headertwo > .span11 {
+    margin-left: 100px;
+  }
+  .detail_title_headertwo > .span22 {
+    margin-left: 190px;
+  }
+  .detail_title_headertwo > .span33 {
+    margin-left: 420px;
+  }
+  .detail_title_dif {
+    width: 100%;
+    display: block;
+  }
+  .detail_title_dif:nth-of-type(2) {
+    margin-left: 200px;
+  }
 }
 
 table {
