@@ -728,7 +728,7 @@ export default {
       // }
       if (this.inputContext) {
         this.id_card = this.inputContext
-        // this.patientInfo.identityCard = this.id_card
+        this.patientInfo.identityCard = this.id_card
         // this.patientInfo.name = window.CardInfo.name
         // this.getData();
         this.getBasicData()
