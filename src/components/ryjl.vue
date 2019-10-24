@@ -207,6 +207,7 @@ export default {
 .tab_content {
   width: 100%;
   height: 100%;
+  text-align: center;
   .tab_content_title {
     font-size: 18px;
     font-weight: 600;
