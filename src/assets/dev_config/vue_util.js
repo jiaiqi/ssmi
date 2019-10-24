@@ -98,7 +98,7 @@ function init_util() {
     }else{
       return backendIpAddr + "/" + app + "/" + operate_type + "/" + service;
     }
-    
+
   }
 
 
@@ -1033,7 +1033,7 @@ function init_util() {
      *  @params operator: 年月日间隔符 默认"YYYY-MM-DD"
      */
   Vue.prototype.format_date = function(date,type,operator) {  // 20180808T082630
-   
+
     if(date){
       if(!type){
         type = 0
@@ -1047,7 +1047,7 @@ function init_util() {
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(9,11)+":"+date.slice(11,13)+":"+date.slice(13,15)
       }else if(typeof date == "string" && type == 1 &&date.length==14){ // 2019-09-04  12:22:22
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14)
-      }else if(typeof date == "number" && type == 0 &&date.length==14){ // 2019-09-04 
+      }else if(typeof date == "number" && type == 0 &&date.length==14){ // 2019-09-04
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)
       }else if(typeof date == "number" && type == 1 &&date.length==14){ // 2019-09-04 12:22:22
         date = date.slice(0,4)+operator+date.slice(4,6)+operator+date.slice(6,8)+" "+date.slice(8,10)+":"+date.slice(10,12)+":"+date.slice(12,14)
@@ -1063,7 +1063,7 @@ function init_util() {
         // return "数据不规范,无法转化成标准时间"
         return date
       }
-      return date      
+      return date
     }
   }
 }
@@ -1073,7 +1073,7 @@ function init_util() {
  * @params date1: 时间字符串或数字  仅支持String和Number类型
  * @params date2: 时间字符串或数字  仅支持String和Number类型
  * @params type: 时间差单位 days/years/seconds
- * 
+ *
  */
   Vue.prototype.dateDiff = function(date1,date2,type="day"){
     console.log(`date1:${date1},date2:${date2}`)

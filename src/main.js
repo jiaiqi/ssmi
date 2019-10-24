@@ -12,7 +12,8 @@ import VCharts from 'v-charts'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 import axios from 'axios'
-
+import moment from 'moment'
+Vue.prototype.moment = moment
 Vue.use(VueAwesomeSwiper)
 Vue.use(VCharts)
 Vue.use(VueResource)

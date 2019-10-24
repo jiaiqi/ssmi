@@ -37,26 +37,12 @@
             <div class="account_info_item" @click="exit_login">退出登录</div>
           </div>
         </div>
-        <!-- <div class="header_btn" @click="goHomePage()">
-          <p class="text">返回</p>
-          <p class="text">首页</p>
-        </div>-->
-        <!--
-        <div class="header_btn" @click="exit_login">
-          <p class="text">退出</p>
-        </div>
-        <div class="header_btn" v-if="userInfo.user_no">
-          <p class="text">
-            账号:
-            <span style="font-weight:600;">{{userInfo.user_no}}</span>
-          </p>
-        </div>-->
       </div>
     </header>
     <div class="content">
       <div class="content_left">
-        <!-- <div class="content_left_top">
-          <div class="content_left_top_item">
+        <div class="content_left_top">
+          <!-- <div class="content_left_top_item">
             <div class="block">
               <el-date-picker
                 v-model="datePickVal"
@@ -69,26 +55,27 @@
                 :picker-options="pickerOptions"
               ></el-date-picker>
             </div>
-          </div>
+          </div>-->
           <div class="content_left_top_item">
             <select class="content_left_top_item_select" v-model="queryCondition.hospital">
               <option class="content_left_top_item_select_option">就诊医院</option>
-              <option class="content_left_top_item_select_option" value="延安市中医医院">延安市中医医院</option>
-              <option class="content_left_top_item_select_option" value="延安市宝塔区人民医院">延安市宝塔区人民医院</option>
-              <option class="content_left_top_item_select_option" value="延安市延安大学附属医院">延安市延安大学附属医院</option>
-              <option class="content_left_top_item_select_option" value="延安市博爱医院">延安市博爱医院</option>
-              <option class="content_left_top_item_select_option" value="延安市博爱医院">延安市博爱医院</option>
+              <option class="content_left_top_item_select_option" value="zyyy">延安市中医医院</option>
               <option class="content_left_top_item_select_option" value="rmyy">延安市人民医院</option>
+              <option class="content_left_top_item_select_option" value="ydfy">延安大学附属医院</option>
+              <option class="content_left_top_item_select_option" value="bayy">延安市博爱医院</option>
+              <option class="content_left_top_item_select_option" value="fybjyy">延安市妇幼医院</option>
+              <option class="content_left_top_item_select_option" value="btqyy">宝塔区医院</option>
             </select>
+            <div class="select-btn" @click="querySelector">查询</div>
           </div>
-          <div class="content_left_top_item">
+          <!-- <div class="content_left_top_item">
             <select class="content_left_top_item_select" v-model="queryCondition.type">
               <option class="content_left_top_item_select_option">就诊类别</option>
               <option class="content_left_top_item_select_option" value="C0001">门诊</option>
               <option class="content_left_top_item_select_option" value="C0002">住院</option>
             </select>
-          </div>
-          <div class="content_left_top_item">
+          </div>-->
+          <!-- <div class="content_left_top_item">
             <select
               class="content_left_top_item_select"
               style="width:220px;"
@@ -106,8 +93,8 @@
               <option class="content_left_top_item_select_option" value="A19">肿瘤科</option>
             </select>
             <div class="select-btn" @click="querySelector">查询</div>
-          </div>
-        </div>-->
+          </div>-->
+        </div>
         <div class="content_left_bottom">
           <div class="tabs">
             <div class="label">
@@ -314,6 +301,7 @@
               :patientInfo="patientInfo"
               :elTabsData="elTabsData"
               :key="componentsKey"
+              @timerPick="getTimePick"
             ></component>
           </el-tab-pane>
         </el-tabs>
@@ -388,7 +376,7 @@ export default {
       oldId: "",
       ghjl: {},
       ryjl: {},
-      datePickVal: "",
+      datePickVal: [],
       loading: false,
       componentsKey: 0,
       tabsActive: true,
@@ -433,8 +421,7 @@ export default {
         startDate: "",
         endDate: "",
         hospital: "就诊医院",
-        type: "就诊类别",
-        department: "就诊科室"
+        hospitalName: ""
       },
       personInfo: {},
       defaultProps: {
@@ -461,8 +448,15 @@ export default {
   updated() {
   },
   methods: {
+    getTimePick(data) {
+      // 获取时间区间
+      console.log("TCL: getTimePick -> datta", data)
+      this.datePickVal = data.datePickVal
+      this.queryCondition.startDate = data.datePickVal[0]
+      this.queryCondition.endDate = data.datePickVal[1]
+      this.clickListItem(data.num, data.type)
+    },
     requestMachineNum() {
-      // let url = "/erm/operate/select/srvdi_electronic_card_cert"
       let serviceName = "srvdi_electronic_card_cert"
       let url = this.getServiceUrl("select", serviceName, "emr");
       let cardType = "身份证"
@@ -600,6 +594,28 @@ export default {
             }
           ]
         };
+        if (this.queryCondition.hospitalName) {
+          req.condition.push({
+            colName: "HOSPITAL_NAME",
+            ruleType: "eq",
+            value: this.queryCondition.hospital
+          })
+        }
+        if (this.datePickVal.length > 0) {
+          req.condition.push({
+            colName: "DATAGENERATE_DATE_TS",
+            ruleType: "ge",
+            value: this.datePickVal[0]
+          })
+          req.condition.push({
+            colName: "DATAGENERATE_DATE_TS",
+            ruleType: "le",
+            value: this.datePickVal[1]
+          })
+          this.datePickVal = []
+        }
+
+        // console.log("TCL: addTab -> req", req)
         let url = this.getServiceUrl("select", data.serviceName, "emr");
         this.axios({
           method: "POST",
@@ -607,6 +623,7 @@ export default {
           data: req
         }).then(res => {
           let ser = req.serviceName
+          console.log("TCL: addTab -> req", req)
           if (ser === "DI_ADI_REGISTER_INFO_select") {
             ser = "mzghjl"
           } else if (ser === "DI_ADI_RECORD_INFO_select") {
@@ -715,7 +732,6 @@ export default {
       } else {
         this.dialogVisible = false;
         console.log(this.dialogVisible)
-
       }// 控制显示输入身份证的dialog是否需要读卡 true不需要
       this.ghjl = {}
       this.ryjl = {}
@@ -734,7 +750,7 @@ export default {
         this.getBasicData()
         setTimeout(() => {
           this.dialogVisible = false;
-        }, 500);
+        }, 200);
       } else {
         this.dialogVisible = false
         this.readIdCard()
@@ -850,79 +866,125 @@ export default {
         // this.getData();
       });
     },
-    getBasicData() {
-      // 获取基本信息、挂号记录统计、入院记录统计
-      let params = {
-        serviceName: "DI_MPI_REGISTERINFO_select",
-        condition: [
+    getBasicData(cond) {
+      if (cond) {
+        let conds = [
           {
             colName: "CERT_NUMBER",
             ruleType: "eq",
             value: this.id_card
-          }
-        ]
-      };
-      let url = this.getServiceUrl("select", params.serviceName, "emr");
-      this.axios.post(url, params)
-        .then(res => {
-          let data = res.data.data[0]
-          console.log("基本信息:", data);
-          if (data.NAME) {
-            this.patientInfo.name = data.NAME
-          }
-          this.patientInfo.sex = data.SEX_NAME
-          let birth = data.BIRTHDAY.toString().slice(0, 4)
-          birth = new Date(birth).getFullYear();
-          let today = new Date().getFullYear();
-          let age = today - birth
-          this.patientInfo.age = age
-          console.log("age:", age)
-        })
-        .catch(err => {
-          console.error(err);
-        })
-      // 查询挂号记录
-      let paramsb = {
-        "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
-        "condition": [
-          {
-            colName: "CERT_NUMBER",
+          }]
+        if (cond.hospital) {
+          conds.push({
+            colName: "HOSPITAL_NAME",
             ruleType: "eq",
-            value: this.id_card
-          }
-        ],
+            value: cond.hospital
+          })
+        }
+        // 查询挂号记录
+        let paramsb = {
+          "serviceName": "DI_ADI_REGISTER_INFO_SUM_select"
+        }
+        paramsb['condition'] = conds
+        let urlb = this.getServiceUrl("select", paramsb.serviceName, "emr");
+        this.axios.post(urlb, paramsb)
+          .then(res => {
+            let ghjl = res.data.data[0]
+            this.ghjl = ghjl
+            console.log("挂号记录:", res.data.data)
+          })
+          .catch(err => {
+            console.error(err);
+          })
+        // 查询入院记录
+        let paramsc = {
+          "serviceName": "DI_HDI_INRECORD_INFO_SUM_select"
+        }
+        paramsc['condition'] = conds
+        let urlc = this.getServiceUrl("select", paramsc.serviceName, "emr");
+        this.axios.post(urlc, paramsc)
+          .then(res => {
+            let ryjl = res.data.data[0]
+            this.ryjl = ryjl
+            console.log("入院记录：", this.ryjl)
+          })
+          .catch(err => {
+            console.error(err);
+          })
+      } else {
+        // 获取基本信息、挂号记录统计、入院记录统计
+        let params = {
+          serviceName: "DI_MPI_REGISTERINFO_select",
+          condition: [
+            {
+              colName: "CERT_NUMBER",
+              ruleType: "eq",
+              value: this.id_card
+            }
+          ]
+        };
+        let url = this.getServiceUrl("select", params.serviceName, "emr");
+        this.axios.post(url, params)
+          .then(res => {
+            let data = res.data.data[0]
+            console.log("基本信息:", data);
+            if (data.NAME) {
+              this.patientInfo.name = data.NAME
+            }
+            this.patientInfo.sex = data.SEX_NAME
+            let birth = data.BIRTHDAY.toString().slice(0, 4)
+            birth = new Date(birth).getFullYear();
+            let today = new Date().getFullYear();
+            let age = today - birth
+            this.patientInfo.age = age
+            console.log("age:", age)
+          })
+          .catch(err => {
+            console.error(err);
+          })
+        // 查询挂号记录
+        let paramsb = {
+          "serviceName": "DI_ADI_REGISTER_INFO_SUM_select",
+          "condition": [
+            {
+              colName: "CERT_NUMBER",
+              ruleType: "eq",
+              value: this.id_card
+            }
+          ],
+        }
+        let urlb = this.getServiceUrl("select", paramsb.serviceName, "emr");
+        this.axios.post(urlb, paramsb)
+          .then(res => {
+            let ghjl = res.data.data[0]
+            this.ghjl = ghjl
+            console.log("挂号记录:", res.data.data)
+          })
+          .catch(err => {
+            console.error(err);
+          })
+        // 查询入院记录
+        let paramsc = {
+          "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
+          "condition": [
+            {
+              colName: "CERT_NUMBER",
+              ruleType: "eq",
+              value: this.id_card
+            }
+          ],
+        }
+        let urlc = this.getServiceUrl("select", paramsc.serviceName, "emr");
+        this.axios.post(urlc, paramsc)
+          .then(res => {
+            let ryjl = res.data.data[0]
+            this.ryjl = ryjl
+            console.log("入院记录：", this.ryjl)
+          })
+          .catch(err => {
+            console.error(err);
+          })
       }
-      let urlb = this.getServiceUrl("select", paramsb.serviceName, "emr");
-      this.axios.post(urlb, paramsb)
-        .then(res => {
-          let ghjl = res.data.data[0]
-          this.ghjl = ghjl
-          console.log("挂号记录:", res.data.data)
-        })
-        .catch(err => {
-          console.error(err);
-        })
-
-      let paramsc = {
-        "serviceName": "DI_HDI_INRECORD_INFO_SUM_select",
-        "condition": [
-          {
-            colName: "CERT_NUMBER",
-            ruleType: "eq",
-            value: this.id_card
-          }
-        ],
-      }
-      let urlc = this.getServiceUrl("select", paramsc.serviceName, "emr");
-      this.axios.post(urlc, paramsc)
-        .then(res => {
-          let ryjl = res.data.data[0]
-          this.ryjl = ryjl
-          console.log("入院记录：", this.ryjl)
-        })
-        .catch(err => {
-          console.error(err);
-        })
     },
     BtnReadCard() {
       if (typeof jsObj == "undefined") {
@@ -955,20 +1017,31 @@ export default {
     },
     querySelector() {
       let condition = {
-        hospital: this.queryCondition.hospital,
-        type: this.queryCondition.type,
-        department: this.queryCondition.department
+        hospital: this.queryCondition.hospital
       };
+      switch (condition.hospital) {
+        case 'zyyy':
+          this.queryCondition.hospitalName = '延安市中医医院'
+          break;
+        case 'fybjyy':
+          this.queryCondition.hospitalName = '延安市妇幼保健医院'
+          break;
+        case 'bayy':
+          this.queryCondition.hospitalName = '延安市博爱医院'
+          break;
+        case 'rmyy':
+          this.queryCondition.hospitalName = '延安市人民医院'
+          break;
+        default:
+          this.queryCondition.hospitalName = null
+          break;
+      }
       if (this.queryCondition.hospital === "就诊医院") {
         condition.hospital = "";
       }
-      if (this.queryCondition.type === "就诊类别") {
-        condition.type = "";
-      }
-      if (this.queryCondition.department === "就诊科室") {
-        condition.department = "";
-      }
-      console.log(condition);
+      console.log(condition, this.queryCondition);
+      this.getBasicData(condition)
+      this.editableTabs = []
     },
     removeTab(targetName) {
       let tabs = this.editableTabs;

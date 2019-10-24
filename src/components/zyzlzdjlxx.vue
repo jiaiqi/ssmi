@@ -1,5 +1,18 @@
 <template>
   <div class="tab_content">
+    <div class="timecheck">
+      <el-date-picker
+        v-model="datePickVal"
+        type="daterange"
+        align="right"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+      ></el-date-picker>
+      <button @click="timerPick">筛选</button>
+    </div>
     <div class="tab_content_title">住院诊疗诊断记录信息</div>
     <div class="tab_content_main">
       <table v-if="tabsData&&tabsData.length>0">
@@ -62,7 +75,39 @@ export default {
     return {
       dialogVisible: false,
       detail: {},
-      tabsData: []
+      tabsData: [],
+      datePickVal: [],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
     };
   },
   created() {
@@ -76,6 +121,20 @@ export default {
       if (item) {
         this.detail = item;
       }
+    },
+    timerPick() {
+      let datePickVal = []
+      console.log(this.datePickVal)
+      this.datePickVal.forEach(date => {
+        datePickVal.push(this.moment(date).format('YYYY-MM-DD HH:mm:ss'))
+      })
+      // datePickVal = this.datePickVal
+      let data = { // type:0门急诊1住院
+        datePickVal: datePickVal,
+        num: 3,
+        type: 1
+      }
+      this.$emit('timerPick', data)
     }
   }
 };
